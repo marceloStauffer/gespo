@@ -1,0 +1,176 @@
+[
+{
+    "nomePopular": "Acará Bandeira",
+    "nomeCientifico": "Pterophyllum scalare",
+    "origem": "Origem: Bacia Amazônica",
+    "foto":"img/acara-bandeira.jpg",
+    "link": "https://www.google.com/search?q=peixe+acara+bandeira"
+},
+{
+    "nomePopular":"Acará-disco",
+    "nomeCientifico":"PSymphysodon aequifasciatus",
+    "origem":"Origem: zonas de forte vegetação dos biótopos da Amazónia, do Peru, da Colômbia e do Brasil",
+    "foto":"img/acara-disco.jpg",
+    "link":"https://www.google.com/search?q=peixe+acar%C3%A1-disco"
+},
+
+{
+    "nomePopular": "Barbo ouro",
+    "nomeCientifico": "Barbodes semifasciolatus",
+    "origem": "Origem: Sudeste da Ásia",
+    "foto":"img/barbo-ouro.jpg",
+    "link": "https://www.google.com/search?q=peixe+barbo+ouro"
+},
+{
+    "nomePopular": "Barbo Sumatra",
+    "nomeCientifico": "Puntigrus tetrazona",
+    "origem": "Origem: Sumatra, Bornéu",
+    "foto":"img/barbo-sumatra.jpg",
+    "link": "https://www.google.com/search?q=peixe+barbo+sumatra"
+},
+{
+    "nomePopular":"Betta",
+    "nomeCientifico":"Betta splendens",
+    "origem":"Origem: sudeste asiático (Cambodja e Tailândia)",
+    "foto":"img/betta.webp",
+    "link":"https://www.google.com/search?q=peixe+betta"
+},
+
+{
+    "nomePopular": "Carpa colorida",
+    "nomeCientifico": "Cyprinus carpio",
+    "origem": "Origem: Japão",
+    "foto":"img/carpa-colorida.jpg",
+    "link": "https://www.google.com/search?q=peixe+carpa+colorida"
+},
+{
+    "nomePopular": "Cascudo abacaxi",
+    "nomeCientifico": "Pterygoplichthys pardalis",
+    "origem": "Origem: América do Sul tropical",
+    "foto":"img/cascudo.webp",
+    "link": "https://www.google.com/search?q=peixe+cascudo+abacaxi"
+},
+{
+    "nomePopular": "Colisa Lalia",
+    "nomeCientifico": "Trichogaster lalius",
+    "origem": "Origem: Índia, Bangladesh",
+    "foto":"img/colisa-lalia.webp",
+    "link": "https://www.google.com/search?q=peixe+colisa+lalia"
+},
+{
+    "nomePopular": "Coridora",
+    "nomeCientifico": "Corydoras aeneus",
+    "origem": "Origem: América do Sul",
+    "foto":"img/corydora.jpg",
+    "link": "https://www.google.com/search?q=peixe+coridora"
+},
+
+{
+    "nomePopular": "Espada",
+    "nomeCientifico": "Xiphophorus hellerii",
+    "origem": "Origem: América do Norte e Central",
+    "foto":"img/espada.jpg",
+    "link": "https://www.google.com/search?q=peixe+espada"
+},
+
+
+{
+    "nomePopular":"Gupy",
+    "nomeCientifico":"Poecilia reticulata",
+    "origem":"Origem: norte da América do Sul e algumas partes das Caraíbas",
+    "foto":"img/gupy.jpg",
+    "link":"https://www.google.com/search?q=peixe+guppy"
+},
+
+{
+    "nomePopular": "Kinguio",
+    "nomeCientifico": "Carassius auratus",
+    "origem": "Origem: Ásia Oriental (China)",
+    "foto":"img/kinguio.webp",
+    "link": "https://www.google.com/search?q=peixe+kinguio"
+},
+
+{
+    "nomePopular": "Labeo bicolor",
+    "nomeCientifico": "Epalzeorhynchos bicolor",
+    "origem": "Origem: Ásia (Tailândia)",
+    "foto":"img/labeo-bicolor.webp",
+    "link": "https://www.google.com/search?q=peixe+labeo+bicolor"
+},
+
+{
+    "nomePopular": "Molinésia",
+    "nomeCientifico": "Poecilia sphenops",
+    "origem": "Origem: Do México ao norte da América do Sul",
+    "foto":"img/molinesia.webp",
+    "link": "https://www.google.com/search?q=peixe+molinesia"
+},
+
+{
+    "nomePopular": "Neon Cardinal",
+    "nomeCientifico": "Paracheirodon axelrodi",
+    "origem": "Origem: Bacia do Rio Negro e Orinoco (Brasil, Colômbia, Venezuela)",
+    "foto":"img/neon-cardinal.webp",
+     "link": "https://www.google.com/search?q=peixe+neon+cardinal"
+},
+
+{
+    "nomePopular": "Oscar",
+    "nomeCientifico": "Astronotus ocellatus",
+    "origem": "Origem: Bacia Amazônica",
+    "foto":"img/oscar.webp",
+    "link": "https://www.google.com/search?q=peixe+oscar"
+},
+
+{
+    "nomePopular": "Paulistinha",
+    "nomeCientifico": "Danio rerio",
+    "origem": "Origem: Ásia do Sul",
+    "foto":"img/paulistinha.webp",
+    "link": "https://www.google.com/search?q=peixe+paulistinha"
+},
+{
+    "nomePopular": "Peixe-Paraíso",
+    "nomeCientifico": "Macropodus opercularis",
+    "origem": "Origem: Leste da Ásia",
+    "foto":"img/peixe_paraiso.webp",
+    "link": "https://www.google.com/search?q=peixe+paraiso"
+},
+{
+    "nomePopular":"Platy",
+    "nomeCientifico":"Xiphophorus maculatus",
+    "origem":"Origem: Costa atlântica, do México às Honduras",
+    "foto":"img/platy.webp",
+    "link":"https://www.google.com/search?q=peixe+platy"
+},
+
+{
+    "nomePopular": "Ramirezi",
+    "nomeCientifico": "Mikrogeophagus ramirezi",
+    "origem": "Origem: Bacia do Rio Orinoco",
+    "foto":"img/ramirezi.webp",
+    "link": "https://www.google.com/search?q=peixe+ramirezi"
+},
+{
+    "nomePopular": "Rodóstomo",
+    "nomeCientifico": "Hemigrammus rhodostomus",
+    "origem": "Origem: Bacia Amazônica",
+    "foto":"img/rodostomo.jpg",
+    "link": "https://www.google.com/search?q=peixe+rodostomo"
+},
+
+{
+    "nomePopular": "Tetra Mato Grosso",
+    "nomeCientifico": "Hyphessobrycon eques",
+    "origem": "Origem: Bacia do Rio Paraguai e Guaporé",
+    "foto":"img/tetra_matogrosso.webp",
+    "link": "https://www.google.com/search?q=peixe+tetra+mato+grosso"
+},
+{
+    "nomePopular": "Tricogaster Azul",
+    "nomeCientifico": "Trichopodus trichopterus",
+    "origem": "Origem: Sudeste Asiático",
+    "foto":"img/trichogaster-azul.jpg",
+    "link": "https://www.google.com/search?q=peixe+tricogaster+azul"
+}
+]
