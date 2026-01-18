@@ -7,7 +7,7 @@
     "link": "https://www.google.com/search?q=peixe+acara+bandeira"
 },
 {
-    "nomePopular":"Acará-disco",
+    "nomePopular":"Acará Disco",
     "nomeCientifico":"PSymphysodon aequifasciatus",
     "origem":"Origem: zonas de forte vegetação dos biótopos da Amazónia, do Peru, da Colômbia e do Brasil",
     "foto":"img/acara-disco.jpg",
@@ -15,7 +15,7 @@
 },
 
 {
-    "nomePopular": "Barbo ouro",
+    "nomePopular": "Barbo Ouro",
     "nomeCientifico": "Barbodes semifasciolatus",
     "origem": "Origem: Sudeste da Ásia",
     "foto":"img/barbo-ouro.jpg",
@@ -37,14 +37,14 @@
 },
 
 {
-    "nomePopular": "Carpa colorida",
+    "nomePopular": "Carpa Colorida",
     "nomeCientifico": "Cyprinus carpio",
     "origem": "Origem: Japão",
     "foto":"img/carpa-colorida.jpg",
     "link": "https://www.google.com/search?q=peixe+carpa+colorida"
 },
 {
-    "nomePopular": "Cascudo abacaxi",
+    "nomePopular": "Cascudo Abacaxi",
     "nomeCientifico": "Pterygoplichthys pardalis",
     "origem": "Origem: América do Sul tropical",
     "foto":"img/cascudo.webp",
@@ -91,7 +91,7 @@
 },
 
 {
-    "nomePopular": "Labeo bicolor",
+    "nomePopular": "Labeo Bicolor",
     "nomeCientifico": "Epalzeorhynchos bicolor",
     "origem": "Origem: Ásia (Tailândia)",
     "foto":"img/labeo-bicolor.webp",
@@ -130,7 +130,7 @@
     "link": "https://www.google.com/search?q=peixe+paulistinha"
 },
 {
-    "nomePopular": "Peixe-Paraíso",
+    "nomePopular": "Peixe Paraíso",
     "nomeCientifico": "Macropodus opercularis",
     "origem": "Origem: Leste da Ásia",
     "foto":"img/peixe_paraiso.webp",
@@ -150,7 +150,7 @@
     "origem": "Origem: Bacia do Rio Orinoco",
     "foto":"img/ramirezi.webp",
     "link": "https://www.google.com/search?q=peixe+ramirezi"
-},
++},
 {
     "nomePopular": "Rodóstomo",
     "nomeCientifico": "Hemigrammus rhodostomus",
