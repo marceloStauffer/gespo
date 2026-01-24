@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap'); /* Importa a fonte Quicksand do Google Fonts */
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box; /* Garante que padding e border não aumentem o tamanho total do elemento */
 }
 
@@ -19,6 +21,7 @@ body {
 }
 
 header {
+    text-align: center;
     padding: 2rem 1rem; /* Espaçamento interno (2rem em cima/baixo, 1rem nos lados) */
     display: flex; /* Habilita o layout flexbox */
     align-items: center; /* Alinha os itens verticalmente ao centro */
