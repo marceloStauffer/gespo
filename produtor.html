@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/stylebege.css">
+    <link rel="icon" href="favicon_peixe.png">
+    <title>Gespo'App / Produtor</title>
+</head>
+<body>
+    <main>
+    <header>
+        <h1>Dados do produtor</h1>
+    </header>
+    <section>
+        <form action="sucesso.html" method="get">
+            <fieldset>
+                <legend>Dados pessoais</legend>
+
+                <label for="nome">Nome</label>
+                <input id="nome" type="text" name="produtorNome" required>
+                <br>
+
+                <p>Gênero:</p>
+                <input id="fem" type="radio" name="produtorGenero" value="Feminino">
+                <label for="fem">Feminino</label>
+                <input id="masc" type="radio" name="produtorGenero" value="Masculino">
+                <label for="masc">Masculino</label>
+                <input id="nInformado" type="radio" name="produtorGenero" value="nInformado">
+                <label for="nInformado">Prefiro não informar</label>
+                <br>
+
+                <label for="cpf">Cpf/Cnpj</label>
+                <input id="cpf" type="text" name="produtorCpf">
+                <br>
+                <label for="celular">Celular</label>
+                <input id="celular" type="tel" name="produtorCelular" pattern="[0-9]{11}" placeholder="digite apenas números - Cod.Área + número">
+                <br>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="produtorEmail">
+                <br>
+            </fieldset>
+        </form>
+    </section>
+
+    </main>
+
+</body>
+</html>
