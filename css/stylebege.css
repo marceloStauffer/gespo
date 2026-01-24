@@ -18,6 +18,7 @@ body {
     background: var(--bg-color); /* Define a cor de fundo usando uma variável */
     color: var(--secondary-color); /* Define a cor do texto padrão usando uma variável */
     font-family: "Quicksand", sans-serif; /* Define a família da fonte */
+    overflow: hidden; /* Remove barras de rolagem da janela principal */
 }
 
 header {
@@ -43,7 +44,7 @@ header h1 {
 }
 
 header a {
-    color: #f5f5dc; /* Cor dos links no cabeçalho */
+    color: #e0ea1e; /* Cor dos links no cabeçalho */
     text-decoration: none;
 }
 
@@ -72,6 +73,22 @@ div input:focus {
     box-shadow: 0 0 0 0.1rem var(--tertiary-color); /* Adiciona uma sombra de caixa para indicar foco */
 }
 
+#botao-form {
+    width: 100px;
+    height: 30px;
+    margin-right: 10px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#botao-form:hover {
+    background-color: var(--primary-color); /* Muda a cor de fundo ao passar o mouse */
+    color: var(--bg-color); /* Muda a cor do texto ao passar o mouse */
+    box-shadow: 0 0 0 0.1rem var(--primary-color); /* Adiciona uma sombra de caixa */
+}
+
+
 #botao-busca {
     padding: 1rem 2rem; /* Espaçamento interno */
     border-radius: 1rem; /* Arredonda as bordas */
@@ -98,11 +115,17 @@ div input:focus {
 }
 
 main {
-    overflow-y: scroll; /* Adiciona uma barra de rolagem vertical se o conteúdo exceder a altura */
+    overflow-y: auto; /* Barra de rolagem apenas se necessário */
+    overflow-x: hidden; /* Remove barra de rolagem horizontal */
+    scrollbar-width: none; /* Oculta a barra de rolagem visualmente (Firefox) */
     max-width: 80rem; /* Largura máxima do conteúdo principal */
     margin: 0 auto; /* Centraliza o conteúdo principal horizontalmente */
     margin-top: 2rem; /* Margem no topo */
     height: calc(100vh - 10rem - 4rem); /* Calcula a altura para preencher o espaço restante da tela */
+}
+
+main::-webkit-scrollbar {
+    display: none; /* Oculta a barra de rolagem visualmente (Chrome/Safari/Edge) */
 }
 
 article {

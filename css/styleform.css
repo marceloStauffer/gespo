@@ -39,6 +39,7 @@ header{
     z-index: 10; /* Define a ordem de empilhamento para ficar sobre outros elementos */
     border-bottom: 1px solid #3e2723; /* Adiciona uma borda inferior */
     gap: 1rem; /* Espaçamento entre os elementos flex */
+    border-radius: 10px;
 
 }
 
