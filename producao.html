@@ -1,188 +1,342 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styleform.css">
-    <link rel="icon" href="favicon_peixe.png">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styleform.css" />
+    <link rel="icon" href="favicon_peixe.png" />
     <title>Gespo'App / Propriedade</title>
-</head>
-<body>
+  </head>
+  <body>
     <main>
-    <header>
+      <header>
         <h1>Dados da produção</h1>
-    </header>
-    <section>
+      </header>
+      <section>
         <form action="sucesso.html" method="get">
-            <fieldset>
-                <legend>Propriedade</legend>
-                <label for="propriedadeNome">Nome da propriedade</label>
-                <input id="propriedadeNome" type="text" name="propriedadeNome" required>
-                <br>
-                <label for="propriedadeMuni">Município</label>
-                <input id="propriedadeMuni" type="text" name="propriedadeMuni">
-                <label for="propriedadeUf">UF</label>
-                <input id="propriedadeUf" type="text" name="propriedadeUf">
-                <br>
-                <label for="propriedadeLocal">Localização da propriedade</label>
-                <input id="propriedadeLocal" type="text" name="propriedadeLocal" placeholder="informe as coordenadas da localização da sede da propriedade">
+          <fieldset>
+            <legend>Propriedade</legend>
+            <label for="propriedadeNome">Nome da propriedade</label>
+            <input
+              id="propriedadeNome"
+              type="text"
+              name="propriedadeNome"
+              required
+            />
+            <br />
+            <label for="propriedadeMuni">Município</label>
+            <input id="propriedadeMuni" type="text" name="propriedadeMuni" />
+            <label for="propriedadeUf">UF</label>
+            <input id="propriedadeUf" type="text" name="propriedadeUf" />
+            <br />
+            <label for="propriedadeLocal">Localização da propriedade</label>
+            <input
+              id="propriedadeLocal"
+              type="text"
+              name="propriedadeLocal"
+              placeholder="informe as coordenadas da sede da propriedade"
+            />
+          </fieldset>
 
-            </fieldset>
+          <fieldset>
+            <legend>Sistema de produção</legend>
 
-            <fieldset>
-                <legend>Sistema de produção</legend>
+            <p>Sistema produtivo:</p>
+            <input
+              id="semi"
+              type="radio"
+              name="sistemaProdutivo"
+              value="semi-intensivo"
+            />
+            <label for="semi">Semi-intensivo</label>
+            <br />
+            <input
+              id="intens"
+              type="radio"
+              name="sistemaProdutivo"
+              value="intensivo"
+            />
+            <label for="intens">Intensivo</label>
+            <br />
+            <input
+              id="superint"
+              type="radio"
+              name="sistemaProdutivo"
+              value="superintensivo"
+            />
+            <label for="superint">Superintensivo</label>
+            <br />
 
-                <p>Sistema produtivo:</p>
-                <input id="semi" type="radio" name="sistemaProdutivo" value="semi-intensivo">
-                <label for="semi">Semi-intensivo</label>
-                <br>
-                <input id="intens" type="radio" name="sistemaProdutivo" value="intensivo">
-                <label for="intens">Intensivo</label>
-                <br>
-                <input id="superint" type="radio" name="sistemaProdutivo" value="superintensivo">
-                <label for="superint">Superintensivo</label>
-                <br>
+            <p>Alimentação:</p>
+            <input
+              id="natural"
+              type="radio"
+              name="alimentTipo"
+              value="natural"
+            />
+            <label for="natural">Natural</label>
 
-                <p>Alimentação:</p>
-                <input id="natural" type="radio" name="alimentTipo" value="natural">
-                <label for="natural">Natural</label>
+            <input
+              id="artificial"
+              type="radio"
+              name="alimentTipo"
+              value="artificial"
+            />
+            <label for="artificial">Artificial</label>
 
-                <input id="artificial" type="radio" name="alimentTipo" value="artificial">
-                <label for="artificial">Artificial</label>
+            <input id="mista" type="radio" name="alimentTipo" value="mista" />
+            <label for="mista">Mista</label>
+            <br />
 
-                <input id="mista" type="radio" name="alimentTipo" value="mista">
-                <label for="mista">Mista</label>
-                <br>
+            <p>Fluxo de água:</p>
+            <input id="aberto" type="radio" name="fluxoAgua" value="aberto" />
+            <label for="aberto">Sistema aberto</label>
+            <br />
+            <input id="fechado" type="radio" name="fluxoAgua" value="fechado" />
+            <label for="fechado">Sistema fechado</label>
+            <br />
+          </fieldset>
 
-                <p>Fluxo de água:</p>
-                <input id="aberto" type="radio" name="fluxoAgua" value="aberto">
-                <label for="aberto">Sistema aberto</label>
-                <br>
-                <input id="fechado" type="radio" name="fluxoAgua" value="fechado">
-                <label for="fechado">Sistema fechado</label>
-                <br>
+          <fieldset>
+            <legend>Infraestrutura de produção</legend>
+            <p>Estrutura para cultivo:</p>
+            <input
+              id="viveiro"
+              type="checkbox"
+              name="estcultivo"
+              value="viveiro"
+            />
+            <label for="viveiro">Viveiro de terra</label>
+            <br />
+            <input
+              id="tanquerev"
+              type="checkbox"
+              name="estcultivo"
+              value="tanque_revestido"
+            />
+            <label for="tanquerev">Tanque revestido</label>
+            <br />
+            <input
+              id="tanqueconc"
+              type="checkbox"
+              name="estcultivo"
+              value="tanque_concreto"
+            />
+            <label for="tanqueconc">Tanque de concreto</label>
+            <br />
+            <input id="caixa" type="checkbox" name="estcultivo" value="caixa" />
+            <label for="caixa">Caixa d'água</label>
+            <br />
+            <input
+              id="aquariovidro"
+              type="checkbox"
+              name="estcultivo"
+              value="aquario_vidro"
+            />
+            <label for="aquariovidro">Aquário de vidro</label>
+            <br />
+            <input
+              id="aquarioceramica"
+              type="checkbox"
+              name="estcultivo"
+              value="aquario_ceramica"
+            />
+            <label for="aquarioceramica">Aquário de cerâmica</label>
+            <br />
 
-            </fieldset>
+            <p>Local de implantação da estrutura:</p>
+            <input
+              id="ceuaberto"
+              type="radio"
+              name="implantEstrutura"
+              value="ceuaberto"
+            />
+            <label for="ceuaberto">Céu aberto</label>
+            <br />
+            <input
+              id="estufa"
+              type="radio"
+              name="implantEstrutura"
+              value="estufa"
+            />
+            <label for="estufa">Estufa plástica</label>
+            <br />
+            <input
+              id="galpao"
+              type="radio"
+              name="implantEstrutura"
+              value="galpao"
+            />
+            <label for="galpao">Galpão</label>
+            <br />
+            <input
+              id="sala"
+              type="radio"
+              name="implantEstrutura"
+              value="sala"
+            />
+            <label for="sala">Sala</label>
+            <br />
+            <p>
+              <input
+                id="protTela"
+                type="checkbox"
+                name="implantProtTela"
+                value="protTela"
+              />
+              <label for="protTela">A estrutura é protegida por tela</label>
+              <br />
+            </p>
+            <p>
+              <input
+                id="climatizado"
+                type="checkbox"
+                name="implantClimatizado"
+                value="climatizado"
+              />
+              <label for="climatizado"
+                >O local de implantação é climatizado</label
+              >
+              <br />
+            </p>
+            <label for="tipoSolo">Tipo de solo</label>
+            <input id="tipoSolo" type="text" name="implantTipoSolo" />
+            <br />
+            <label for="declividade">Declividade do terreno</label>
+            <input id="declividade" type="text" name="implantDeclividade" />
+            <br />
+            <label for="area">Área para produção (m²)</label>
+            <input id="area" type="text" name="implantArea" />
+            <br />
+            <label for="fonteAgua">Fonte de água para abastecimento</label>
+            <input id="fonteAgua" type="text" name="implantFonteAgua" />
+            <br />
+          </fieldset>
 
-            <fieldset>
-                <legend>Infraestrutura de produção</legend>
-                <p>Estrutura para cultivo:</p>
-                <input id="viveiro" type="checkbox" name="estcultivo" value="viveiro">
-                <label for="viveiro">Viveiro de terra</label> 
-                <br>
-                <input id="tanquerev" type="checkbox" name="estcultivo" value="tanque_revestido">
-                <label for="tanquerev">Tanque revestido</label> 
-                <br>
-                <input id="tanqueconc" type="checkbox" name="estcultivo" value="tanque_concreto">
-                <label for="tanqueconc">Tanque de concreto</label>
-                <br>
-                <input id="caixa" type="checkbox" name="estcultivo" value="caixa">
-                <label for="caixa">Caixa d'água</label>
-                <br>
-                <input id="aquariovidro" type="checkbox" name="estcultivo" value="aquario_vidro">
-                <label for="aquariovidro">Aquário de vidro</label>
-                <br>
-                <input id="aquarioceramica" type="checkbox" name="estcultivo" value="aquario_ceramica">
-                <label for="aquarioceramica">Aquário de cerâmica</label>
-                <br>
+          <fieldset>
+            <legend>Peixes</legend>
+            <p>Espécies/grupos de peixes cultivados:</p>
+            <input
+              id="betta"
+              type="checkbox"
+              name="peixesGrupos"
+              value="betta"
+            />
+            <label for="betta">Betta</label>
+            <input
+              id="poecilideos"
+              type="checkbox"
+              name="peixesGrupos"
+              value="poecilideos"
+            />
+            <label for="poecilideos">Poecilídeos</label>
+            <br />
+            <input
+              id="ciprinideos"
+              type="checkbox"
+              name="peixesGrupos"
+              value="ciprinideos"
+            />
+            <label for="ciprinideos">Ciprinideos</label>
+            <input
+              id="outros"
+              type="checkbox"
+              name="peixesGrupos"
+              value="outros"
+            />
+            <label for="outros">Outros</label>
+            <br />
 
-                <p>Local de implantação da estrutura:</p>
-                <input id="ceuaberto" type="radio" name="implantEstrutura" value="ceuaberto">
-                <label for="ceuaberto">Céu aberto</label>
-                <br>
-                <input id="estufa" type="radio" name="implantEstrutura" value="estufa">
-                <label for="estufa">Estufa plástica</label>
-                <br>
-                <input id="galpao" type="radio" name="implantEstrutura" value="galpao">
-                <label for="galpao">Galpão</label>
-                <br>
-                <input id="sala" type="radio" name="implantEstrutura" value="sala">
-                <label for="sala">Sala</label>
-                <br>
-                <p>
-                <input id="protTela" type="checkbox" name="implantProtTela" value="protTela">
-                <label for="protTela">A estrutura é protegida por tela</label>
-                <br>
-                </p>
-                <p>
-                <input id="climatizado" type="checkbox" name="implantClimatizado" value="climatizado">
-                <label for="climatizado">O local de implantação é climatizado</label>
-                <br>
-                </p>
-                <label for="tipoSolo">Tipo de solo</label>
-                <input id="tipoSolo" type="text" name="implantTipoSolo">
-                <br>
-                <label for="declividade">Declividade do terreno</label>
-                <input id="declividade" type="text" name="implantDeclividade">
-                <br>
-                <label for="area">Área para produção (m²)</label>
-                <input id="area" type="text" name="implantArea">
-                <br>
-                <label for="fonteAgua">Fonte de água para abastecimento</label>
-                <input id="fonteAgua" type="text" name="implantFonteAgua">
-                <br>
+            <p>Fases do cultivo:</p>
+            <input
+              id="reproducao"
+              type="checkbox"
+              name="fasesCultivo"
+              value="reproducao"
+            />
+            <label for="reproducao">Reprodução</label>
+            <br />
+            <input
+              id="larvicultura"
+              type="checkbox"
+              name="fasesCultivo"
+              value="larvicultura"
+            />
+            <label for="larvicultura">Larvicultura</label>
+            <br />
+            <input
+              id="bercario"
+              type="checkbox"
+              name="fasesCultivo"
+              value="bercario"
+            />
+            <label for="bercario">Berçário</label>
+            <br />
+            <input
+              id="recria"
+              type="checkbox"
+              name="fasesCultivo"
+              value="recria"
+            />
+            <label for="recria">Recria/engorda</label>
+            <br />
+            <input
+              id="comercio"
+              type="checkbox"
+              name="fasesCultivo"
+              value="comercio"
+            />
+            <label for="comercio">Comercialização</label>
+            <br />
 
-            </fieldset>
+            <p>Mercado comprador:</p>
+            <input
+              id="lojasLocais"
+              type="checkbox"
+              name="mercadoComprador"
+              value="lojasLocais"
+            />
+            <label for="lojasLocais">Lojas locais / regionais</label>
+            <br />
+            <input
+              id="lojasNacionais"
+              type="checkbox"
+              name="mercadoComprador"
+              value="lojasNacionais"
+            />
+            <label for="lojasNacionais">Lojas nacionais</label>
+            <br />
+            <input
+              id="atacadistas"
+              type="checkbox"
+              name="mercadoComprador"
+              value="atacadistas"
+            />
+            <label for="atacadistas">Atacadistas</label>
+            <br />
+            <input
+              id="export"
+              type="checkbox"
+              name="mercadoComprador"
+              value="export"
+            />
+            <label for="export">Exportação</label>
+            <br />
+            <input
+              id="vendaDireta"
+              type="checkbox"
+              name="mercadoComprador"
+              value="vendaDireta"
+            />
+            <label for="vendaDireta">Venda direta</label>
+            <br />
+          </fieldset>
 
-            <fieldset>
-                <legend>Peixes</legend>
-                <p>Espécies/grupos de peixes cultivados:</p>
-                <input id="betta" type="checkbox" name="peixesGrupos" value="betta">
-                <label for="betta">Betta</label>
-                <input id="poecilideos" type="checkbox" name="peixesGrupos" value="poecilideos">
-                <label for="poecilideos">Poecilídeos</label>
-                <br>
-                <input id="ciprinideos" type="checkbox" name="peixesGrupos" value="ciprinideos">
-                <label for="ciprinideos">Ciprinideos</label>
-                <input id="outros" type="checkbox" name="peixesGrupos" value="outros">
-                <label for="outros">Outros</label>
-                <br>
-
-                <p>Fases do cultivo:</p>
-                <input id="reproducao" type="checkbox" name="fasesCultivo" value="reproducao">
-                <label for="reproducao">Reprodução</label>
-                <br>
-                <input id="larvicultura" type="checkbox" name="fasesCultivo" value="larvicultura">
-                <label for="larvicultura">Larvicultura</label>
-                <br>
-                <input id="bercario" type="checkbox" name="fasesCultivo" value="bercario">
-                <label for="bercario">Berçário</label>
-                <br>
-                <input id="recria" type="checkbox" name="fasesCultivo" value="recria">
-                <label for="recria">Recria/engorda</label>
-                <br>
-                <input id="comercio" type="checkbox" name="fasesCultivo" value="comercio">
-                <label for="comercio">Comercialização</label>
-                <br>
-
-                <p>Mercado comprador:</p>
-                <input id="lojasLocais" type="checkbox" name="mercadoComprador" value="lojasLocais">
-                <label for="lojasLocais">Lojas locais / regionais</label>
-                <br>
-                <input id="lojasNacionais" type="checkbox" name="mercadoComprador" value="lojasNacionais">
-                <label for="lojasNacionais">Lojas nacionais</label>
-                <br>
-                <input id="atacadistas" type="checkbox" name="mercadoComprador" value="atacadistas">
-                <label for="atacadistas">Atacadistas</label>
-                <br>
-                <input id="export" type="checkbox" name="mercadoComprador" value="export">
-                <label for="export">Exportação</label>
-                <br>
-                <input id="vendaDireta" type="checkbox" name="mercadoComprador" value="vendaDireta">
-                <label for="vendaDireta">Venda direta</label>
-                <br>
-
-            </fieldset>
-
-
-            <br>
-            <button type="submit">Enviar</button>
-            <button type="reset">Limpar</button>
-
+          <br />
+          <button type="submit">Enviar</button>
+          <button type="reset">Limpar</button>
         </form>
-    </section>
-
+      </section>
     </main>
-
-</body>
+  </body>
 </html>
