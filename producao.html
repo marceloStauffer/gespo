@@ -30,12 +30,6 @@
             <input id="propriedadeUf" type="text" name="propriedadeUf" />
             <br />
             <label for="propriedadeLocal">Localização da propriedade</label>
-            <input
-              id="propriedadeLocal"
-              type="text"
-              name="propriedadeLocal"
-              placeholder="informe as coordenadas da sede da propriedade"
-            />
           </fieldset>
 
           <fieldset>
@@ -214,40 +208,151 @@
           </fieldset>
 
           <fieldset>
-            <legend>Peixes</legend>
-            <p>Espécies/grupos de peixes cultivados:</p>
+            <legend>Peixes - Espécies cultivadas</legend>
+            <p>Anabantídeos:</p>
             <input
               id="betta"
               type="checkbox"
-              name="peixesGrupos"
+              name="peixesEspecies"
               value="betta"
             />
             <label for="betta">Betta</label>
             <input
-              id="poecilideos"
+              id="colisa"
               type="checkbox"
-              name="peixesGrupos"
-              value="poecilideos"
+              name="peixesEspecies"
+              value="colisa"
             />
-            <label for="poecilideos">Poecilídeos</label>
+            <label for="colisa">Colisa</label>
+            <input
+              id="tricogaster"
+              type="checkbox"
+              name="peixesEspecies"
+              value="tricogaster"
+            />
+            <label for="tricogaster">Tricogaster</label>
+            <br />
+            <p>Ciprinídeos:</p>
+            <input
+              id="carpa"
+              type="checkbox"
+              name="peixesEspecies"
+              value="carpa"
+            />
+            <label for="carpa">Carpa</label>
+            <input
+              id="kinguio"
+              type="checkbox"
+              name="peixesEspecies"
+              value="kinguio"
+            />
+            <label for="kinguio">Kinguio</label>
+            <input
+              id="paulistinha"
+              type="checkbox"
+              name="peixesEspecies"
+              value="paulistinha"
+            />
+            <label for="paulistinha">Paulistinha</label>
+            <br />
+            <p>Poecilídeos:</p>
+            <input
+              id="guppy"
+              type="checkbox"
+              name="peixesEspecies"
+              value="guppy"
+            />
+            <label for="guppy">Guppy</label>
+            <input
+              id="platy"
+              type="checkbox"
+              name="peixesEspecies"
+              value="platy"
+            />
+            <label for="platy">Platy</label>
             <br />
             <input
-              id="ciprinideos"
+              id="espada"
               type="checkbox"
-              name="peixesGrupos"
-              value="ciprinideos"
+              name="peixesEspecies"
+              value="espada"
             />
-            <label for="ciprinideos">Ciprinideos</label>
+            <label for="espada">Espada</label>
             <input
-              id="outros"
+              id="molinesia"
               type="checkbox"
-              name="peixesGrupos"
-              value="outros"
+              name="peixesEspecies"
+              value="molinesia"
             />
-            <label for="outros">Outros</label>
+            <label for="molinesia">Molinésia</label>
             <br />
+            <p>Ciclídeos:</p>
+            <input
+              id="acaraBandeira"
+              type="checkbox"
+              name="peixesEspecies"
+              value="acaraBandeira"
+            />
+            <label for="acaraBandeira">Acará Bandeira</label>
+            <input
+              id="acaraDisco"
+              type="checkbox"
+              name="peixesEspecies"
+              value="acaraDisco"
+            />
+            <label for="acaraDisco">Acará Disco</label>
+            <br />
+            <input
+              id="oscar"
+              type="checkbox"
+              name="peixesEspecies"
+              value="oscar"
+            />
+            <label for="oscar">Oscar</label>
+            <input
+              id="ramirezi"
+              type="checkbox"
+              name="peixesEspecies"
+              value="ramirezi"
+            />
+            <label for="ramirezi">Ramirezi</label>
+            <br />
+            <p>Siluriformes (Peixes de Fundo):</p>
+            <input
+              id="cascudo"
+              type="checkbox"
+              name="peixesEspecies"
+              value="cascudo"
+            />
+            <label for="cascudo">Cascudo</label>
+            <input
+              id="coridora"
+              type="checkbox"
+              name="peixesEspecies"
+              value="coridora"
+            />
+            <label for="coridora">Coridora</label>
+            <br />
+            <br />
+            <p>
+              <input
+                id="outros"
+                type="checkbox"
+                name="peixesEspecies"
+                value="outros"
+              />
+              <label for="outros">Outros</label>
+            </p>
+            <input
+              id="outrosInf"
+              type="text"
+              name="peixesEspeciesInf"
+              placeholder="informe as outras espécies"
+            />
+          </fieldset>
 
-            <p>Fases do cultivo:</p>
+          <fieldset>
+            <legend>Fases do cultivo</legend>
             <input
               id="reproducao"
               type="checkbox"
@@ -288,8 +393,10 @@
             />
             <label for="comercio">Comercialização</label>
             <br />
+          </fieldset>
 
-            <p>Mercado comprador:</p>
+          <fieldset>
+            <legend>Mercado comprador</legend>
             <input
               id="lojasLocais"
               type="checkbox"
