@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styleform.css" />
+    <link rel="icon" href="favicon_peixe.png" />
+    <title>Gespo'App / Receitas</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Receitas</h1>
+      </header>
+      <section>
+        <form action="sucesso.html" method="get">
+          <fieldset>
+            <legend>Receitas</legend>
+
+            <label for="recData">Data da receita:</label>
+            <input id="recData" type="date" name="receitasData" />
+            <br />
+
+            <label for="recDescricao">Descrição:</label>
+            <input
+              id="recDescricao"
+              type="text"
+              name="receitasDescricao"
+              required
+            />
+            <br />
+
+            <label for="recGrupo">Grupo:</label>
+            <select id="recGrupo" name="receitasGrupo">
+              <option value="notInformed">
+                Selecione o grupo da receita...
+              </option>
+              <option value="recGrupoPeixes">Venda de peixes</option>
+              <option value="recGrupoAluguel">Recebimento de Aluguel</option>
+              <option value="recGrupoFinanceiro">Rendimento financeiro</option>
+              <option value="recGrupoOutras">Outras receitas</option>
+            </select>
+            <br />
+
+            <label for="recQuant">Quantidade:</label>
+            <input
+              element.defaultValue="1"
+              id="recQuant"
+              type="number"
+              name="receitasQuant"
+              required
+            />
+            <br />
+
+            <label for="recValor">Valor total:</label>
+            <input id="recValor" type="number" name="receitasValor" />
+            <br />
+
+            <label for="recObs">Obs.:</label>
+            <input id="recObs" type="text" name="receitasObs" />
+          </fieldset>
+          <br />
+          <button type="submit">Enviar</button>
+          <button type="reset">Limpar</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

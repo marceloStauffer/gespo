@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styleform.css" />
+    <link rel="icon" href="favicon_peixe.png" />
+    <title>Gespo'App / Despesas</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Despesas</h1>
+      </header>
+      <section>
+        <form action="sucesso.html" method="get">
+          <fieldset>
+            <legend>Despesas</legend>
+
+            <label for="despData">Data da despesa:</label>
+            <input id="despData" type="date" name="despesasData" />
+            <br />
+
+            <label for="despDescricao">Descrição:</label>
+            <input
+              id="despDescricao"
+              type="text"
+              name="despesasDescricao"
+              required
+            />
+            <br />
+
+            <label for="despGrupo">Grupo:</label>
+            <select id="despGrupo" name="despesasGrupo">
+              <option value="notInformed">
+                Selecione o grupo da despesa...
+              </option>
+              <option value="despGrupoAluguel">Despesas com aluguéis</option>
+              <option value="despGrupoAlimentacao">Alimentação</option>
+              <option value="despGrupoFinanceiro">Despesas financeiras</option>
+              <option value="despGrupoOutras">Outras despesas</option>
+            </select>
+            <br />
+
+            <label for="despQuant">Quantidade:</label>
+            <input
+              element.defaultValue="1"
+              id="despQuant"
+              type="number"
+              name="despesasQuant"
+              required
+            />
+            <br />
+
+            <label for="despValor">Valor total:</label>
+            <input id="despValor" type="number" name="despesasValor" />
+            <br />
+
+            <label for="despObs">Obs.:</label>
+            <input id="despObs" type="text" name="despesasObs" />
+          </fieldset>
+          <br />
+          <button type="submit">Enviar</button>
+          <button type="reset">Limpar</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
