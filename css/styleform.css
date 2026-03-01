@@ -146,51 +146,62 @@ button[type="reset"]:hover {
 
 /* Estilos do Menu Hamburguer */
 .dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .dropbtn {
-    background-color: transparent;
-    color: #f5f5dc;
-    padding: 10px;
-    font-size: 20px;
-    border: none;
-    cursor: pointer;
-    width: auto; /* Sobrescreve a largura padrão dos botões */
-    height: auto; /* Sobrescreve a altura padrão dos botões */
-    margin: 0;
+  background-color: transparent;
+  color: #f5f5dc;
+  padding: 10px;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  width: auto; /* Sobrescreve a largura padrão dos botões */
+  height: auto; /* Sobrescreve a altura padrão dos botões */
+  margin: 0;
 }
 
 .dropbtn:hover {
-    background-color: transparent; /* Mantém transparente ao passar o mouse */
-    color: var(--branco-color);
-    box-shadow: none;
+  background-color: transparent; /* Mantém transparente ao passar o mouse */
+  color: var(--branco-color);
+  box-shadow: none;
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    border-radius: 5px;
-    text-align: left;
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+  text-align: left;
 }
 
 .dropdown-content a {
-    color: var(--secondary-color);
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+  color: var(--secondary-color);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
 }
 
 .dropdown-content a:hover {
-    background-color: #ddd;
-    border-radius: 5px;
+  background-color: #ddd;
+  border-radius: 5px;
 }
 
 .dropdown:hover .dropdown-content {
-    display: block;
+  display: block;
+}
+
+/* Estilos dos botões de relatório */
+.btn-relatorio {
+  background-color: var(--primary-color);
+  color: var(--branco-color);
+  border: 1px solid var(--secondary-color);
+}
+
+.btn-relatorio:hover {
+  background-color: var(--secondary-color);
 }
