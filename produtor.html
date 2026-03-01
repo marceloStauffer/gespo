@@ -4,13 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/styleform.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <link rel="icon" href="favicon_peixe.png" />
     <title>Gespo'App / Produtor</title>
   </head>
   <body>
     <main>
-      <header style="justify-content: space-between;">
+      <header style="justify-content: space-between">
         <div class="dropdown">
           <button class="dropbtn"><i class="fas fa-bars"></i></button>
           <div class="dropdown-content">
@@ -26,7 +29,8 @@
           </div>
         </div>
         <h3>Dados do produtor</h3>
-        <div style="width: 40px;"></div> <!-- Espaçador para manter o título centralizado -->
+        <div style="width: 40px"></div>
+        <!-- Espaçador para manter o título centralizado -->
       </header>
       <section style="display: flex; justify-content: space-between">
         <div>
@@ -132,5 +136,50 @@
         </form>
       </section>
     </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.querySelector("form");
+
+        // Função para carregar dados do servidor Node.js
+        async function carregarDados() {
+          try {
+            const response = await fetch('/api/produtor');
+            const dados = await response.json();
+
+            Object.keys(dados).forEach((key) => {
+              const inputs = document.getElementsByName(key);
+              if (inputs.length > 0) {
+                if (inputs[0].type === "radio") {
+                  inputs.forEach((input) => {
+                    if (input.value === dados[key]) input.checked = true;
+                  });
+                } else if (inputs[0].type !== "file") {
+                  inputs[0].value = dados[key];
+                }
+              }
+            });
+          } catch (erro) {
+            console.error("Erro ao carregar dados:", erro);
+          }
+        }
+
+        // Função para salvar dados no servidor Node.js
+        async function salvarDados() {
+          const formData = new FormData(form);
+          const dados = Object.fromEntries(formData.entries());
+
+          await fetch('/api/produtor', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+          });
+        }
+
+        // Carrega ao iniciar e salva a cada alteração
+        carregarDados();
+        form.addEventListener("input", salvarDados);
+        form.addEventListener("change", salvarDados);
+      });
+    </script>
   </body>
 </html>

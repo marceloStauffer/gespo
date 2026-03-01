@@ -477,5 +477,70 @@
         </form>
       </section>
     </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.querySelector("form");
+
+        // Função para carregar dados do servidor Node.js
+        async function carregarDados() {
+          try {
+            const response = await fetch("/api/producao");
+            const dados = await response.json();
+
+            Object.keys(dados).forEach((key) => {
+              const inputs = document.getElementsByName(key);
+              if (inputs.length > 0) {
+                if (inputs[0].type === "radio") {
+                  inputs.forEach((input) => {
+                    if (input.value === dados[key]) input.checked = true;
+                  });
+                } else if (inputs[0].type === "checkbox") {
+                  // Lógica para checkboxes (pode haver múltiplos valores)
+                  const values = Array.isArray(dados[key])
+                    ? dados[key]
+                    : [dados[key]];
+                  inputs.forEach((input) => {
+                    if (values.includes(input.value)) input.checked = true;
+                  });
+                } else if (inputs[0].type !== "file") {
+                  inputs[0].value = dados[key];
+                }
+              }
+            });
+          } catch (erro) {
+            console.error("Erro ao carregar dados:", erro);
+          }
+        }
+
+        // Função para salvar dados no servidor Node.js
+        async function salvarDados() {
+          const formData = new FormData(form);
+          const dados = {};
+
+          // Converte FormData para objeto, tratando múltiplos valores (checkboxes)
+          for (let [key, value] of formData.entries()) {
+            if (dados[key] !== undefined) {
+              if (!Array.isArray(dados[key])) {
+                dados[key] = [dados[key]];
+              }
+              dados[key].push(value);
+            } else {
+              dados[key] = value;
+            }
+          }
+
+          await fetch("/api/producao", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dados),
+          });
+        }
+
+        // Carrega ao iniciar e salva a cada alteração
+        carregarDados();
+        form.addEventListener("input", salvarDados);
+        form.addEventListener("change", salvarDados);
+      });
+    </script>
   </body>
 </html>
