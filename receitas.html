@@ -68,9 +68,22 @@
                 Selecione o grupo da receita...
               </option>
               <option value="recGrupoPeixes">Venda de peixes</option>
-              <option value="recGrupoAluguel">Recebimento de Aluguel</option>
-              <option value="recGrupoFinanceiro">Rendimento financeiro</option>
+              <option value="recGrupoPlantas">
+                Venda de plantas aquáticas
+              </option>
+              <option value="recGrupoInsumos">
+                Venda de insumos e produtos
+              </option>
+              <option value="recGrupoServicos">Prestação de serviços</option>
               <option value="recGrupoOutras">Outras receitas</option>
+            </select>
+            <br />
+
+            <label for="recSubgrupo">Subgrupo:</label>
+            <select id="recSubgrupo" name="receitasSubgrupo">
+              <option value="notInformed">
+                Selecione o subgrupo da receita...
+              </option>
             </select>
             <br />
 
@@ -97,5 +110,65 @@
         </form>
       </section>
     </main>
+    <script>
+      const subgrupos = {
+        recGrupoPeixes: [
+          { value: "recSubgrupoAdultos", text: "Peixes adultos" },
+          { value: "recSubgrupoAlevinos", text: "Alevinos" },
+          { value: "recSubgrupoMatrizes", text: "Matrizes/Reprodutores" },
+          { value: "recSubgrupoOutros", text: "Outros peixes" },
+        ],
+        recGrupoPlantas: [
+          { value: "recSubgrupoMudas", text: "Mudas" },
+          { value: "recSubgrupoCarpete", text: "Carpetes" },
+          { value: "recSubgrupoVasos", text: "Plantas em vasos" },
+        ],
+        recGrupoInsumos: [
+          { value: "recSubgrupoAlimentacao", text: "Alimentação" },
+          {
+            value: "recSubgrupoCondicionadores",
+            text: "Condicionadores e medicamentos",
+          },
+          {
+            value: "recSubgrupoEquipamentos",
+            text: "Equipamentos e acessórios",
+          },
+          { value: "recSubgrupoAquarios", text: "Aquários e terrários" },
+        ],
+        recGrupoServicos: [
+          { value: "recSubgrupoConsultoria", text: "Consultoria e projetos" },
+          { value: "recSubgrupoManutencao", text: "Manutenção" },
+          { value: "recSubgrupoTreinamento", text: "Treinamentos e mentorias" },
+        ],
+        recGrupoOutras: [
+          {
+            value: "recSubgrupoResiduos",
+            text: "Venda de resíduos / subprodutos",
+          },
+          { value: "recSubgrupoFretes", text: "Fretes e entregas" },
+          { value: "recSubgrupoRecfin", text: "Rec. financeiras" },
+          { value: "recSubgrupoRecoutras", text: "Outras receitas" },
+        ],
+      };
+
+      const grupoSelect = document.getElementById("recGrupo");
+      const subgrupoSelect = document.getElementById("recSubgrupo");
+
+      grupoSelect.addEventListener("change", function () {
+        const grupoSelecionado = this.value;
+
+        subgrupoSelect.innerHTML =
+          '<option value="notInformed">Selecione o subgrupo da receita...</option>';
+
+        if (subgrupos[grupoSelecionado]) {
+          subgrupos[grupoSelecionado].forEach((sub) => {
+            const option = document.createElement("option");
+            option.value = sub.value;
+            option.textContent = sub.text;
+            subgrupoSelect.appendChild(option);
+          });
+        }
+      });
+    </script>
   </body>
 </html>
