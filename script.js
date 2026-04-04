@@ -1,3 +1,25 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC91oioVkrrxnw0METfw0km1Z7VYkWdz8I",
+  authDomain: "gespo-fb.firebaseapp.com",
+  projectId: "gespo-fb",
+  storageBucket: "gespo-fb.firebasestorage.app",
+  messagingSenderId: "805894941559",
+  appId: "1:805894941559:web:0de8669809c4b79236cf72",
+  measurementId: "G-3LW8DK16ZL"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 let cardContainer = document.querySelector(".card-container");
 let dados = [];
 

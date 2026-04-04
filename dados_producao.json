@@ -1,0 +1,17 @@
+{
+  "propriedadeNome": "propriedade teste",
+  "propriedadeMuni": "Belo Horizonte",
+  "propriedadeUf": "MG",
+  "sistemaProdutivo": "semi-intensivo",
+  "alimentTipo": "natural",
+  "fluxoAgua": "aberto",
+  "estcultivo": "aquario_ceramica",
+  "implantEstrutura": "sala",
+  "implantProtTela": "protTela",
+  "implantTipoSolo": "",
+  "implantDeclividade": "",
+  "implantArea": "",
+  "implantFonteAgua": "",
+  "peixesEspecies": "betta",
+  "peixesEspeciesInf": ""
+}

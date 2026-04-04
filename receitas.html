@@ -87,6 +87,15 @@
             </select>
             <br />
 
+            <label for="recEspecie">Espécie vendida:</label>
+            <input
+              id="recEspecie"
+              type="text"
+              name="receitasEspecie"
+            disabled
+            />
+            <br />
+
             <label for="recQuant">Quantidade:</label>
             <input
               element.defaultValue="1"
@@ -153,9 +162,18 @@
 
       const grupoSelect = document.getElementById("recGrupo");
       const subgrupoSelect = document.getElementById("recSubgrupo");
+      const especieInput = document.getElementById("recEspecie");
 
       grupoSelect.addEventListener("change", function () {
         const grupoSelecionado = this.value;
+
+        // Habilita o campo de espécie apenas se "Venda de peixes" for selecionado
+        if (grupoSelecionado === "recGrupoPeixes") {
+          especieInput.disabled = false;
+        } else {
+          especieInput.disabled = true;
+          especieInput.value = ""; // Limpa o valor caso troque de opção
+        }
 
         subgrupoSelect.innerHTML =
           '<option value="notInformed">Selecione o subgrupo da receita...</option>';

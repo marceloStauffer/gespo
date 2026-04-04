@@ -83,41 +83,5 @@
         </table>
       </section>
     </main>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("form-documentos");
-        const lista = document.getElementById("lista-documentos");
-
-        async function carregarDocumentos() {
-          const res = await fetch("/api/documentos");
-          const docs = await res.json();
-          lista.innerHTML = "";
-          docs.forEach((doc) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                        <td style="border: 1px solid #ddd; padding: 8px;">${doc.descricao}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">
-                            <a href="/uploads/${doc.filename}" target="_blank">${doc.originalname}</a>
-                        </td>
-                    `;
-            lista.appendChild(tr);
-          });
-        }
-
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const formData = new FormData(form);
-
-          await fetch("/api/documentos", {
-            method: "POST",
-            body: formData,
-          });
-          form.reset();
-          carregarDocumentos();
-        });
-
-        carregarDocumentos();
-      });
-    </script>
   </body>
 </html>
