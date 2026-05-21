@@ -2,38 +2,23 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer'); // Requer instalação: npm install multer
-const mongoose = require('mongoose'); // Adicionado para o MongoDB
-require('dotenv').config(); // Adicionado para carregar variáveis de ambiente
 
 const app = express();
 const port = 3000;
+
+// Middleware de CORS para permitir acesso de outras portas (ex: Live Server ou aberturas via file://)
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === "OPTIONS") return res.sendStatus(200);
+    next();
+});
 
 // Middleware para processar JSON e servir arquivos estáticos
 app.use(express.json());
 app.use(express.static(__dirname));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir arquivos enviados
-
-// --- Conexão com o MongoDB ---
-mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log('Conectado ao MongoDB com sucesso!'))
-.catch(err => console.error('Erro ao conectar ao MongoDB:', err));
-
-// --- Mongoose Schemas e Models ---
-// Schema flexível para Produtor e Producao, já que a estrutura original era um JSON livre
-const GenericDataSchema = new mongoose.Schema({}, { strict: false });
-
-const Produtor = mongoose.model('Produtor', GenericDataSchema);
-const Producao = mongoose.model('Producao', GenericDataSchema);
-
-// Schema para Documentos
-const DocumentoSchema = new mongoose.Schema({
-    descricao: String,
-    filename: String,
-    originalname: String,
-    path: String,
-    createdAt: { type: Date, default: Date.now } // Adicionado para rastreamento
-});
-const Documento = mongoose.model('Documento', DocumentoSchema);
 
 // Configuração do Multer para upload de arquivos
 const storage = multer.diskStorage({
@@ -51,63 +36,43 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// --- Rotas da API atualizadas para o MongoDB ---
-
-// Rota para OBTER os dados do produtor (GET)
-app.get('/api/produtor', async (req, res) => {
+// Rota para OBTER os dados diretamente do arquivo dados_produtor.json (GET)
+app.get('/api/ler-json-produtor', (req, res) => {
     try {
-        const dados = await Produtor.findOne();
-        res.json(dados || {}); // Retorna dados ou objeto vazio para manter consistência
+        const filePath = path.join(__dirname, 'dados_produtor.json');
+        if (fs.existsSync(filePath)) {
+            const fileData = fs.readFileSync(filePath, 'utf8');
+            res.json(JSON.parse(fileData));
+        } else {
+            res.json({}); // Retorna vazio caso o arquivo ainda não exista
+        }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Erro ao buscar dados do produtor.', error: error.message });
+        res.status(500).json({ message: 'Erro ao ler o arquivo JSON.', error: error.message });
     }
 });
 
-// Rota para SALVAR os dados do produtor (POST)
-app.post('/api/produtor', async (req, res) => {
+// Rota para SALVAR os dados diretamente no arquivo dados_produtor.json (POST)
+app.post('/api/salvar-json-produtor', (req, res) => {
     try {
-        const dados = req.body;
-        // Encontra e atualiza o único documento, ou cria se não existir (upsert: true)
-        const produtorAtualizado = await Produtor.findOneAndUpdate({}, dados, { upsert: true, new: true });
-        res.json({ message: 'Dados salvos com sucesso!', data: produtorAtualizado });
+        const filePath = path.join(__dirname, 'dados_produtor.json');
+        fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2));
+        res.json({ message: 'Dados salvos com sucesso no arquivo JSON!' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Erro ao salvar dados do produtor.', error: error.message });
+        res.status(500).json({ message: 'Erro ao salvar no arquivo JSON.', error: error.message });
     }
 });
 
-// Rota para OBTER os dados de PRODUÇÃO (GET)
-app.get('/api/producao', async (req, res) => {
+// Rota para SALVAR os dados diretamente no arquivo dados_producao.json (POST)
+app.post('/api/salvar-json-producao', (req, res) => {
     try {
-        const dados = await Producao.findOne();
-        res.json(dados || {});
+        const filePath = path.join(__dirname, 'dados_producao.json');
+        fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2));
+        res.json({ message: 'Dados de produção salvos com sucesso no arquivo JSON!' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Erro ao buscar dados de produção.', error: error.message });
-    }
-});
-
-// Rota para SALVAR os dados de PRODUÇÃO (POST)
-app.post('/api/producao', async (req, res) => {
-    try {
-        const dados = req.body;
-        const producaoAtualizada = await Producao.findOneAndUpdate({}, dados, { upsert: true, new: true });
-        res.json({ message: 'Dados de produção salvos com sucesso!', data: producaoAtualizada });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erro ao salvar dados de produção.', error: error.message });
-    }
-});
-
-// Rota para OBTER a lista de documentos (GET)
-app.get('/api/documentos', async (req, res) => {
-    try {
-        const documentos = await Documento.find().sort({ createdAt: -1 }); // Ordena pelos mais recentes
-        res.json(documentos);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erro ao buscar documentos.', error: error.message });
+        res.status(500).json({ message: 'Erro ao salvar no arquivo JSON.', error: error.message });
     }
 });
 
@@ -121,15 +86,7 @@ app.post('/api/documentos', upload.single('arquivo'), async (req, res) => {
             return res.status(400).json({ message: 'Nenhum arquivo enviado.' });
         }
 
-        const novoDocumento = new Documento({
-            descricao: descricao,
-            filename: arquivo.filename,
-            originalname: arquivo.originalname,
-            path: arquivo.path
-        });
-
-        await novoDocumento.save();
-        res.status(201).json({ message: 'Documento salvo com sucesso!', documento: novoDocumento });
+        res.status(201).json({ message: 'Documento salvo localmente com sucesso!', file: arquivo.filename });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erro ao salvar documento.', error: error.message });

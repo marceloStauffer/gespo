@@ -45,7 +45,7 @@
         </div>
       </section>
       <section>
-        <form id="form-produtor" action="sucesso.html" method="get">
+        <form id="form-produtor">
           <fieldset>
             <legend>Dados pessoais</legend>
 
@@ -136,6 +136,92 @@
         </form>
       </section>
     </main>
-    <script type="module" src="script.js"></script>
+    <script>
+      // Carregar os dados ao abrir a tela
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const baseUrl =
+            window.location.port === "3000" ? "" : "http://localhost:3000";
+          const response = await fetch(
+            `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          );
+
+          if (response.ok) {
+            const dados = await response.json();
+
+            // Preenche os campos de forma dinâmica
+            for (const key in dados) {
+              const values = Array.isArray(dados[key])
+                ? dados[key]
+                : [dados[key]];
+              const inputs = document.querySelectorAll(`[name="${key}"]`);
+
+              if (inputs.length > 0) {
+                const type = inputs[0].type;
+                // Trata checkboxes e radios
+                if (type === "radio" || type === "checkbox") {
+                  values.forEach((val) => {
+                    const el = document.querySelector(
+                      `input[name="${key}"][value="${val}"]`,
+                    );
+                    if (el) el.checked = true;
+                  });
+                } else if (type !== "file") {
+                  // Trata inputs de texto comum, ignorando campo de arquivo (foto)
+                  inputs[0].value = dados[key];
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Erro ao recuperar os dados:", error);
+        }
+      });
+
+      // Salvar os dados do formulário
+      document
+        .getElementById("form-produtor")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault(); // Evita o recarregamento da página
+
+          const formData = new FormData(e.target);
+          const dados = {};
+
+          // Prepara os dados, removendo o objeto físico da foto para não quebrar o JSON.stringify
+          formData.forEach((value, key) => {
+            if (value instanceof File) {
+              dados[key] = value.name ? { filename: value.name } : {};
+            } else {
+              dados[key] = value;
+            }
+          });
+
+          try {
+            const baseUrl =
+              window.location.port === "3000" ? "" : "http://localhost:3000";
+            const response = await fetch(
+              `${baseUrl}/api/salvar-json-produtor`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados),
+              },
+            );
+
+            if (response.ok) {
+              window.location.href = "sucesso.html";
+            } else {
+              const errorText = await response.text();
+              alert(
+                "Erro ao salvar os dados no arquivo JSON. Detalhe: " +
+                  errorText,
+              );
+            }
+          } catch (error) {
+            console.error("Erro ao salvar:", error);
+            alert("Erro de comunicação com o servidor.");
+          }
+        });
+    </script>
   </body>
 </html>

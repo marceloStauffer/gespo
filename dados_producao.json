@@ -1,17 +1,36 @@
 {
-  "propriedadeNome": "propriedade teste",
+  "propriedadeNome": "Sitio Peixe Grande",
   "propriedadeMuni": "Belo Horizonte",
   "propriedadeUf": "MG",
   "sistemaProdutivo": "semi-intensivo",
   "alimentTipo": "natural",
   "fluxoAgua": "aberto",
-  "estcultivo": "aquario_ceramica",
+  "estcultivo": [
+    "tanque_revestido",
+    "aquario_ceramica"
+  ],
   "implantEstrutura": "sala",
   "implantProtTela": "protTela",
-  "implantTipoSolo": "",
-  "implantDeclividade": "",
-  "implantArea": "",
-  "implantFonteAgua": "",
-  "peixesEspecies": "betta",
-  "peixesEspeciesInf": ""
+  "implantClimatizado": "climatizado",
+  "implantTipoSolo": "Arenoso",
+  "implantDeclividade": "10m",
+  "implantArea": "20",
+  "implantFonteAgua": "Rio Arrudas",
+  "peixesEspecies": [
+    "betta",
+    "paulistinha",
+    "guppy",
+    "platy",
+    "acaraBandeira",
+    "cascudo"
+  ],
+  "fasesCultivo": [
+    "reproducao",
+    "recria",
+    "comercio"
+  ],
+  "mercadoComprador": [
+    "lojasLocais",
+    "lojasNacionais"
+  ]
 }
