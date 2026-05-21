@@ -12,13 +12,14 @@ const firebaseConfig = {
   projectId: "gespo-fb",
   storageBucket: "gespo-fb.firebasestorage.app",
   messagingSenderId: "805894941559",
-  appId: "1:805894941559:web:0de8669809c4b79236cf72",
-  measurementId: "G-3LW8DK16ZL"
+  appId: "1:805894941559:web:c7c7c23194398f2836cf72",
+  measurementId: "G-GD3MLNKC4J"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
 
 let cardContainer = document.querySelector(".card-container");
 let dados = [];

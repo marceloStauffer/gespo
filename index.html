@@ -68,6 +68,56 @@
         Discente: Vanildo José da Silva Filho --- Orientador: Giovanni Resende de Oliveira</p>
     </footer>
     <script type="module" src="script.js"></script>
+    <script>
+        async function iniciarBusca() {
+            const campoBusca = document.getElementById('campo-busca');
+            const cardContainer = document.querySelector('.card-container');
+            const termoBusca = campoBusca.value.toLowerCase().trim();
+            
+            cardContainer.innerHTML = ''; // Limpa os resultados da busca anterior
 
+            try {
+                // Carrega os dados do JSON
+                const response = await fetch('data.json');
+                if (!response.ok) throw new Error('Erro ao carregar o arquivo data.json');
+                const peixes = await response.json();
+
+                // Filtra pelo nome popular ou científico
+                const resultados = peixes.filter(peixe => 
+                    peixe.nomePopular.toLowerCase().includes(termoBusca) || 
+                    peixe.nomeCientifico.toLowerCase().includes(termoBusca)
+                );
+
+                if (resultados.length === 0) {
+                    cardContainer.innerHTML = '<p style="text-align: center; margin-top: 20px;">Nenhum peixe encontrado para esta busca.</p>';
+                    return;
+                }
+
+                // Adiciona os resultados na tela
+                resultados.forEach(peixe => {
+                    const article = document.createElement('article');
+                    article.innerHTML = `
+                        <h2>${peixe.nomePopular}</h2>
+                        <img src="${peixe.foto}" alt="${peixe.nomePopular}" style="width: 100%; max-width: 250px; border-radius: 8px; margin-top: 10px; object-fit: cover;">
+                        <p><strong>Nome Científico:</strong> ${peixe.nomeCientifico}</p>
+                        <p><strong>Origem:</strong> ${peixe.origem.replace('Origem: ', '').trim()}</p>
+                        <a href="${peixe.link}" target="_blank">Mais informações</a>
+                    `;
+                    cardContainer.appendChild(article);
+                });
+            } catch (error) {
+                console.error(error);
+                cardContainer.innerHTML = '<p style="text-align: center; margin-top: 20px;">Erro ao carregar as informações dos peixes.</p>';
+            }
+        }
+
+        // Permite buscar ao pressionar a tecla Enter
+        document.getElementById('campo-busca').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') iniciarBusca();
+        });
+        
+        // Inicia a página carregando todos os peixes (busca vazia)
+        document.addEventListener('DOMContentLoaded', iniciarBusca);
+    </script>
 </body>
 </html>
