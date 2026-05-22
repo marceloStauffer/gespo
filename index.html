@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/stylebege.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="icon" href="favicon_peixe.png">
     <title>Gespo'App</title>
 </head>
@@ -21,6 +22,10 @@
             <a href="relatorios.html" target="_self">Relatórios</a>
             <a href="consolidado.html" target="_self">Consolidado</a>
             <a href="documentos.html" target="_self">Documentos</a>
+        </div>
+        <div class="user-profile" style="display: flex; flex-direction: column; align-items: center; color: inherit;">
+            <i class="fas fa-user-circle" style="font-size: 2rem;"></i>
+            <span id="nome-usuario" style="margin-top: 5px; font-size: 0.9rem; font-weight: bold;">Usuário</span>
         </div>
     </header>
 
@@ -116,8 +121,27 @@
             if (e.key === 'Enter') iniciarBusca();
         });
         
-        // Inicia a página carregando todos os peixes (busca vazia)
-        document.addEventListener('DOMContentLoaded', iniciarBusca);
+        // Função para buscar e exibir o nome do usuário
+        async function carregarUsuario() {
+            try {
+                const baseUrl = window.location.port === "3000" ? "" : "http://localhost:3000";
+                const response = await fetch(`${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`);
+                if (response.ok) {
+                    const dados = await response.json();
+                    if (dados.produtorPrimNome) {
+                        document.getElementById('nome-usuario').textContent = dados.produtorPrimNome;
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao carregar o usuário:", error);
+            }
+        }
+
+        // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
+        document.addEventListener('DOMContentLoaded', () => {
+            iniciarBusca();
+            carregarUsuario();
+        });
     </script>
 </body>
 </html>
