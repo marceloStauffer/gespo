@@ -1,0 +1,22 @@
+[
+  {
+    "patrimonioCadData": "2026-05-01",
+    "patrimonioNome": "Aquário de vidro com capacidade para 1000 litros",
+    "patrimonioQuant": "5",
+    "patrimonioVida": "10",
+    "patrimonioGrupo": "bensAquario",
+    "patrimonioValor": "900",
+    "patrimonioSucata": "100",
+    "patrimonioObs": "aquário de vidro transparente"
+  },
+  {
+    "patrimonioCadData": "2026-05-11",
+    "patrimonioNome": "Terreno para criação de 1500 m²",
+    "patrimonioQuant": "1",
+    "patrimonioVida": "50",
+    "patrimonioGrupo": "bensImovel",
+    "patrimonioValor": "100000",
+    "patrimonioSucata": "50000",
+    "patrimonioObs": ""
+  }
+]

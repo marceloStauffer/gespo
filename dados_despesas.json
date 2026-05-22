@@ -1,0 +1,18 @@
+[
+  {
+    "despesasData": "2026-05-05",
+    "despesasDescricao": "Compra de ração para peixes",
+    "despesasGrupo": "despGrupoAlimentacao",
+    "despesasQuant": "200",
+    "despesasValor": "2500",
+    "despesasObs": "compra em atacadista"
+  },
+  {
+    "despesasData": "2026-04-06",
+    "despesasDescricao": "Pagamento de aluguel de galpão",
+    "despesasGrupo": "despGrupoAluguel",
+    "despesasQuant": "1",
+    "despesasValor": "2867",
+    "despesasObs": ""
+  }
+]

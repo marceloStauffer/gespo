@@ -45,7 +45,7 @@
         </div>
       </section>
       <section>
-        <form action="sucesso.html" method="get">
+        <form id="form-receitas">
           <fieldset>
             <legend>Receita</legend>
 
@@ -92,7 +92,7 @@
               id="recEspecie"
               type="text"
               name="receitasEspecie"
-            disabled
+              disabled
             />
             <br />
 
@@ -118,6 +118,27 @@
           <button type="reset">Limpar</button>
         </form>
       </section>
+
+      <!-- Pop-up de sucesso -->
+      <div
+        id="popup-sucesso"
+        style="
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #4caf50;
+          color: white;
+          padding: 20px 40px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          z-index: 1000;
+          text-align: center;
+        "
+      >
+        <h2>Dados enviados com sucesso!</h2>
+      </div>
     </main>
     <script>
       const subgrupos = {
@@ -187,6 +208,52 @@
           });
         }
       });
+
+      // Salvar os dados do formulário de receitas
+      document
+        .getElementById("form-receitas")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault(); // Evita o recarregamento natural da página
+
+          const formData = new FormData(e.target);
+          const dados = {};
+
+          formData.forEach((value, key) => {
+            dados[key] = value;
+          });
+
+          try {
+            const baseUrl =
+              window.location.port === "3000" ? "" : "http://localhost:3000";
+            const response = await fetch(
+              `${baseUrl}/api/salvar-json-receitas`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados),
+              },
+            );
+
+            if (response.ok) {
+              const popup = document.getElementById("popup-sucesso");
+              popup.style.display = "block";
+
+              setTimeout(() => {
+                popup.style.display = "none";
+                e.target.reset(); // Limpa os campos do formulário para um novo envio
+              }, 4000);
+            } else {
+              const errorText = await response.text();
+              alert(
+                "Erro ao salvar os dados no arquivo JSON. Detalhe: " +
+                  errorText,
+              );
+            }
+          } catch (error) {
+            console.error("Erro ao salvar:", error);
+            alert("Erro de comunicação com o servidor.");
+          }
+        });
     </script>
   </body>
 </html>

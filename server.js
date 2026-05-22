@@ -76,6 +76,72 @@ app.post('/api/salvar-json-producao', (req, res) => {
     }
 });
 
+// Rota para INSERIR um novo registro de receita no arquivo dados_receitas.json (POST)
+app.post('/api/salvar-json-receitas', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_receitas.json');
+        let receitas = [];
+        
+        // Se o arquivo já existir, lê e transforma o conteúdo em array
+        if (fs.existsSync(filePath)) {
+            const fileData = fs.readFileSync(filePath, 'utf8');
+            if (fileData.trim() !== "") receitas = JSON.parse(fileData);
+        }
+        
+        // Adiciona o novo registro e sobrescreve o arquivo
+        receitas.push(req.body);
+        fs.writeFileSync(filePath, JSON.stringify(receitas, null, 2));
+        res.json({ message: 'Receita salva com sucesso no arquivo JSON!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erro ao salvar no arquivo JSON.', error: error.message });
+    }
+});
+
+// Rota para INSERIR um novo registro de despesa no arquivo dados_despesas.json (POST)
+app.post('/api/salvar-json-despesas', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_despesas.json');
+        let despesas = [];
+        
+        // Se o arquivo já existir, lê e transforma o conteúdo em array
+        if (fs.existsSync(filePath)) {
+            const fileData = fs.readFileSync(filePath, 'utf8');
+            if (fileData.trim() !== "") despesas = JSON.parse(fileData);
+        }
+        
+        // Adiciona o novo registro e sobrescreve o arquivo
+        despesas.push(req.body);
+        fs.writeFileSync(filePath, JSON.stringify(despesas, null, 2));
+        res.json({ message: 'Despesa salva com sucesso no arquivo JSON!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erro ao salvar no arquivo JSON.', error: error.message });
+    }
+});
+
+// Rota para INSERIR um novo registro de patrimônio no arquivo dados_patrimonio.json (POST)
+app.post('/api/salvar-json-patrimonio', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_patrimonio.json');
+        let patrimonio = [];
+        
+        // Se o arquivo já existir, lê e transforma o conteúdo em array
+        if (fs.existsSync(filePath)) {
+            const fileData = fs.readFileSync(filePath, 'utf8');
+            if (fileData.trim() !== "") patrimonio = JSON.parse(fileData);
+        }
+        
+        // Adiciona o novo registro e sobrescreve o arquivo
+        patrimonio.push(req.body);
+        fs.writeFileSync(filePath, JSON.stringify(patrimonio, null, 2));
+        res.json({ message: 'Patrimônio salvo com sucesso no arquivo JSON!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erro ao salvar no arquivo JSON.', error: error.message });
+    }
+});
+
 // Rota para FAZER UPLOAD de documento (POST)
 app.post('/api/documentos', upload.single('arquivo'), async (req, res) => {
     try {

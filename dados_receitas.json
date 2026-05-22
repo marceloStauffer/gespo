@@ -1,0 +1,57 @@
+[
+  {
+    "receitasData": "2026-05-21",
+    "receitasDescricao": "Venda direta para consumidor José da Silva",
+    "receitasGrupo": "recGrupoPeixes",
+    "receitasSubgrupo": "recSubgrupoAdultos",
+    "receitasEspecie": "Platy",
+    "receitasQuant": "10",
+    "receitasValor": "250",
+    "receitasObs": "Obs venda direta"
+  },
+  {
+    "receitasData": "2026-05-11",
+    "receitasDescricao": "Recebimento de honorários ref. consultoria em projeto de implantação de tanque",
+    "receitasGrupo": "recGrupoServicos",
+    "receitasSubgrupo": "recSubgrupoConsultoria",
+    "receitasQuant": "1",
+    "receitasValor": "2000",
+    "receitasObs": ""
+  },
+  {
+    "receitasData": "2026-04-20",
+    "receitasDescricao": "Rendimento de aplicação CDB",
+    "receitasGrupo": "recGrupoOutras",
+    "receitasSubgrupo": "recSubgrupoRecfin",
+    "receitasQuant": "1",
+    "receitasValor": "350",
+    "receitasObs": "rendimento de aplicação no Sicoob"
+  },
+  {
+    "receitasData": "2026-04-01",
+    "receitasDescricao": "Recebimento ref. serviço de manutenção em galpão",
+    "receitasGrupo": "recGrupoServicos",
+    "receitasSubgrupo": "recSubgrupoManutencao",
+    "receitasQuant": "1",
+    "receitasValor": "1500",
+    "receitasObs": ""
+  },
+  {
+    "receitasData": "2026-05-04",
+    "receitasDescricao": "Venda de aquários usados",
+    "receitasGrupo": "recGrupoInsumos",
+    "receitasSubgrupo": "recSubgrupoEquipamentos",
+    "receitasQuant": "3",
+    "receitasValor": "600",
+    "receitasObs": ""
+  },
+  {
+    "receitasData": "2026-05-15",
+    "receitasDescricao": "Recebimento de frete para entrega de peixes em Viçosa/MG",
+    "receitasGrupo": "recGrupoOutras",
+    "receitasSubgrupo": "recSubgrupoFretes",
+    "receitasQuant": "1",
+    "receitasValor": "856",
+    "receitasObs": ""
+  }
+]
