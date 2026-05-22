@@ -98,6 +98,44 @@ app.post('/api/salvar-json-receitas', (req, res) => {
     }
 });
 
+// Rota para ATUALIZAR um registro de receita (PUT)
+app.put('/api/receitas/:index', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_receitas.json');
+        if (fs.existsSync(filePath)) {
+            let receitas = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            const index = parseInt(req.params.index);
+            if (index >= 0 && index < receitas.length) {
+                receitas[index] = req.body; // Substitui os dados pelo novo form
+                fs.writeFileSync(filePath, JSON.stringify(receitas, null, 2));
+                return res.json({ message: 'Receita atualizada com sucesso!' });
+            }
+        }
+        res.status(404).json({ message: 'Registro não encontrado.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao atualizar no JSON.', error: error.message });
+    }
+});
+
+// Rota para EXCLUIR um registro de receita (DELETE)
+app.delete('/api/receitas/:index', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_receitas.json');
+        if (fs.existsSync(filePath)) {
+            let receitas = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            const index = parseInt(req.params.index);
+            if (index >= 0 && index < receitas.length) {
+                receitas.splice(index, 1); // Remove 1 item no index correspondente
+                fs.writeFileSync(filePath, JSON.stringify(receitas, null, 2));
+                return res.json({ message: 'Receita excluída com sucesso!' });
+            }
+        }
+        res.status(404).json({ message: 'Registro não encontrado.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao excluir no JSON.', error: error.message });
+    }
+});
+
 // Rota para INSERIR um novo registro de despesa no arquivo dados_despesas.json (POST)
 app.post('/api/salvar-json-despesas', (req, res) => {
     try {

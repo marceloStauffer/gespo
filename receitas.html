@@ -32,7 +32,10 @@
         <div style="width: 40px"></div>
         <!-- Espaçador para manter o título centralizado -->
       </header>
-      <section style="display: flex; justify-content: space-between">
+      <section
+        id="navegacao-secoes"
+        style="display: flex; justify-content: space-between"
+      >
         <div>
           <a href="producao.html" target="_self"
             ><button id="botao-form">← ANTERIOR</button></a
@@ -114,8 +117,36 @@
             <input id="recObs" type="text" name="receitasObs" />
           </fieldset>
           <br />
-          <button type="submit">Enviar</button>
-          <button type="reset">Limpar</button>
+          <div style="display: flex; gap: 10px">
+            <button
+              type="button"
+              id="btn-submit"
+              style="width: 180px; height: 40px; margin-right: 0"
+            >
+              Salvar/Editar
+            </button>
+            <button
+              type="reset"
+              id="btn-reset"
+              style="width: 180px; height: 40px; margin-right: 0"
+            >
+              Limpar
+            </button>
+            <button
+              type="button"
+              id="btn-voltar-relatorio"
+              style="
+                display: none;
+                background-color: #6c757d;
+                color: white;
+                width: 180px;
+                height: 40px;
+                margin-right: 0;
+              "
+            >
+              Voltar para Relatório
+            </button>
+          </div>
         </form>
       </section>
 
@@ -209,13 +240,79 @@
         }
       });
 
+      // Verifica se está no modo de edição pela URL (?edit=0, por exemplo)
+      const urlParams = new URLSearchParams(window.location.search);
+      const editIndex = urlParams.get("edit");
+
+      if (editIndex !== null) {
+        document.addEventListener("DOMContentLoaded", async () => {
+          // Altera a interface dos botões para o modo de edição
+          document.getElementById("btn-reset").style.display = "none";
+          document.getElementById("navegacao-secoes").style.display = "none";
+          const btnVoltar = document.getElementById("btn-voltar-relatorio");
+          btnVoltar.style.display = "inline-block";
+
+          // Adiciona o evento de clique para o novo botão
+          btnVoltar.addEventListener("click", () => {
+            let redirectUrl = "relatorio_receitas.html";
+            const paramInicio = urlParams.get("inicio");
+            const paramFim = urlParams.get("fim");
+            const params = [];
+            if (paramInicio) params.push(`inicio=${paramInicio}`);
+            if (paramFim) params.push(`fim=${paramFim}`);
+            if (params.length > 0) redirectUrl += `?${params.join("&")}`;
+            window.location.href = redirectUrl;
+          });
+
+          try {
+            const baseUrl =
+              window.location.port === "3000" ? "" : "http://localhost:3000";
+            const response = await fetch(
+              `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
+            );
+            if (response.ok) {
+              const dados = await response.json();
+              const registro = dados[editIndex];
+              if (registro) {
+                document.getElementById("recData").value =
+                  registro.receitasData || "";
+                document.getElementById("recDescricao").value =
+                  registro.receitasDescricao || "";
+                document.getElementById("recGrupo").value =
+                  registro.receitasGrupo || "notInformed";
+                grupoSelect.dispatchEvent(new Event("change")); // Dispara o evento para carregar o subgrupo
+                document.getElementById("recSubgrupo").value =
+                  registro.receitasSubgrupo || "notInformed";
+                document.getElementById("recEspecie").value =
+                  registro.receitasEspecie || "";
+                document.getElementById("recQuant").value =
+                  registro.receitasQuant || "1";
+                document.getElementById("recValor").value =
+                  registro.receitasValor || "";
+                document.getElementById("recObs").value =
+                  registro.receitasObs || "";
+              }
+            }
+          } catch (error) {
+            console.error("Erro ao carregar edição:", error);
+          }
+        });
+      }
+
       // Salvar os dados do formulário de receitas
       document
-        .getElementById("form-receitas")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault(); // Evita o recarregamento natural da página
+        .getElementById("btn-submit")
+        .addEventListener("click", async (e) => {
+          e.preventDefault(); // Evita recarregamento fantasma
+          const form = document.getElementById("form-receitas");
 
-          const formData = new FormData(e.target);
+          // Valida os campos obrigatórios antes de prosseguir
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+          }
+
+          const formData = new FormData(form);
           const dados = {};
 
           formData.forEach((value, key) => {
@@ -225,23 +322,35 @@
           try {
             const baseUrl =
               window.location.port === "3000" ? "" : "http://localhost:3000";
-            const response = await fetch(
-              `${baseUrl}/api/salvar-json-receitas`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(dados),
-              },
-            );
+
+            const url =
+              editIndex !== null
+                ? `${baseUrl}/api/receitas/${editIndex}`
+                : `${baseUrl}/api/salvar-json-receitas`;
+            const methodForm = editIndex !== null ? "PUT" : "POST";
+
+            const response = await fetch(url, {
+              method: methodForm,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(dados),
+            });
 
             if (response.ok) {
-              const popup = document.getElementById("popup-sucesso");
-              popup.style.display = "block";
+              if (editIndex !== null) {
+                // No modo de edição, apenas confirma o salvamento.
+                // O usuário usará o botão "Voltar para Relatório" para navegar.
+                alert("Lançamento atualizado com sucesso!");
+              } else {
+                // No modo de criação, exibe o pop-up e limpa o formulário.
+                const popup = document.getElementById("popup-sucesso");
+                popup.innerHTML = "<h2>Dados enviados com sucesso!</h2>";
+                popup.style.display = "block";
 
-              setTimeout(() => {
-                popup.style.display = "none";
-                e.target.reset(); // Limpa os campos do formulário para um novo envio
-              }, 4000);
+                setTimeout(() => {
+                  popup.style.display = "none";
+                  form.reset(); // Limpa os campos do formulário para um novo envio
+                }, 3000); // 3 Segundos de espera para novos cadastros
+              }
             } else {
               const errorText = await response.text();
               alert(

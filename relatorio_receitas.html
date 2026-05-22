@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styleform.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="icon" href="favicon_peixe.png" />
+    <title>Gespo'App / Relatório de Receitas</title>
+  </head>
+  <body>
+    <main>
+      <!-- CABEÇALHO (Igual ao relatorios.html) -->
+      <header style="justify-content: space-between">
+        <div class="dropdown">
+          <button class="dropbtn"><i class="fas fa-bars"></i></button>
+          <div class="dropdown-content">
+            <a href="index.html">Início</a>
+            <a href="produtor.html">Produtor</a>
+            <a href="producao.html">Produção</a>
+            <a href="receitas.html">Receitas</a>
+            <a href="despesas.html">Despesas</a>
+            <a href="patrimonio.html">Patrimônio</a>
+            <a href="relatorios.html">Relatórios</a>
+            <a href="consolidado.html">Consolidado</a>
+            <a href="documentos.html">Documentos</a>
+          </div>
+        </div>
+        <h3>Relatórios</h3>
+        <div style="width: 40px"></div>
+      </header>
+      <section style="display: flex; justify-content: space-between">
+        <div>
+          <a href="relatorios.html" target="_self"
+            ><button id="botao-form">← VOLTAR</button></a
+          >
+        </div>
+      </section>
+
+      <!-- CORPO DO RELATÓRIO -->
+      <section style="margin-top: 20px">
+        <h2 style="text-align: center; color: var(--primary-color)">
+          RECEITAS
+        </h2>
+        <h3
+          id="nome-propriedade"
+          style="
+            text-align: center;
+            color: #555;
+            font-weight: normal;
+            margin-bottom: 20px;
+          "
+        ></h3>
+
+        <fieldset>
+          <legend>Escolha o período</legend>
+          <label for="data-inicio">Data inicio:</label>
+          <input type="date" id="data-inicio" />
+          <br />
+          <label for="data-fim">Data fim:</label>
+          <input type="date" id="data-fim" />
+          <br /><br />
+          <button type="button" id="btn-filtrar" style="margin-right: 10px">
+            Filtrar
+          </button>
+          <button type="button" id="btn-limpar">Limpar datas</button>
+        </fieldset>
+
+        <!-- Lista onde os registros serão injetados -->
+        <div
+          id="lista-receitas"
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+          "
+        ></div>
+
+        <!-- Campo de Totalização -->
+        <div
+          style="
+            margin-top: 20px;
+            text-align: left;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+          "
+        >
+          Total: R$ <span id="valor-total">0,00</span>
+        </div>
+      </section>
+
+      <!-- POP-UP DE EDIÇÃO -->
+      <div
+        id="modal-editar"
+        style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div
+          style="
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          "
+        >
+          <h2 style="margin-top: 0">Edição</h2>
+          <p>Deseja editar o lançamento?</p>
+          <div
+            style="
+              margin-top: 20px;
+              display: flex;
+              justify-content: center;
+              gap: 15px;
+            "
+          >
+            <button id="btn-sim-editar" style="width: 80px">Sim</button>
+            <button
+              onclick="fecharModal('modal-editar')"
+              style="width: 80px; background-color: #f44336"
+            >
+              Não
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- POP-UP DE EXCLUSÃO -->
+      <div
+        id="modal-excluir"
+        style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div
+          style="
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          "
+        >
+          <h2 style="margin-top: 0">Exclusão</h2>
+          <p>Deseja excluir o lançamento?</p>
+          <div
+            style="
+              margin-top: 20px;
+              display: flex;
+              justify-content: center;
+              gap: 15px;
+            "
+          >
+            <button id="btn-sim-excluir" style="width: 80px">Sim</button>
+            <button
+              onclick="fecharModal('modal-excluir')"
+              style="width: 80px; background-color: #f44336"
+            >
+              Não
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Lógica de Negócio do Relatório -->
+    <script>
+      let todasReceitas = [];
+      let indiceSelecionado = null;
+      const baseUrl =
+        window.location.port === "3000" ? "" : "http://localhost:3000";
+
+      // Mapeamento para nomes amigáveis de Grupos e Subgrupos
+      const gruposMap = {
+        recGrupoPeixes: "Venda de peixes",
+        recGrupoPlantas: "Venda de plantas aquáticas",
+        recGrupoInsumos: "Venda de insumos e produtos",
+        recGrupoServicos: "Prestação de serviços",
+        recGrupoOutras: "Outras receitas",
+      };
+
+      const subgruposMap = {
+        recSubgrupoAdultos: "Peixes adultos",
+        recSubgrupoAlevinos: "Alevinos",
+        recSubgrupoMatrizes: "Matrizes/Reprodutores",
+        recSubgrupoOutros: "Outros peixes",
+        recSubgrupoMudas: "Mudas",
+        recSubgrupoCarpete: "Carpetes",
+        recSubgrupoVasos: "Plantas em vasos",
+        recSubgrupoAlimentacao: "Alimentação",
+        recSubgrupoCondicionadores: "Condicionadores e medicamentos",
+        recSubgrupoEquipamentos: "Equipamentos e acessórios",
+        recSubgrupoAquarios: "Aquários e terrários",
+        recSubgrupoConsultoria: "Consultoria e projetos",
+        recSubgrupoManutencao: "Manutenção",
+        recSubgrupoTreinamento: "Treinamentos e mentorias",
+        recSubgrupoResiduos: "Venda de resíduos / subprodutos",
+        recSubgrupoFretes: "Fretes e entregas",
+        recSubgrupoRecfin: "Rec. financeiras",
+        recSubgrupoRecoutras: "Outras receitas",
+      };
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Recupera os parâmetros de filtro da URL, se existirem (ex: voltando da edição)
+        const urlParams = new URLSearchParams(window.location.search);
+        const pInicio = urlParams.get("inicio");
+        const pFim = urlParams.get("fim");
+        if (pInicio) document.getElementById("data-inicio").value = pInicio;
+        if (pFim) document.getElementById("data-fim").value = pFim;
+
+        // Busca o nome da propriedade em dados_producao.json
+        try {
+          const respProd = await fetch(
+            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
+          );
+          if (respProd.ok) {
+            const prod = await respProd.json();
+            if (prod.propriedadeNome) {
+              document.getElementById("nome-propriedade").textContent =
+                prod.propriedadeNome;
+            }
+          }
+        } catch (e) {
+          console.error("Erro ao carregar propriedade:", e);
+        }
+
+        carregarReceitas();
+      });
+
+      // Carrega os dados de receitas
+      async function carregarReceitas() {
+        try {
+          const resp = await fetch(
+            `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
+          );
+          if (resp.ok) {
+            let dados = await resp.json();
+            // Salva o índice original para edição e exclusão corretas após a ordenação
+            dados.forEach((item, idx) => (item._originalIndex = idx));
+            // Ordena em ordem decrescente de data
+            dados.sort((a, b) =>
+              (b.receitasData || "").localeCompare(a.receitasData || ""),
+            );
+            todasReceitas = dados;
+
+            // Aplica o filtro automaticamente caso existam datas preenchidas
+            const dInicio = document.getElementById("data-inicio").value;
+            const dFim = document.getElementById("data-fim").value;
+            if (dInicio && dFim) {
+              const filtrados = todasReceitas.filter(
+                (item) =>
+                  item.receitasData >= dInicio && item.receitasData <= dFim,
+              );
+              renderizarLista(filtrados);
+            } else {
+              renderizarLista(todasReceitas);
+            }
+          }
+        } catch (e) {
+          console.error("Erro ao carregar receitas:", e);
+        }
+      }
+
+      // Monta os registros na tela
+      function renderizarLista(lista) {
+        const container = document.getElementById("lista-receitas");
+        const spanTotal = document.getElementById("valor-total");
+        container.innerHTML = "";
+        let somaTotal = 0;
+
+        if (lista.length === 0) {
+          container.innerHTML =
+            '<p style="text-align: center;">Nenhum registro encontrado para este período.</p>';
+          spanTotal.textContent = "0,00";
+          return;
+        }
+
+        // Renderizando passando o index original para os botões Editar/Excluir funcionarem
+        lista.forEach((item) => {
+          const originalIndex = item._originalIndex;
+          const card = document.createElement("div");
+          card.style.cssText =
+            "border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);";
+
+          let dataFormatada = item.receitasData;
+          if (dataFormatada && dataFormatada.includes("-")) {
+            const p = dataFormatada.split("-");
+            dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
+          }
+
+          // Soma o valor da receita atual
+          const valorNum = parseFloat(
+            String(item.receitasValor || "0").replace(",", "."),
+          );
+          if (!isNaN(valorNum)) somaTotal += valorNum;
+
+          // Estilo para diminuir o espaçamento entre linhas
+          const pStyle = "margin: 2px 0; line-height: 1.3;";
+          const nomeGrupo =
+            gruposMap[item.receitasGrupo] ||
+            item.receitasGrupo ||
+            "Não informado";
+          const nomeSubgrupo =
+            subgruposMap[item.receitasSubgrupo] ||
+            item.receitasSubgrupo ||
+            "Não informado";
+
+          card.innerHTML = `
+            <p style="${pStyle}"><strong>Data:</strong> ${dataFormatada || "N/A"}</p>
+            <p style="${pStyle}"><strong>Descrição:</strong> ${item.receitasDescricao || "Sem descrição"}</p>
+            <p style="${pStyle}"><strong>Grupo:</strong> ${nomeGrupo}</p>
+            <p style="${pStyle}"><strong>Subgrupo:</strong> ${nomeSubgrupo}</p>
+            ${item.receitasEspecie ? `<p style="${pStyle}"><strong>Espécie:</strong> ${item.receitasEspecie}</p>` : ""}
+            <p style="${pStyle}"><strong>Quantidade:</strong> ${item.receitasQuant || "N/A"}</p>
+            <p style="${pStyle}"><strong>Valor:</strong> R$ ${item.receitasValor || "0,00"}</p>
+            <p style="${pStyle}"><strong>Obs:</strong> ${item.receitasObs || "-"}</p>
+            <div style="margin-top: 12px; display: flex; gap: 10px;">
+              <button onclick="abrirModalEditar(${originalIndex})" style="padding: 5px 15px;">Editar</button>
+              <button onclick="abrirModalExcluir(${originalIndex})" style="padding: 5px 15px; background-color: #f44336;">Excluir</button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        // Formata e exibe o total
+        spanTotal.textContent = somaTotal.toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      // Filtros de Data
+      document.getElementById("btn-filtrar").addEventListener("click", () => {
+        const dInicio = document.getElementById("data-inicio").value;
+        const dFim = document.getElementById("data-fim").value;
+        if (!dInicio || !dFim) {
+          alert("Preencha as duas datas para aplicar o filtro.");
+          return;
+        }
+        const filtrados = todasReceitas.filter(
+          (item) => item.receitasData >= dInicio && item.receitasData <= dFim,
+        );
+        renderizarLista(filtrados);
+      });
+
+      document.getElementById("btn-limpar").addEventListener("click", () => {
+        document.getElementById("data-inicio").value = "";
+        document.getElementById("data-fim").value = "";
+        renderizarLista(todasReceitas);
+      });
+
+      // Lógica de Modais
+      function abrirModalEditar(index) {
+        indiceSelecionado = index;
+        document.getElementById("modal-editar").style.display = "flex";
+      }
+      function abrirModalExcluir(index) {
+        indiceSelecionado = index;
+        document.getElementById("modal-excluir").style.display = "flex";
+      }
+      function fecharModal(id) {
+        document.getElementById(id).style.display = "none";
+        indiceSelecionado = null;
+      }
+
+      // Confirmações
+      document
+        .getElementById("btn-sim-editar")
+        .addEventListener("click", () => {
+          if (indiceSelecionado !== null) {
+            const dInicio = document.getElementById("data-inicio").value;
+            const dFim = document.getElementById("data-fim").value;
+            let url = `receitas.html?edit=${indiceSelecionado}`;
+            if (dInicio) url += `&inicio=${dInicio}`;
+            if (dFim) url += `&fim=${dFim}`;
+            window.location.href = url;
+          }
+        });
+
+      document
+        .getElementById("btn-sim-excluir")
+        .addEventListener("click", async () => {
+          if (indiceSelecionado !== null) {
+            try {
+              const resp = await fetch(
+                `${baseUrl}/api/receitas/${indiceSelecionado}`,
+                { method: "DELETE" },
+              );
+              if (resp.ok) {
+                fecharModal("modal-excluir");
+                carregarReceitas();
+              } else {
+                alert("Erro ao excluir o registro.");
+              }
+            } catch (e) {
+              alert("Erro de comunicação com o servidor.");
+            }
+          }
+        });
+    </script>
+  </body>
+</html>

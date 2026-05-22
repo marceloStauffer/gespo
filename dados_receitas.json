@@ -1,15 +1,5 @@
 [
   {
-    "receitasData": "2026-05-21",
-    "receitasDescricao": "Venda direta para consumidor José da Silva",
-    "receitasGrupo": "recGrupoPeixes",
-    "receitasSubgrupo": "recSubgrupoAdultos",
-    "receitasEspecie": "Platy",
-    "receitasQuant": "10",
-    "receitasValor": "250",
-    "receitasObs": "Obs venda direta"
-  },
-  {
     "receitasData": "2026-05-11",
     "receitasDescricao": "Recebimento de honorários ref. consultoria em projeto de implantação de tanque",
     "receitasGrupo": "recGrupoServicos",
@@ -34,7 +24,7 @@
     "receitasSubgrupo": "recSubgrupoManutencao",
     "receitasQuant": "1",
     "receitasValor": "1500",
-    "receitasObs": ""
+    "receitasObs": "agora vai"
   },
   {
     "receitasData": "2026-05-04",
@@ -51,7 +41,17 @@
     "receitasGrupo": "recGrupoOutras",
     "receitasSubgrupo": "recSubgrupoFretes",
     "receitasQuant": "1",
-    "receitasValor": "856",
-    "receitasObs": ""
+    "receitasValor": "800",
+    "receitasObs": "obs 15/05"
+  },
+  {
+    "receitasData": "2026-05-21",
+    "receitasDescricao": "Venda direta para consumidor José da Silva",
+    "receitasGrupo": "recGrupoPeixes",
+    "receitasSubgrupo": "recSubgrupoAdultos",
+    "receitasEspecie": "Platy",
+    "receitasQuant": "10",
+    "receitasValor": "250",
+    "receitasObs": "Obs venda direta - alterado"
   }
 ]
