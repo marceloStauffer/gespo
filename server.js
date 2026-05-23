@@ -256,20 +256,51 @@ app.delete('/api/patrimonio/:index', (req, res) => {
     }
 });
 
-// Rota para FAZER UPLOAD de documento (POST)
-app.post('/api/documentos', upload.single('arquivo'), async (req, res) => {
+// Rota para SALVAR link/texto do documento (POST)
+app.post('/api/documentos', async (req, res) => {
     try {
-        const { descricao } = req.body;
-        const arquivo = req.file;
+        const { descricao, arquivo } = req.body;
 
-        if (!arquivo) {
-            return res.status(400).json({ message: 'Nenhum arquivo enviado.' });
+        const filePath = path.join(__dirname, 'dados_documentos.json');
+        let documentos = [];
+        
+        // Lê os documentos já existentes
+        if (fs.existsSync(filePath)) {
+            const fileData = fs.readFileSync(filePath, 'utf8');
+            if (fileData.trim() !== "") documentos = JSON.parse(fileData);
         }
+        
+        // Adiciona o novo documento ao array
+        documentos.push({
+            id: Date.now(),
+            descricao: descricao,
+            nomeArquivo: arquivo || '',
+            dataUpload: new Date().toISOString()
+        });
+        
+        // Grava no arquivo
+        fs.writeFileSync(filePath, JSON.stringify(documentos, null, 2));
 
-        res.status(201).json({ message: 'Documento salvo localmente com sucesso!', file: arquivo.filename });
+        res.status(201).json({ message: 'Documento salvo localmente com sucesso!' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erro ao salvar documento.', error: error.message });
+    }
+});
+
+// Rota para LER os documentos salvos (GET)
+app.get('/api/ler-json-documentos', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_documentos.json');
+        if (fs.existsSync(filePath)) {
+            const fileData = fs.readFileSync(filePath, 'utf8');
+            res.json(JSON.parse(fileData));
+        } else {
+            res.json([]);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erro ao ler o arquivo JSON de documentos.', error: error.message });
     }
 });
 

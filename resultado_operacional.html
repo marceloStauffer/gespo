@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styleform.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="icon" href="favicon_peixe.png" />
+    <title>Gespo'App / Resultado Operacional</title>
+    <!-- Bibliotecas para geração de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <!-- CABEÇALHO -->
+      <header style="justify-content: space-between">
+        <div class="dropdown">
+          <button class="dropbtn"><i class="fas fa-bars"></i></button>
+          <div class="dropdown-content">
+            <a href="index.html">Início</a>
+            <a href="produtor.html">Produtor</a>
+            <a href="producao.html">Produção</a>
+            <a href="receitas.html">Receitas</a>
+            <a href="despesas.html">Despesas</a>
+            <a href="patrimonio.html">Patrimônio</a>
+            <a href="relatorios.html">Relatórios</a>
+            <a href="consolidado.html">Consolidado</a>
+            <a href="documentos.html">Documentos</a>
+            <a href="resultado_operacional.html">Res. Operacional</a>
+          </div>
+        </div>
+        <h3>Relatórios</h3>
+        <div style="width: 40px"></div>
+        <div
+          class="user-profile"
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: inherit;
+          "
+        >
+          <i class="fas fa-user-circle" style="font-size: 2rem"></i>
+          <span
+            id="nome-usuario"
+            style="margin-top: 5px; font-size: 0.9rem; font-weight: bold"
+            >Usuário</span
+          >
+        </div>
+      </header>
+
+      <section
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div>
+          <a href="relatorios.html" target="_self"
+            ><button id="botao-form">← VOLTAR</button></a
+          >
+        </div>
+        <div>
+          <button
+            id="btn-abrir-modal-pdf"
+            style="
+              width: auto;
+              padding: 5px 15px;
+              font-size: 1.2rem;
+              background-color: #e0ea1e;
+              color: #3e2723;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+            "
+            title="Visualizar PDF"
+          >
+            <i class="fas fa-file-pdf"></i> PDF
+          </button>
+        </div>
+      </section>
+
+      <!-- CORPO DO RELATÓRIO -->
+      <section style="margin-top: 20px">
+        <h2 style="text-align: center; color: var(--primary-color)">
+          RESULTADO OPERACIONAL
+        </h2>
+        <h3
+          id="nome-propriedade"
+          style="
+            text-align: center;
+            color: #555;
+            font-weight: normal;
+            margin-bottom: 20px;
+          "
+        ></h3>
+
+        <fieldset>
+          <legend>Escolha o período</legend>
+          <div style="display: flex; gap: 15px">
+            <div style="flex: 1">
+              <label for="data-inicio">Data inicio:</label>
+              <input type="date" id="data-inicio" style="margin-bottom: 15px" />
+            </div>
+            <div style="flex: 1">
+              <label for="data-fim">Data fim:</label>
+              <input type="date" id="data-fim" style="margin-bottom: 15px" />
+            </div>
+          </div>
+          <button type="button" id="btn-filtrar" style="margin-right: 10px">
+            Filtrar
+          </button>
+          <button type="button" id="btn-limpar">Limpar datas</button>
+        </fieldset>
+
+        <!-- Lista onde os resultados agregados serão injetados -->
+        <div id="lista-resultado" style="margin-top: 20px"></div>
+      </section>
+
+      <!-- POP-UP DE GERAR PDF -->
+      <div
+        id="modal-pdf"
+        style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div
+          style="
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          "
+        >
+          <h2 style="margin-top: 0">Gerar PDF</h2>
+          <p>Deseja gerar arquivo .pdf do Resultado Operacional?</p>
+          <div
+            style="
+              margin-top: 20px;
+              display: flex;
+              justify-content: center;
+              gap: 15px;
+            "
+          >
+            <button
+              id="btn-sim-pdf"
+              style="
+                width: 80px;
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                padding: 8px;
+              "
+            >
+              Sim
+            </button>
+            <button
+              onclick="fecharModal('modal-pdf')"
+              style="
+                width: 80px;
+                background-color: #f44336;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                padding: 8px;
+              "
+            >
+              Não
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Lógica de Negócio do Relatório -->
+    <script>
+      let todasReceitas = [];
+      let todasDespesas = [];
+      let totalReceitasGlobais = 0;
+      let totalDespesasGlobais = 0;
+
+      const baseUrl =
+        window.location.port === "3000" ? "" : "http://localhost:3000";
+
+      // Mapeamento
+      const gruposRecMap = {
+        recGrupoPeixes: "Venda de peixes",
+        recGrupoPlantas: "Venda de plantas aquáticas",
+        recGrupoInsumos: "Venda de insumos e produtos",
+        recGrupoServicos: "Prestação de serviços",
+        recGrupoOutras: "Outras receitas",
+      };
+
+      const subgruposRecMap = {
+        recSubgrupoAdultos: "Peixes adultos",
+        recSubgrupoAlevinos: "Alevinos",
+        recSubgrupoMatrizes: "Matrizes/Reprodutores",
+        recSubgrupoOutros: "Outros peixes",
+        recSubgrupoMudas: "Mudas",
+        recSubgrupoCarpete: "Carpetes",
+        recSubgrupoVasos: "Plantas em vasos",
+        recSubgrupoAlimentacao: "Alimentação",
+        recSubgrupoCondicionadores: "Condicionadores e medicamentos",
+        recSubgrupoEquipamentos: "Equipamentos e acessórios",
+        recSubgrupoAquarios: "Aquários e terrários",
+        recSubgrupoConsultoria: "Consultoria e projetos",
+        recSubgrupoManutencao: "Manutenção",
+        recSubgrupoTreinamento: "Treinamentos e mentorias",
+        recSubgrupoResiduos: "Venda de resíduos / subprodutos",
+        recSubgrupoFretes: "Fretes e entregas",
+        recSubgrupoRecfin: "Rec. financeiras",
+        recSubgrupoRecoutras: "Outras receitas",
+      };
+
+      const gruposDespMap = {
+        despGrupoAlimentacao: "Alimentação animal",
+        despGrupoAluguel: "Aluguel de propriedade",
+        despGrupoComercializacao: "Comercialização",
+        despGrupoAdm: "Despesas administrativas",
+        despGrupoInsumos: "Insumos",
+        despGrupoOutras: "Outras despesas",
+      };
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Busca o nome da propriedade
+        try {
+          const respProd = await fetch(
+            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
+          );
+          if (respProd.ok) {
+            const prod = await respProd.json();
+            if (prod.propriedadeNome) {
+              document.getElementById("nome-propriedade").textContent =
+                prod.propriedadeNome;
+            }
+          }
+        } catch (e) {
+          console.error("Erro ao carregar propriedade:", e);
+        }
+        carregarDados();
+      });
+
+      async function carregarDados() {
+        try {
+          const reqReceitas = fetch(
+            `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
+          );
+          const reqDespesas = fetch(
+            `${baseUrl}/dados_despesas.json?t=${new Date().getTime()}`,
+          );
+
+          const [respRec, respDesp] = await Promise.all([
+            reqReceitas,
+            reqDespesas,
+          ]);
+
+          if (respRec.ok) todasReceitas = await respRec.json();
+          if (respDesp.ok) todasDespesas = await respDesp.json();
+
+          renderizarResultados();
+        } catch (e) {
+          console.error("Erro ao carregar dados:", e);
+        }
+      }
+
+      function renderizarResultados() {
+        const dInicio = document.getElementById("data-inicio").value;
+        const dFim = document.getElementById("data-fim").value;
+
+        let recFiltradas = todasReceitas;
+        let despFiltradas = todasDespesas;
+
+        if (dInicio && dFim) {
+          recFiltradas = todasReceitas.filter(
+            (item) => item.receitasData >= dInicio && item.receitasData <= dFim,
+          );
+          despFiltradas = todasDespesas.filter(
+            (item) => item.despesasData >= dInicio && item.despesasData <= dFim,
+          );
+        }
+
+        // Agrupamento de Receitas
+        let recAgrupadas = {};
+        totalReceitasGlobais = 0;
+        recFiltradas.forEach((r) => {
+          let val = parseFloat(
+            String(r.receitasValor || "0").replace(",", "."),
+          );
+          if (isNaN(val)) val = 0;
+          totalReceitasGlobais += val;
+
+          let g = r.receitasGrupo || "Não informado";
+          let sg = r.receitasSubgrupo || "Não informado";
+
+          if (!recAgrupadas[g]) recAgrupadas[g] = { total: 0, subgrupos: {} };
+          if (!recAgrupadas[g].subgrupos[sg]) recAgrupadas[g].subgrupos[sg] = 0;
+
+          recAgrupadas[g].total += val;
+          recAgrupadas[g].subgrupos[sg] += val;
+        });
+
+        // Agrupamento de Despesas
+        let despAgrupadas = {};
+        totalDespesasGlobais = 0;
+        despFiltradas.forEach((d) => {
+          let val = parseFloat(
+            String(d.despesasValor || "0").replace(",", "."),
+          );
+          if (isNaN(val)) val = 0;
+          totalDespesasGlobais += val;
+
+          let g = d.despesasGrupo || "Não informado";
+          if (!despAgrupadas[g]) despAgrupadas[g] = 0;
+
+          despAgrupadas[g] += val;
+        });
+
+        const container = document.getElementById("lista-resultado");
+        let html = "";
+
+        // Bloco Receitas
+        html +=
+          '<div style="background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">';
+        html +=
+          '<h3 style="color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; margin-top: 0;">RECEITAS</h3>';
+        for (let g in recAgrupadas) {
+          let nomeG = gruposRecMap[g] || g;
+          html += `<div style="margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: var(--secondary-color);">❖ ${nomeG}: R$ ${recAgrupadas[g].total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+          for (let sg in recAgrupadas[g].subgrupos) {
+            let nomeSG = subgruposRecMap[sg] || sg;
+            let valSG = recAgrupadas[g].subgrupos[sg];
+            html += `<div style="margin-left: 25px; margin-top: 5px; color: #555;">↳ ${nomeSG}: R$ ${valSG.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+          }
+        }
+        if (Object.keys(recAgrupadas).length === 0) {
+          html +=
+            '<p style="margin-top: 10px; color: #777;">Nenhuma receita neste período.</p>';
+        }
+        html += `<div style="margin-top: 20px; font-size: 1.2rem; font-weight: bold; color: var(--secondary-color); text-align: right;">TOTAL RECEITAS: R$ ${totalReceitasGlobais.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+        html += "</div>";
+
+        // Bloco Despesas
+        html +=
+          '<div style="background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">';
+        html +=
+          '<h3 style="color: #f44336; border-bottom: 2px solid #f44336; padding-bottom: 5px; margin-top: 0;">DESPESAS</h3>';
+        for (let g in despAgrupadas) {
+          let nomeG = gruposDespMap[g] || g;
+          html += `<div style="margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: #555;">❖ ${nomeG}: R$ ${despAgrupadas[g].toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+        }
+        if (Object.keys(despAgrupadas).length === 0) {
+          html +=
+            '<p style="margin-top: 10px; color: #777;">Nenhuma despesa neste período.</p>';
+        }
+        html += `<div style="margin-top: 20px; font-size: 1.2rem; font-weight: bold; color: #f44336; text-align: right;">TOTAL DESPESAS: R$ ${totalDespesasGlobais.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+        html += "</div>";
+
+        // Bloco Resultado Operacional
+        let resultadoOperacional = totalReceitasGlobais - totalDespesasGlobais;
+        let corResultado = resultadoOperacional >= 0 ? "#4caf50" : "#f44336";
+        let textoResultado = resultadoOperacional >= 0 ? "LUCRO" : "PREJUÍZO";
+
+        html += `<div style="background: ${corResultado}15; border: 2px solid ${corResultado}; border-radius: 8px; padding: 20px; text-align: center;">`;
+        html += `<h2 style="margin: 0; color: ${corResultado};">RESULTADO OPERACIONAL (${textoResultado})</h2>`;
+        html += `<div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: ${corResultado};">R$ ${resultadoOperacional.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+        html += "</div>";
+
+        container.innerHTML = html;
+
+        // Variáveis globais para serem consumidas na geração do PDF
+        window.recAgrupadasParaPDF = recAgrupadas;
+        window.despAgrupadasParaPDF = despAgrupadas;
+      }
+
+      // Filtros
+      document.getElementById("btn-filtrar").addEventListener("click", () => {
+        const dInicio = document.getElementById("data-inicio").value;
+        const dFim = document.getElementById("data-fim").value;
+        if (!dInicio || !dFim) {
+          alert("Preencha as duas datas para aplicar o filtro.");
+          return;
+        }
+        renderizarResultados();
+      });
+
+      document.getElementById("btn-limpar").addEventListener("click", () => {
+        document.getElementById("data-inicio").value = "";
+        document.getElementById("data-fim").value = "";
+        renderizarResultados();
+      });
+
+      function fecharModal(id) {
+        document.getElementById(id).style.display = "none";
+      }
+
+      // Modal PDF
+      document
+        .getElementById("btn-abrir-modal-pdf")
+        .addEventListener("click", () => {
+          document.getElementById("modal-pdf").style.display = "flex";
+        });
+
+      document.getElementById("btn-sim-pdf").addEventListener("click", () => {
+        fecharModal("modal-pdf");
+        gerarPDF();
+      });
+
+      // Geração de PDF usando jsPDF + autoTable
+      function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const propriedade =
+          document.getElementById("nome-propriedade").textContent ||
+          "Propriedade Não Informada";
+        const dInicio = document.getElementById("data-inicio").value;
+        const dFim = document.getElementById("data-fim").value;
+        let periodoStr = "Período: Todos os registros";
+
+        if (dInicio && dFim) {
+          const dataI = dInicio.split("-").reverse().join("/");
+          const dataF = dFim.split("-").reverse().join("/");
+          periodoStr = `Período: ${dataI} a ${dataF}`;
+        }
+
+        // Título PDF
+        doc.setFontSize(16);
+        doc.text(propriedade, 105, 15, { align: "center" });
+        doc.setFontSize(14);
+        doc.text("Resultado Operacional", 105, 22, { align: "center" });
+        doc.setFontSize(12);
+        doc.text(periodoStr, 105, 29, { align: "center" });
+
+        let finalY = 35;
+
+        // Tabela Receitas
+        doc.setFontSize(12);
+        doc.setTextColor(145, 116, 96); // Marrom do site
+        doc.text("RECEITAS", 14, finalY);
+        finalY += 5;
+
+        const colunasRec = ["Grupo", "Subgrupo", "Total (R$)"];
+        const linhasRec = [];
+
+        for (let g in window.recAgrupadasParaPDF) {
+          let nomeG = gruposRecMap[g] || g;
+          let subgrupos = window.recAgrupadasParaPDF[g].subgrupos;
+          linhasRec.push([
+            nomeG,
+            "",
+            window.recAgrupadasParaPDF[g].total.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            }),
+          ]);
+          for (let sg in subgrupos) {
+            linhasRec.push([
+              "",
+              subgruposRecMap[sg] || sg,
+              subgrupos[sg].toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+              }),
+            ]);
+          }
+        }
+        linhasRec.push([
+          "",
+          "TOTAL RECEITAS:",
+          totalReceitasGlobais.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+          }),
+        ]);
+
+        doc.autoTable({
+          startY: finalY,
+          head: [colunasRec],
+          body: linhasRec,
+          theme: "grid",
+          headStyles: { fillColor: [145, 116, 96] },
+          columnStyles: {
+            2: { halign: "right" },
+          },
+          didParseCell: function (data) {
+            if (data.section === "body") {
+              if (data.row.index === linhasRec.length - 1) {
+                data.cell.styles.fontStyle = "bold";
+                if (data.column.index === 1) data.cell.styles.halign = "right";
+                data.cell.styles.lineWidth = {
+                  top: 0.1,
+                  right: 0.1,
+                  bottom: 0.1,
+                  left: 0.1,
+                };
+              } else {
+                if (data.row.raw[0]) {
+                  if (data.column.index === 0 || data.column.index === 2) {
+                    data.cell.styles.fontStyle = "bold";
+                  }
+                  data.cell.styles.lineWidth = {
+                    top: 0.1,
+                    right: 0.1,
+                    bottom: 0,
+                    left: 0.1,
+                  };
+                } else {
+                  data.cell.styles.lineWidth = {
+                    top: 0,
+                    right: 0.1,
+                    bottom: 0,
+                    left: 0.1,
+                  };
+                }
+              }
+            }
+          },
+        });
+
+        finalY = doc.lastAutoTable.finalY + 10;
+
+        // Tabela Despesas
+        doc.setFontSize(12);
+        doc.setTextColor(244, 67, 54); // Vermelho
+        doc.text("DESPESAS", 14, finalY);
+        finalY += 5;
+
+        const colunasDesp = ["Grupo", "Total (R$)"];
+        const linhasDesp = [];
+
+        for (let g in window.despAgrupadasParaPDF) {
+          linhasDesp.push([
+            gruposDespMap[g] || g,
+            window.despAgrupadasParaPDF[g].toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            }),
+          ]);
+        }
+        linhasDesp.push([
+          "TOTAL DESPESAS:",
+          totalDespesasGlobais.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+          }),
+        ]);
+
+        doc.autoTable({
+          startY: finalY,
+          head: [colunasDesp],
+          body: linhasDesp,
+          theme: "grid",
+          headStyles: { fillColor: [244, 67, 54] },
+          columnStyles: {
+            1: { halign: "right" },
+          },
+          didParseCell: function (data) {
+            if (data.section === "body") {
+              if (data.row.index === linhasDesp.length - 1) {
+                data.cell.styles.fontStyle = "bold";
+                if (data.column.index === 0) data.cell.styles.halign = "right";
+              } else {
+                data.cell.styles.fontStyle = "bold";
+              }
+            }
+          },
+        });
+
+        finalY = doc.lastAutoTable.finalY + 15;
+
+        // Resultado Operacional Final
+        let resultado = totalReceitasGlobais - totalDespesasGlobais;
+        doc.setFontSize(14);
+        let corResultado = resultado >= 0 ? [76, 175, 80] : [244, 67, 54]; // Verde / Vermelho
+        doc.setTextColor(corResultado[0], corResultado[1], corResultado[2]);
+        let statusText = resultado >= 0 ? "LUCRO" : "PREJUÍZO";
+        doc.text(
+          `RESULTADO OPERACIONAL (${statusText}): R$ ${resultado.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+          105,
+          finalY,
+          { align: "center" },
+        );
+
+        // Abre o PDF para visualização
+        const pdfUrl = doc.output("bloburl");
+        window.open(pdfUrl, "_blank");
+      }
+    </script>
+  </body>
+  <script>
+    async function carregarUsuario() {
+      try {
+        const baseUrl =
+          window.location.port === "3000" ? "" : "http://localhost:3000";
+        const response = await fetch(
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+        );
+        if (response.ok) {
+          const dados = await response.json();
+          if (dados.produtorPrimNome) {
+            document.getElementById("nome-usuario").textContent =
+              dados.produtorPrimNome;
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao carregar o usuário:", error);
+      }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarUsuario();
+    });
+  </script>
+</html>

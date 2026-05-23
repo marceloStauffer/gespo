@@ -24,14 +24,13 @@
             <a href="despesas.html">Despesas</a>
             <a href="patrimonio.html">Patrimônio</a>
             <a href="relatorios.html">Relatórios</a>
-            <a href="consolidado.html">Consolidado</a>
             <a href="documentos.html">Documentos</a>
           </div>
         </div>
         <h3>Documentos</h3>
         <div style="width: 40px"></div>
         <!-- Espaçador para manter o título centralizado -->
-                 <div
+        <div
           class="user-profile"
           style="
             display: flex;
@@ -47,17 +46,16 @@
             >Usuário</span
           >
         </div>
-
       </header>
       <section style="display: flex; justify-content: space-between">
         <div>
-          <a href="consolidado.html" target="_self"
+          <a href="relatorios.html" target="_self"
             ><button id="botao-form">← ANTERIOR</button></a
           >
         </div>
       </section>
       <section>
-        <form id="form-documentos">
+        <form id="form-documentos" style="margin-bottom: 20px">
           <fieldset>
             <legend>Novo Documento</legend>
             <label for="descricao">Descrição do Documento:</label>
@@ -70,9 +68,11 @@
             />
 
             <label for="arquivo">Arquivo:</label>
-            <input type="file" id="arquivo" name="arquivo" required />
+            <input type="file" id="arquivo" accept="image/*" name="arquivo" />
 
-            <button type="submit">Enviar Upload</button>
+            <br />
+            <button type="submit">Enviar</button>
+            <button type="reset">Limpar</button>
           </fieldset>
         </form>
       </section>
@@ -101,26 +101,112 @@
       </section>
     </main>
   </body>
-      <script>
-        // Função para buscar e exibir o nome do usuário
-        async function carregarUsuario() {
-            try {
-                const baseUrl = window.location.port === "3000" ? "" : "http://localhost:3000";
-                const response = await fetch(`${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`);
-                if (response.ok) {
-                    const dados = await response.json();
-                    if (dados.produtorPrimNome) {
-                        document.getElementById('nome-usuario').textContent = dados.produtorPrimNome;
-                    }
-                }
-            } catch (error) {
-                console.error("Erro ao carregar o usuário:", error);
-            }
+  <script>
+    // Função para buscar e exibir o nome do usuário
+    async function carregarUsuario() {
+      try {
+        const baseUrl =
+          window.location.port === "3000" ? "" : "http://localhost:3000";
+        const response = await fetch(
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+        );
+        if (response.ok) {
+          const dados = await response.json();
+          if (dados.produtorPrimNome) {
+            document.getElementById("nome-usuario").textContent =
+              dados.produtorPrimNome;
+          }
         }
-        // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
-        document.addEventListener('DOMContentLoaded', () => {
-            carregarUsuario();
-        });
-  </script>
+      } catch (error) {
+        console.error("Erro ao carregar o usuário:", error);
+      }
+    }
 
+    // Carrega a lista de documentos do JSON e preenche a tabela
+    async function carregarDocumentos() {
+      try {
+        const baseUrl =
+          window.location.port === "3000" ? "" : "http://localhost:3000";
+        const response = await fetch(
+          `${baseUrl}/api/ler-json-documentos?t=${new Date().getTime()}`,
+        );
+        const lista = document.getElementById("lista-documentos");
+        lista.innerHTML = ""; // Limpa a tabela
+
+        if (response.ok) {
+          const documentos = await response.json();
+
+          if (documentos.length === 0) {
+            lista.innerHTML =
+              '<tr><td colspan="2" style="border: 1px solid #ddd; padding: 8px; text-align: center;">Nenhum documento arquivado.</td></tr>';
+            return;
+          }
+
+          documentos.forEach((doc) => {
+            const tr = document.createElement("tr");
+            const arquivoNome = doc.nomeArquivo || "";
+            const arquivoHtml = arquivoNome.startsWith("http")
+              ? `<a href="${arquivoNome}" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: bold;"><i class="fas fa-external-link-alt"></i> Acessar Link</a>`
+              : arquivoNome;
+            tr.innerHTML = `
+                            <td style="border: 1px solid #ddd; padding: 8px;">${doc.descricao}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">
+                                ${arquivoHtml}
+                            </td>
+                        `;
+            lista.appendChild(tr);
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao carregar documentos:", error);
+      }
+    }
+
+    // Envia o formulário para o backend
+    document
+      .getElementById("form-documentos")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const dados = {};
+
+        // Remove o objeto físico para não quebrar o JSON, salvando apenas o nome (como no produtor.html)
+        formData.forEach((value, key) => {
+          if (value instanceof File) {
+            if (value.name) dados[key] = value.name;
+          } else {
+            dados[key] = value;
+          }
+        });
+
+        const baseUrl =
+          window.location.port === "3000" ? "" : "http://localhost:3000";
+
+        try {
+          const response = await fetch(`${baseUrl}/api/documentos`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dados),
+          });
+          if (response.ok) {
+            alert("Documento salvo com sucesso!");
+            form.reset();
+            carregarDocumentos(); // Recarrega a tabela imediatamente
+          } else {
+            const errorMsg = await response.text();
+            alert("Erro ao enviar documento: " + errorMsg);
+          }
+        } catch (error) {
+          console.error("Erro no upload:", error);
+          alert("Erro de comunicação com o servidor.");
+        }
+      });
+
+    // Inicia a página carregando os dados do usuário e a tabela de documentos
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarUsuario();
+      carregarDocumentos();
+    });
+  </script>
 </html>

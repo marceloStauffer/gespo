@@ -53,5 +53,15 @@
     "receitasQuant": "10",
     "receitasValor": "250",
     "receitasObs": "Obs venda direta - alterado"
+  },
+  {
+    "receitasData": "2026-05-20",
+    "receitasDescricao": "Venda de matrizes para criador especializado",
+    "receitasGrupo": "recGrupoPeixes",
+    "receitasSubgrupo": "recSubgrupoMatrizes",
+    "receitasEspecie": "Platy",
+    "receitasQuant": "20",
+    "receitasValor": "5000",
+    "receitasObs": "matrizes campeãs"
   }
 ]
