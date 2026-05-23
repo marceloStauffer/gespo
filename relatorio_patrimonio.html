@@ -9,14 +9,14 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="icon" href="favicon_peixe.png" />
-    <title>Gespo'App / Relatório de Receitas</title>
+    <title>Gespo'App / Relatório de Patrimônio</title>
     <!-- Bibliotecas para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   </head>
   <body>
     <main>
-      <!-- CABEÇALHO (Igual ao relatorios.html) -->
+      <!-- CABEÇALHO -->
       <header style="justify-content: space-between">
         <div class="dropdown">
           <button class="dropbtn"><i class="fas fa-bars"></i></button>
@@ -86,7 +86,7 @@
       <!-- CORPO DO RELATÓRIO -->
       <section style="margin-top: 20px">
         <h2 style="text-align: center; color: var(--primary-color)">
-          RECEITAS
+          PATRIMÔNIO (BENS)
         </h2>
         <h3
           id="nome-propriedade"
@@ -99,7 +99,7 @@
         ></h3>
 
         <fieldset>
-          <legend>Escolha o período</legend>
+          <legend>Escolha o período do cadastro</legend>
           <div style="display: flex; gap: 15px">
             <div style="flex: 1">
               <label for="data-inicio">Data inicio:</label>
@@ -118,7 +118,7 @@
 
         <!-- Lista onde os registros serão injetados -->
         <div
-          id="lista-receitas"
+          id="lista-patrimonio"
           style="
             display: flex;
             flex-direction: column;
@@ -137,7 +137,7 @@
             color: var(--secondary-color);
           "
         >
-          Total: R$ <span id="valor-total">0,00</span>
+          Total de Bens Atual: R$ <span id="valor-total">0,00</span>
         </div>
       </section>
 
@@ -167,7 +167,7 @@
           "
         >
           <h2 style="margin-top: 0">Edição</h2>
-          <p>Deseja editar o lançamento?</p>
+          <p>Deseja editar o registro patrimonial?</p>
           <div
             style="
               margin-top: 20px;
@@ -213,7 +213,7 @@
           "
         >
           <h2 style="margin-top: 0">Exclusão</h2>
-          <p>Deseja excluir o lançamento?</p>
+          <p>Deseja excluir o registro patrimonial?</p>
           <div
             style="
               margin-top: 20px;
@@ -303,51 +303,28 @@
 
     <!-- Lógica de Negócio do Relatório -->
     <script>
-      let todasReceitas = [];
-      let receitasFiltradas = [];
+      let todosPatrimonios = [];
+      let patrimoniosFiltrados = [];
       let indiceSelecionado = null;
       const baseUrl =
         window.location.port === "3000" ? "" : "http://localhost:3000";
 
-      // Mapeamento para nomes amigáveis de Grupos e Subgrupos
+      // Mapeamento para nomes amigáveis de Grupos
       const gruposMap = {
-        recGrupoPeixes: "Venda de peixes",
-        recGrupoPlantas: "Venda de plantas aquáticas",
-        recGrupoInsumos: "Venda de insumos e produtos",
-        recGrupoServicos: "Prestação de serviços",
-        recGrupoOutras: "Outras receitas",
-      };
-
-      const subgruposMap = {
-        recSubgrupoAdultos: "Peixes adultos",
-        recSubgrupoAlevinos: "Alevinos",
-        recSubgrupoMatrizes: "Matrizes/Reprodutores",
-        recSubgrupoOutros: "Outros peixes",
-        recSubgrupoMudas: "Mudas",
-        recSubgrupoCarpete: "Carpetes",
-        recSubgrupoVasos: "Plantas em vasos",
-        recSubgrupoAlimentacao: "Alimentação",
-        recSubgrupoCondicionadores: "Condicionadores e medicamentos",
-        recSubgrupoEquipamentos: "Equipamentos e acessórios",
-        recSubgrupoAquarios: "Aquários e terrários",
-        recSubgrupoConsultoria: "Consultoria e projetos",
-        recSubgrupoManutencao: "Manutenção",
-        recSubgrupoTreinamento: "Treinamentos e mentorias",
-        recSubgrupoResiduos: "Venda de resíduos / subprodutos",
-        recSubgrupoFretes: "Fretes e entregas",
-        recSubgrupoRecfin: "Rec. financeiras",
-        recSubgrupoRecoutras: "Outras receitas",
+        bensAquario: "Aquário",
+        bensEquip: "Equipamentos",
+        bensFerrament: "Ferramentas",
+        bensImovel: "Imóveis",
+        bensInstal: "Instalações",
       };
 
       document.addEventListener("DOMContentLoaded", async () => {
-        // Recupera os parâmetros de filtro da URL, se existirem (ex: voltando da edição)
         const urlParams = new URLSearchParams(window.location.search);
         const pInicio = urlParams.get("inicio");
         const pFim = urlParams.get("fim");
         if (pInicio) document.getElementById("data-inicio").value = pInicio;
         if (pFim) document.getElementById("data-fim").value = pFim;
 
-        // Busca o nome da propriedade em dados_producao.json
         try {
           const respProd = await fetch(
             `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
@@ -363,50 +340,47 @@
           console.error("Erro ao carregar propriedade:", e);
         }
 
-        carregarReceitas();
+        carregarPatrimonios();
       });
 
-      // Carrega os dados de receitas
-      async function carregarReceitas() {
+      async function carregarPatrimonios() {
         try {
           const resp = await fetch(
-            `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_patrimonio.json?t=${new Date().getTime()}`,
           );
           if (resp.ok) {
             let dados = await resp.json();
-            // Salva o índice original para edição e exclusão corretas após a ordenação
             dados.forEach((item, idx) => (item._originalIndex = idx));
-            // Ordena em ordem decrescente de data
             dados.sort((a, b) =>
-              (b.receitasData || "").localeCompare(a.receitasData || ""),
+              (b.patrimonioCadData || "").localeCompare(
+                a.patrimonioCadData || "",
+              ),
             );
-            todasReceitas = dados;
+            todosPatrimonios = dados;
 
-            // Aplica o filtro automaticamente caso existam datas preenchidas
             const dInicio = document.getElementById("data-inicio").value;
             const dFim = document.getElementById("data-fim").value;
             if (dInicio && dFim) {
-              const filtrados = todasReceitas.filter(
+              const filtrados = todosPatrimonios.filter(
                 (item) =>
-                  item.receitasData >= dInicio && item.receitasData <= dFim,
+                  item.patrimonioCadData >= dInicio &&
+                  item.patrimonioCadData <= dFim,
               );
               renderizarLista(filtrados);
             } else {
-              renderizarLista(todasReceitas);
+              renderizarLista(todosPatrimonios);
             }
           }
         } catch (e) {
-          console.error("Erro ao carregar receitas:", e);
+          console.error("Erro ao carregar patrimônio:", e);
         }
       }
 
-      // Monta os registros na tela
       function renderizarLista(lista) {
-        const container = document.getElementById("lista-receitas");
+        const container = document.getElementById("lista-patrimonio");
         const spanTotal = document.getElementById("valor-total");
         container.innerHTML = "";
-        // Guarda as informações que estão visíveis na tela para enviar ao PDF
-        receitasFiltradas = lista;
+        patrimoniosFiltrados = lista;
         let somaTotal = 0;
 
         if (lista.length === 0) {
@@ -416,45 +390,38 @@
           return;
         }
 
-        // Renderizando passando o index original para os botões Editar/Excluir funcionarem
         lista.forEach((item) => {
           const originalIndex = item._originalIndex;
           const card = document.createElement("div");
           card.style.cssText =
             "border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);";
 
-          let dataFormatada = item.receitasData;
+          let dataFormatada = item.patrimonioCadData;
           if (dataFormatada && dataFormatada.includes("-")) {
             const p = dataFormatada.split("-");
             dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
           }
 
-          // Soma o valor da receita atual
           const valorNum = parseFloat(
-            String(item.receitasValor || "0").replace(",", "."),
+            String(item.patrimonioValor || "0").replace(",", "."),
           );
           if (!isNaN(valorNum)) somaTotal += valorNum;
 
-          // Estilo para diminuir o espaçamento entre linhas
           const pStyle = "margin: 2px 0; line-height: 1.3;";
           const nomeGrupo =
-            gruposMap[item.receitasGrupo] ||
-            item.receitasGrupo ||
-            "Não informado";
-          const nomeSubgrupo =
-            subgruposMap[item.receitasSubgrupo] ||
-            item.receitasSubgrupo ||
+            gruposMap[item.patrimonioGrupo] ||
+            item.patrimonioGrupo ||
             "Não informado";
 
           card.innerHTML = `
-            <p style="${pStyle}"><strong>Data:</strong> ${dataFormatada || "N/A"}</p>
-            <p style="${pStyle}"><strong>Descrição:</strong> ${item.receitasDescricao || "Sem descrição"}</p>
+            <p style="${pStyle}"><strong>Data Cadastro:</strong> ${dataFormatada || "N/A"}</p>
+            <p style="${pStyle}"><strong>Bem patrimonial:</strong> ${item.patrimonioNome || "Sem nome"}</p>
             <p style="${pStyle}"><strong>Grupo:</strong> ${nomeGrupo}</p>
-            <p style="${pStyle}"><strong>Subgrupo:</strong> ${nomeSubgrupo}</p>
-            ${item.receitasEspecie ? `<p style="${pStyle}"><strong>Espécie:</strong> ${item.receitasEspecie}</p>` : ""}
-            <p style="${pStyle}"><strong>Quantidade:</strong> ${item.receitasQuant || "N/A"}</p>
-            <p style="${pStyle}"><strong>Valor:</strong> R$ ${item.receitasValor || "0,00"}</p>
-            <p style="${pStyle}"><strong>Obs:</strong> ${item.receitasObs || "-"}</p>
+            <p style="${pStyle}"><strong>Quantidade:</strong> ${item.patrimonioQuant || "N/A"}</p>
+            <p style="${pStyle}"><strong>Vida útil (anos):</strong> ${item.patrimonioVida || "N/A"}</p>
+            <p style="${pStyle}"><strong>Valor atual:</strong> R$ ${item.patrimonioValor || "0,00"}</p>
+            <p style="${pStyle}"><strong>Valor residual:</strong> R$ ${item.patrimonioSucata || "0,00"}</p>
+            <p style="${pStyle}"><strong>Obs:</strong> ${item.patrimonioObs || "-"}</p>
             <div style="margin-top: 12px; display: flex; gap: 10px;">
               <button onclick="abrirModalEditar(${originalIndex})" style="padding: 5px 15px;">Editar</button>
               <button onclick="abrirModalExcluir(${originalIndex})" style="padding: 5px 15px; background-color: #f44336;">Excluir</button>
@@ -463,14 +430,12 @@
           container.appendChild(card);
         });
 
-        // Formata e exibe o total
         spanTotal.textContent = somaTotal.toLocaleString("pt-BR", {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         });
       }
 
-      // Filtros de Data
       document.getElementById("btn-filtrar").addEventListener("click", () => {
         const dInicio = document.getElementById("data-inicio").value;
         const dFim = document.getElementById("data-fim").value;
@@ -478,8 +443,9 @@
           alert("Preencha as duas datas para aplicar o filtro.");
           return;
         }
-        const filtrados = todasReceitas.filter(
-          (item) => item.receitasData >= dInicio && item.receitasData <= dFim,
+        const filtrados = todosPatrimonios.filter(
+          (item) =>
+            item.patrimonioCadData >= dInicio && item.patrimonioCadData <= dFim,
         );
         renderizarLista(filtrados);
       });
@@ -487,10 +453,9 @@
       document.getElementById("btn-limpar").addEventListener("click", () => {
         document.getElementById("data-inicio").value = "";
         document.getElementById("data-fim").value = "";
-        renderizarLista(todasReceitas);
+        renderizarLista(todosPatrimonios);
       });
 
-      // Lógica de Modais
       function abrirModalEditar(index) {
         indiceSelecionado = index;
         document.getElementById("modal-editar").style.display = "flex";
@@ -504,14 +469,13 @@
         indiceSelecionado = null;
       }
 
-      // Confirmações
       document
         .getElementById("btn-sim-editar")
         .addEventListener("click", () => {
           if (indiceSelecionado !== null) {
             const dInicio = document.getElementById("data-inicio").value;
             const dFim = document.getElementById("data-fim").value;
-            let url = `receitas.html?edit=${indiceSelecionado}`;
+            let url = `patrimonio.html?edit=${indiceSelecionado}`;
             if (dInicio) url += `&inicio=${dInicio}`;
             if (dFim) url += `&fim=${dFim}`;
             window.location.href = url;
@@ -524,12 +488,12 @@
           if (indiceSelecionado !== null) {
             try {
               const resp = await fetch(
-                `${baseUrl}/api/receitas/${indiceSelecionado}`,
+                `${baseUrl}/api/patrimonio/${indiceSelecionado}`,
                 { method: "DELETE" },
               );
               if (resp.ok) {
                 fecharModal("modal-excluir");
-                carregarReceitas();
+                carregarPatrimonios();
               } else {
                 alert("Erro ao excluir o registro.");
               }
@@ -573,48 +537,46 @@
         doc.setFontSize(16);
         doc.text(propriedade, 105, 15, { align: "center" });
         doc.setFontSize(14);
-        doc.text("Receitas", 105, 22, { align: "center" });
+        doc.text("Patrimônio", 105, 22, { align: "center" });
         doc.setFontSize(12);
         doc.text(periodoStr, 105, 29, { align: "center" });
 
         // Configuração da Tabela
         const colunas = [
           "Data",
-          "Descrição",
+          "Bem",
           "Grupo",
-          "Subgrupo",
-          "Espécie",
           "Qtd",
-          "Valor (R$)",
+          "Vida Útil",
+          "V. Atual",
+          "V. Residual",
         ];
         const linhas = [];
         let somaTotal = 0;
 
-        receitasFiltradas.forEach((item) => {
-          let dataFormatada = item.receitasData;
+        patrimoniosFiltrados.forEach((item) => {
+          let dataFormatada = item.patrimonioCadData;
           if (dataFormatada && dataFormatada.includes("-")) {
             const p = dataFormatada.split("-");
             dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
           }
           const nomeGrupo =
-            gruposMap[item.receitasGrupo] || item.receitasGrupo || "N/I";
-          const nomeSubgrupo =
-            subgruposMap[item.receitasSubgrupo] ||
-            item.receitasSubgrupo ||
-            "N/I";
+            gruposMap[item.patrimonioGrupo] || item.patrimonioGrupo || "N/I";
           const valorNum = parseFloat(
-            String(item.receitasValor || "0").replace(",", "."),
+            String(item.patrimonioValor || "0").replace(",", "."),
           );
           somaTotal += isNaN(valorNum) ? 0 : valorNum;
 
           linhas.push([
             dataFormatada || "N/A",
-            item.receitasDescricao || "N/A",
+            item.patrimonioNome || "N/A",
             nomeGrupo,
-            nomeSubgrupo,
-            item.receitasEspecie || "-",
-            item.receitasQuant || "N/A",
+            item.patrimonioQuant || "N/A",
+            item.patrimonioVida || "N/A",
             valorNum.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+            parseFloat(
+              String(item.patrimonioSucata || "0").replace(",", "."),
+            ).toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
           ]);
         });
 
@@ -624,9 +586,9 @@
           "",
           "",
           "",
-          "",
           "TOTAL:",
           somaTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+          "",
         ]);
 
         doc.autoTable({
@@ -650,7 +612,6 @@
     </script>
   </body>
   <script>
-    // Função para buscar e exibir o nome do usuário
     async function carregarUsuario() {
       try {
         const baseUrl =
@@ -669,7 +630,6 @@
         console.error("Erro ao carregar o usuário:", error);
       }
     }
-    // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
     document.addEventListener("DOMContentLoaded", () => {
       carregarUsuario();
     });

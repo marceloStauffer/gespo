@@ -9,14 +9,14 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="icon" href="favicon_peixe.png" />
-    <title>Gespo'App / Relatório de Receitas</title>
+    <title>Gespo'App / Relatório de Despesas</title>
     <!-- Bibliotecas para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   </head>
   <body>
     <main>
-      <!-- CABEÇALHO (Igual ao relatorios.html) -->
+      <!-- CABEÇALHO -->
       <header style="justify-content: space-between">
         <div class="dropdown">
           <button class="dropbtn"><i class="fas fa-bars"></i></button>
@@ -51,33 +51,14 @@
           >
         </div>
       </header>
-      <section
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        "
-      >
+      <section style="display: flex; justify-content: space-between; align-items: center;">
         <div>
           <a href="relatorios.html" target="_self"
             ><button id="botao-form">← VOLTAR</button></a
           >
         </div>
         <div>
-          <button
-            id="btn-abrir-modal-pdf"
-            style="
-              width: auto;
-              padding: 5px 15px;
-              font-size: 1.2rem;
-              background-color: #e0ea1e;
-              color: #3e2723;
-              border: none;
-              border-radius: 5px;
-              cursor: pointer;
-            "
-            title="Visualizar PDF"
-          >
+          <button id="btn-abrir-modal-pdf" style="width: auto; padding: 5px 15px; font-size: 1.2rem; background-color: #e0ea1e; color: #3e2723; border: none; border-radius: 5px; cursor: pointer;" title="Visualizar PDF">
             <i class="fas fa-file-pdf"></i> PDF
           </button>
         </div>
@@ -86,7 +67,7 @@
       <!-- CORPO DO RELATÓRIO -->
       <section style="margin-top: 20px">
         <h2 style="text-align: center; color: var(--primary-color)">
-          RECEITAS
+          DESPESAS
         </h2>
         <h3
           id="nome-propriedade"
@@ -118,7 +99,7 @@
 
         <!-- Lista onde os registros serão injetados -->
         <div
-          id="lista-receitas"
+          id="lista-despesas"
           style="
             display: flex;
             flex-direction: column;
@@ -268,31 +249,10 @@
               gap: 15px;
             "
           >
-            <button
-              id="btn-sim-pdf"
-              style="
-                width: 80px;
-                background-color: #4caf50;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                padding: 8px;
-              "
-            >
-              Sim
-            </button>
+            <button id="btn-sim-pdf" style="width: 80px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; padding: 8px;">Sim</button>
             <button
               onclick="fecharModal('modal-pdf')"
-              style="
-                width: 80px;
-                background-color: #f44336;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                padding: 8px;
-              "
+              style="width: 80px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; padding: 8px;"
             >
               Não
             </button>
@@ -303,51 +263,29 @@
 
     <!-- Lógica de Negócio do Relatório -->
     <script>
-      let todasReceitas = [];
-      let receitasFiltradas = [];
+      let todasDespesas = [];
+      let despesasFiltradas = [];
       let indiceSelecionado = null;
       const baseUrl =
         window.location.port === "3000" ? "" : "http://localhost:3000";
 
-      // Mapeamento para nomes amigáveis de Grupos e Subgrupos
+      // Mapeamento para nomes amigáveis de Grupos
       const gruposMap = {
-        recGrupoPeixes: "Venda de peixes",
-        recGrupoPlantas: "Venda de plantas aquáticas",
-        recGrupoInsumos: "Venda de insumos e produtos",
-        recGrupoServicos: "Prestação de serviços",
-        recGrupoOutras: "Outras receitas",
-      };
-
-      const subgruposMap = {
-        recSubgrupoAdultos: "Peixes adultos",
-        recSubgrupoAlevinos: "Alevinos",
-        recSubgrupoMatrizes: "Matrizes/Reprodutores",
-        recSubgrupoOutros: "Outros peixes",
-        recSubgrupoMudas: "Mudas",
-        recSubgrupoCarpete: "Carpetes",
-        recSubgrupoVasos: "Plantas em vasos",
-        recSubgrupoAlimentacao: "Alimentação",
-        recSubgrupoCondicionadores: "Condicionadores e medicamentos",
-        recSubgrupoEquipamentos: "Equipamentos e acessórios",
-        recSubgrupoAquarios: "Aquários e terrários",
-        recSubgrupoConsultoria: "Consultoria e projetos",
-        recSubgrupoManutencao: "Manutenção",
-        recSubgrupoTreinamento: "Treinamentos e mentorias",
-        recSubgrupoResiduos: "Venda de resíduos / subprodutos",
-        recSubgrupoFretes: "Fretes e entregas",
-        recSubgrupoRecfin: "Rec. financeiras",
-        recSubgrupoRecoutras: "Outras receitas",
+        despGrupoAlimentacao: "Alimentação animal",
+        despGrupoAluguel: "Aluguel de propriedade",
+        despGrupoComercializacao: "Comercialização",
+        despGrupoAdm: "Despesas administrativas",
+        despGrupoInsumos: "Insumos",
+        despGrupoOutras: "Outras despesas",
       };
 
       document.addEventListener("DOMContentLoaded", async () => {
-        // Recupera os parâmetros de filtro da URL, se existirem (ex: voltando da edição)
         const urlParams = new URLSearchParams(window.location.search);
         const pInicio = urlParams.get("inicio");
         const pFim = urlParams.get("fim");
         if (pInicio) document.getElementById("data-inicio").value = pInicio;
         if (pFim) document.getElementById("data-fim").value = pFim;
 
-        // Busca o nome da propriedade em dados_producao.json
         try {
           const respProd = await fetch(
             `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
@@ -363,50 +301,44 @@
           console.error("Erro ao carregar propriedade:", e);
         }
 
-        carregarReceitas();
+        carregarDespesas();
       });
 
-      // Carrega os dados de receitas
-      async function carregarReceitas() {
+      async function carregarDespesas() {
         try {
           const resp = await fetch(
-            `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_despesas.json?t=${new Date().getTime()}`,
           );
           if (resp.ok) {
             let dados = await resp.json();
-            // Salva o índice original para edição e exclusão corretas após a ordenação
             dados.forEach((item, idx) => (item._originalIndex = idx));
-            // Ordena em ordem decrescente de data
             dados.sort((a, b) =>
-              (b.receitasData || "").localeCompare(a.receitasData || ""),
+              (b.despesasData || "").localeCompare(a.despesasData || ""),
             );
-            todasReceitas = dados;
+            todasDespesas = dados;
 
-            // Aplica o filtro automaticamente caso existam datas preenchidas
             const dInicio = document.getElementById("data-inicio").value;
             const dFim = document.getElementById("data-fim").value;
             if (dInicio && dFim) {
-              const filtrados = todasReceitas.filter(
+              const filtrados = todasDespesas.filter(
                 (item) =>
-                  item.receitasData >= dInicio && item.receitasData <= dFim,
+                  item.despesasData >= dInicio && item.despesasData <= dFim,
               );
               renderizarLista(filtrados);
             } else {
-              renderizarLista(todasReceitas);
+              renderizarLista(todasDespesas);
             }
           }
         } catch (e) {
-          console.error("Erro ao carregar receitas:", e);
+          console.error("Erro ao carregar despesas:", e);
         }
       }
 
-      // Monta os registros na tela
       function renderizarLista(lista) {
-        const container = document.getElementById("lista-receitas");
+        const container = document.getElementById("lista-despesas");
         const spanTotal = document.getElementById("valor-total");
         container.innerHTML = "";
-        // Guarda as informações que estão visíveis na tela para enviar ao PDF
-        receitasFiltradas = lista;
+        despesasFiltradas = lista;
         let somaTotal = 0;
 
         if (lista.length === 0) {
@@ -416,45 +348,36 @@
           return;
         }
 
-        // Renderizando passando o index original para os botões Editar/Excluir funcionarem
         lista.forEach((item) => {
           const originalIndex = item._originalIndex;
           const card = document.createElement("div");
           card.style.cssText =
             "border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);";
 
-          let dataFormatada = item.receitasData;
+          let dataFormatada = item.despesasData;
           if (dataFormatada && dataFormatada.includes("-")) {
             const p = dataFormatada.split("-");
             dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
           }
 
-          // Soma o valor da receita atual
           const valorNum = parseFloat(
-            String(item.receitasValor || "0").replace(",", "."),
+            String(item.despesasValor || "0").replace(",", "."),
           );
           if (!isNaN(valorNum)) somaTotal += valorNum;
 
-          // Estilo para diminuir o espaçamento entre linhas
           const pStyle = "margin: 2px 0; line-height: 1.3;";
           const nomeGrupo =
-            gruposMap[item.receitasGrupo] ||
-            item.receitasGrupo ||
-            "Não informado";
-          const nomeSubgrupo =
-            subgruposMap[item.receitasSubgrupo] ||
-            item.receitasSubgrupo ||
+            gruposMap[item.despesasGrupo] ||
+            item.despesasGrupo ||
             "Não informado";
 
           card.innerHTML = `
             <p style="${pStyle}"><strong>Data:</strong> ${dataFormatada || "N/A"}</p>
-            <p style="${pStyle}"><strong>Descrição:</strong> ${item.receitasDescricao || "Sem descrição"}</p>
+            <p style="${pStyle}"><strong>Descrição:</strong> ${item.despesasDescricao || "Sem descrição"}</p>
             <p style="${pStyle}"><strong>Grupo:</strong> ${nomeGrupo}</p>
-            <p style="${pStyle}"><strong>Subgrupo:</strong> ${nomeSubgrupo}</p>
-            ${item.receitasEspecie ? `<p style="${pStyle}"><strong>Espécie:</strong> ${item.receitasEspecie}</p>` : ""}
-            <p style="${pStyle}"><strong>Quantidade:</strong> ${item.receitasQuant || "N/A"}</p>
-            <p style="${pStyle}"><strong>Valor:</strong> R$ ${item.receitasValor || "0,00"}</p>
-            <p style="${pStyle}"><strong>Obs:</strong> ${item.receitasObs || "-"}</p>
+            <p style="${pStyle}"><strong>Quantidade:</strong> ${item.despesasQuant || "N/A"}</p>
+            <p style="${pStyle}"><strong>Valor:</strong> R$ ${item.despesasValor || "0,00"}</p>
+            <p style="${pStyle}"><strong>Obs:</strong> ${item.despesasObs || "-"}</p>
             <div style="margin-top: 12px; display: flex; gap: 10px;">
               <button onclick="abrirModalEditar(${originalIndex})" style="padding: 5px 15px;">Editar</button>
               <button onclick="abrirModalExcluir(${originalIndex})" style="padding: 5px 15px; background-color: #f44336;">Excluir</button>
@@ -463,14 +386,12 @@
           container.appendChild(card);
         });
 
-        // Formata e exibe o total
         spanTotal.textContent = somaTotal.toLocaleString("pt-BR", {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         });
       }
 
-      // Filtros de Data
       document.getElementById("btn-filtrar").addEventListener("click", () => {
         const dInicio = document.getElementById("data-inicio").value;
         const dFim = document.getElementById("data-fim").value;
@@ -478,8 +399,8 @@
           alert("Preencha as duas datas para aplicar o filtro.");
           return;
         }
-        const filtrados = todasReceitas.filter(
-          (item) => item.receitasData >= dInicio && item.receitasData <= dFim,
+        const filtrados = todasDespesas.filter(
+          (item) => item.despesasData >= dInicio && item.despesasData <= dFim,
         );
         renderizarLista(filtrados);
       });
@@ -487,10 +408,9 @@
       document.getElementById("btn-limpar").addEventListener("click", () => {
         document.getElementById("data-inicio").value = "";
         document.getElementById("data-fim").value = "";
-        renderizarLista(todasReceitas);
+        renderizarLista(todasDespesas);
       });
 
-      // Lógica de Modais
       function abrirModalEditar(index) {
         indiceSelecionado = index;
         document.getElementById("modal-editar").style.display = "flex";
@@ -504,14 +424,13 @@
         indiceSelecionado = null;
       }
 
-      // Confirmações
       document
         .getElementById("btn-sim-editar")
         .addEventListener("click", () => {
           if (indiceSelecionado !== null) {
             const dInicio = document.getElementById("data-inicio").value;
             const dFim = document.getElementById("data-fim").value;
-            let url = `receitas.html?edit=${indiceSelecionado}`;
+            let url = `despesas.html?edit=${indiceSelecionado}`;
             if (dInicio) url += `&inicio=${dInicio}`;
             if (dFim) url += `&fim=${dFim}`;
             window.location.href = url;
@@ -524,12 +443,12 @@
           if (indiceSelecionado !== null) {
             try {
               const resp = await fetch(
-                `${baseUrl}/api/receitas/${indiceSelecionado}`,
+                `${baseUrl}/api/despesas/${indiceSelecionado}`,
                 { method: "DELETE" },
               );
               if (resp.ok) {
                 fecharModal("modal-excluir");
-                carregarReceitas();
+                carregarDespesas();
               } else {
                 alert("Erro ao excluir o registro.");
               }
@@ -540,11 +459,9 @@
         });
 
       // Abertura do Modal de PDF
-      document
-        .getElementById("btn-abrir-modal-pdf")
-        .addEventListener("click", () => {
-          document.getElementById("modal-pdf").style.display = "flex";
-        });
+      document.getElementById("btn-abrir-modal-pdf").addEventListener("click", () => {
+        document.getElementById("modal-pdf").style.display = "flex";
+      });
 
       // Geração do PDF
       document.getElementById("btn-sim-pdf").addEventListener("click", () => {
@@ -556,101 +473,76 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        const propriedade =
-          document.getElementById("nome-propriedade").textContent ||
-          "Propriedade Não Informada";
+        const propriedade = document.getElementById("nome-propriedade").textContent || "Propriedade Não Informada";
         const dInicio = document.getElementById("data-inicio").value;
         const dFim = document.getElementById("data-fim").value;
         let periodoStr = "Período: Todos os registros";
 
         if (dInicio && dFim) {
-          const dataI = dInicio.split("-").reverse().join("/");
-          const dataF = dFim.split("-").reverse().join("/");
-          periodoStr = `Período: ${dataI} a ${dataF}`;
+            const dataI = dInicio.split('-').reverse().join('/');
+            const dataF = dFim.split('-').reverse().join('/');
+            periodoStr = `Período: ${dataI} a ${dataF}`;
         }
 
         // Título
         doc.setFontSize(16);
         doc.text(propriedade, 105, 15, { align: "center" });
         doc.setFontSize(14);
-        doc.text("Receitas", 105, 22, { align: "center" });
+        doc.text("Despesas", 105, 22, { align: "center" });
         doc.setFontSize(12);
         doc.text(periodoStr, 105, 29, { align: "center" });
 
         // Configuração da Tabela
-        const colunas = [
-          "Data",
-          "Descrição",
-          "Grupo",
-          "Subgrupo",
-          "Espécie",
-          "Qtd",
-          "Valor (R$)",
-        ];
+        const colunas = ["Data", "Descrição", "Grupo", "Qtd", "Valor (R$)"];
         const linhas = [];
         let somaTotal = 0;
 
-        receitasFiltradas.forEach((item) => {
-          let dataFormatada = item.receitasData;
-          if (dataFormatada && dataFormatada.includes("-")) {
-            const p = dataFormatada.split("-");
-            dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
-          }
-          const nomeGrupo =
-            gruposMap[item.receitasGrupo] || item.receitasGrupo || "N/I";
-          const nomeSubgrupo =
-            subgruposMap[item.receitasSubgrupo] ||
-            item.receitasSubgrupo ||
-            "N/I";
-          const valorNum = parseFloat(
-            String(item.receitasValor || "0").replace(",", "."),
-          );
-          somaTotal += isNaN(valorNum) ? 0 : valorNum;
+        despesasFiltradas.forEach(item => {
+            let dataFormatada = item.despesasData;
+            if (dataFormatada && dataFormatada.includes("-")) {
+              const p = dataFormatada.split("-");
+              dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
+            }
+            const nomeGrupo = gruposMap[item.despesasGrupo] || item.despesasGrupo || "N/I";
+            const valorNum = parseFloat(String(item.despesasValor || "0").replace(",", "."));
+            somaTotal += isNaN(valorNum) ? 0 : valorNum;
 
-          linhas.push([
-            dataFormatada || "N/A",
-            item.receitasDescricao || "N/A",
-            nomeGrupo,
-            nomeSubgrupo,
-            item.receitasEspecie || "-",
-            item.receitasQuant || "N/A",
-            valorNum.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
-          ]);
+            linhas.push([
+                dataFormatada || "N/A",
+                item.despesasDescricao || "N/A",
+                nomeGrupo,
+                item.despesasQuant || "N/A",
+                valorNum.toLocaleString("pt-BR", { minimumFractionDigits: 2 })
+            ]);
         });
 
         // Linha do Total
         linhas.push([
-          "",
-          "",
-          "",
-          "",
-          "",
-          "TOTAL:",
-          somaTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+            "", "", "", "TOTAL:",
+            somaTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 })
         ]);
 
         doc.autoTable({
-          startY: 35,
-          head: [colunas],
-          body: linhas,
-          theme: "grid",
-          headStyles: { fillColor: [145, 116, 96] }, // Cor var(--primary-color) correspondente ao marrom do site
-          didParseCell: function (data) {
-            // Deixa a última linha (Total) em negrito
-            if (data.row.index === linhas.length - 1) {
-              data.cell.styles.fontStyle = "bold";
+            startY: 35,
+            head: [colunas],
+            body: linhas,
+            theme: 'grid',
+            headStyles: { fillColor: [145, 116, 96] }, // Cor var(--primary-color) correspondente ao marrom do site
+            didParseCell: function(data) {
+                // Deixa a última linha (Total) em negrito
+                if (data.row.index === linhas.length - 1) {
+                    data.cell.styles.fontStyle = 'bold';
+                }
             }
-          },
         });
 
         // Abre o PDF em uma nova guia do navegador (visualização)
-        const pdfUrl = doc.output("bloburl");
-        window.open(pdfUrl, "_blank");
+        const pdfUrl = doc.output('bloburl');
+        window.open(pdfUrl, '_blank');
       }
     </script>
   </body>
   <script>
-    // Função para buscar e exibir o nome do usuário
     async function carregarUsuario() {
       try {
         const baseUrl =
@@ -669,7 +561,6 @@
         console.error("Erro ao carregar o usuário:", error);
       }
     }
-    // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
     document.addEventListener("DOMContentLoaded", () => {
       carregarUsuario();
     });

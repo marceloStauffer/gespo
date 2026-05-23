@@ -31,8 +31,27 @@
         <h3>Despesas</h3>
         <div style="width: 40px"></div>
         <!-- Espaçador para manter o título centralizado -->
+        <div
+          class="user-profile"
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: inherit;
+          "
+        >
+          <i class="fas fa-user-circle" style="font-size: 2rem"></i>
+          <span
+            id="nome-usuario"
+            style="margin-top: 5px; font-size: 0.9rem; font-weight: bold"
+            >Usuário</span
+          >
+        </div>
       </header>
-      <section style="display: flex; justify-content: space-between">
+      <section
+        id="navegacao-secoes"
+        style="display: flex; justify-content: space-between"
+      >
         <div>
           <a href="receitas.html" target="_self"
             ><button id="botao-form">← ANTERIOR</button></a
@@ -94,8 +113,36 @@
             <input id="despObs" type="text" name="despesasObs" />
           </fieldset>
           <br />
-          <button type="submit">Enviar</button>
-          <button type="reset">Limpar</button>
+          <div style="display: flex; gap: 10px">
+            <button
+              type="button"
+              id="btn-submit"
+              style="width: 180px; height: 40px; margin-right: 0"
+            >
+              Salvar/Editar
+            </button>
+            <button
+              type="reset"
+              id="btn-reset"
+              style="width: 180px; height: 40px; margin-right: 0"
+            >
+              Limpar
+            </button>
+            <button
+              type="button"
+              id="btn-voltar-relatorio"
+              style="
+                display: none;
+                background-color: #6c757d;
+                color: white;
+                width: 180px;
+                height: 40px;
+                margin-right: 0;
+              "
+            >
+              Voltar para Relatório
+            </button>
+          </div>
         </form>
       </section>
 
@@ -121,13 +168,74 @@
       </div>
     </main>
     <script>
+      // Verifica se está no modo de edição pela URL (?edit=0, por exemplo)
+      const urlParams = new URLSearchParams(window.location.search);
+      const editIndex = urlParams.get("edit");
+
+      if (editIndex !== null) {
+        document.addEventListener("DOMContentLoaded", async () => {
+          // Altera a interface dos botões para o modo de edição
+          document.getElementById("btn-reset").style.display = "none";
+          document.getElementById("navegacao-secoes").style.display = "none";
+          const btnVoltar = document.getElementById("btn-voltar-relatorio");
+          btnVoltar.style.display = "inline-block";
+
+          // Adiciona o evento de clique para o novo botão
+          btnVoltar.addEventListener("click", () => {
+            let redirectUrl = "relatorio_despesas.html";
+            const paramInicio = urlParams.get("inicio");
+            const paramFim = urlParams.get("fim");
+            const params = [];
+            if (paramInicio) params.push(`inicio=${paramInicio}`);
+            if (paramFim) params.push(`fim=${paramFim}`);
+            if (params.length > 0) redirectUrl += `?${params.join("&")}`;
+            window.location.href = redirectUrl;
+          });
+
+          try {
+            const baseUrl =
+              window.location.port === "3000" ? "" : "http://localhost:3000";
+            const response = await fetch(
+              `${baseUrl}/dados_despesas.json?t=${new Date().getTime()}`,
+            );
+            if (response.ok) {
+              const dados = await response.json();
+              const registro = dados[editIndex];
+              if (registro) {
+                document.getElementById("despData").value =
+                  registro.despesasData || "";
+                document.getElementById("despDescricao").value =
+                  registro.despesasDescricao || "";
+                document.getElementById("despGrupo").value =
+                  registro.despesasGrupo || "notInformed";
+                document.getElementById("despQuant").value =
+                  registro.despesasQuant || "1";
+                document.getElementById("despValor").value =
+                  registro.despesasValor || "";
+                document.getElementById("despObs").value =
+                  registro.despesasObs || "";
+              }
+            }
+          } catch (error) {
+            console.error("Erro ao carregar edição:", error);
+          }
+        });
+      }
+
       // Salvar os dados do formulário de despesas
       document
-        .getElementById("form-despesas")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault(); // Evita o recarregamento natural da página
+        .getElementById("btn-submit")
+        .addEventListener("click", async (e) => {
+          e.preventDefault(); // Evita recarregamento fantasma
+          const form = document.getElementById("form-despesas");
 
-          const formData = new FormData(e.target);
+          // Valida os campos obrigatórios antes de prosseguir
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+          }
+
+          const formData = new FormData(form);
           const dados = {};
 
           formData.forEach((value, key) => {
@@ -137,23 +245,32 @@
           try {
             const baseUrl =
               window.location.port === "3000" ? "" : "http://localhost:3000";
-            const response = await fetch(
-              `${baseUrl}/api/salvar-json-despesas`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(dados),
-              },
-            );
+
+            const url =
+              editIndex !== null
+                ? `${baseUrl}/api/despesas/${editIndex}`
+                : `${baseUrl}/api/salvar-json-despesas`;
+            const methodForm = editIndex !== null ? "PUT" : "POST";
+
+            const response = await fetch(url, {
+              method: methodForm,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(dados),
+            });
 
             if (response.ok) {
-              const popup = document.getElementById("popup-sucesso");
-              popup.style.display = "block";
+              if (editIndex !== null) {
+                alert("Lançamento atualizado com sucesso!");
+              } else {
+                const popup = document.getElementById("popup-sucesso");
+                popup.innerHTML = "<h2>Dados enviados com sucesso!</h2>";
+                popup.style.display = "block";
 
-              setTimeout(() => {
-                popup.style.display = "none";
-                e.target.reset(); // Limpa os campos do formulário para um novo envio
-              }, 3000); // 3 Segundos de espera
+                setTimeout(() => {
+                  popup.style.display = "none";
+                  form.reset(); // Limpa os campos do formulário para um novo envio
+                }, 3000); // 3 Segundos de espera para novos cadastros
+              }
             } else {
               const errorText = await response.text();
               alert(
@@ -168,4 +285,29 @@
         });
     </script>
   </body>
+  <script>
+    // Função para buscar e exibir o nome do usuário
+    async function carregarUsuario() {
+      try {
+        const baseUrl =
+          window.location.port === "3000" ? "" : "http://localhost:3000";
+        const response = await fetch(
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+        );
+        if (response.ok) {
+          const dados = await response.json();
+          if (dados.produtorPrimNome) {
+            document.getElementById("nome-usuario").textContent =
+              dados.produtorPrimNome;
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao carregar o usuário:", error);
+      }
+    }
+    // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarUsuario();
+    });
+  </script>
 </html>

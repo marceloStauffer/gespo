@@ -158,6 +158,44 @@ app.post('/api/salvar-json-despesas', (req, res) => {
     }
 });
 
+// Rota para ATUALIZAR um registro de despesa (PUT)
+app.put('/api/despesas/:index', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_despesas.json');
+        if (fs.existsSync(filePath)) {
+            let despesas = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            const index = parseInt(req.params.index);
+            if (index >= 0 && index < despesas.length) {
+                despesas[index] = req.body; // Substitui os dados pelo novo form
+                fs.writeFileSync(filePath, JSON.stringify(despesas, null, 2));
+                return res.json({ message: 'Despesa atualizada com sucesso!' });
+            }
+        }
+        res.status(404).json({ message: 'Registro não encontrado.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao atualizar no JSON.', error: error.message });
+    }
+});
+
+// Rota para EXCLUIR um registro de despesa (DELETE)
+app.delete('/api/despesas/:index', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_despesas.json');
+        if (fs.existsSync(filePath)) {
+            let despesas = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            const index = parseInt(req.params.index);
+            if (index >= 0 && index < despesas.length) {
+                despesas.splice(index, 1); // Remove 1 item no index correspondente
+                fs.writeFileSync(filePath, JSON.stringify(despesas, null, 2));
+                return res.json({ message: 'Despesa excluída com sucesso!' });
+            }
+        }
+        res.status(404).json({ message: 'Registro não encontrado.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao excluir no JSON.', error: error.message });
+    }
+});
+
 // Rota para INSERIR um novo registro de patrimônio no arquivo dados_patrimonio.json (POST)
 app.post('/api/salvar-json-patrimonio', (req, res) => {
     try {
@@ -177,6 +215,44 @@ app.post('/api/salvar-json-patrimonio', (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erro ao salvar no arquivo JSON.', error: error.message });
+    }
+});
+
+// Rota para ATUALIZAR um registro de patrimônio (PUT)
+app.put('/api/patrimonio/:index', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_patrimonio.json');
+        if (fs.existsSync(filePath)) {
+            let patrimonio = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            const index = parseInt(req.params.index);
+            if (index >= 0 && index < patrimonio.length) {
+                patrimonio[index] = req.body; // Substitui os dados pelo novo form
+                fs.writeFileSync(filePath, JSON.stringify(patrimonio, null, 2));
+                return res.json({ message: 'Patrimônio atualizado com sucesso!' });
+            }
+        }
+        res.status(404).json({ message: 'Registro não encontrado.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao atualizar no JSON.', error: error.message });
+    }
+});
+
+// Rota para EXCLUIR um registro de patrimônio (DELETE)
+app.delete('/api/patrimonio/:index', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'dados_patrimonio.json');
+        if (fs.existsSync(filePath)) {
+            let patrimonio = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            const index = parseInt(req.params.index);
+            if (index >= 0 && index < patrimonio.length) {
+                patrimonio.splice(index, 1); // Remove 1 item no index correspondente
+                fs.writeFileSync(filePath, JSON.stringify(patrimonio, null, 2));
+                return res.json({ message: 'Patrimônio excluído com sucesso!' });
+            }
+        }
+        res.status(404).json({ message: 'Registro não encontrado.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao excluir no JSON.', error: error.message });
     }
 });
 

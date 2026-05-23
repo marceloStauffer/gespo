@@ -227,7 +227,7 @@ article a:hover {
 }
 
 .footer-links a {
-  color: #f5f5dc; /* Cor do link */
+  color: #e0ea1e; /* Cor do link */
   text-decoration: none; /* Remove o sublinhado */
   transition: color 0.2s; /* Transição suave para a cor */
 }

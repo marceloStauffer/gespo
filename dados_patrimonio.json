@@ -18,5 +18,25 @@
     "patrimonioValor": "100000",
     "patrimonioSucata": "50000",
     "patrimonioObs": ""
+  },
+  {
+    "patrimonioCadData": "2026-03-02",
+    "patrimonioNome": "Computador",
+    "patrimonioQuant": "3",
+    "patrimonioVida": "5",
+    "patrimonioGrupo": "bensEquip",
+    "patrimonioValor": "9000",
+    "patrimonioSucata": "3000",
+    "patrimonioObs": "valor após 5 anos de uso"
+  },
+  {
+    "patrimonioCadData": "2026-04-06",
+    "patrimonioNome": "Aerador grande para tanque 5000 litros",
+    "patrimonioQuant": "1",
+    "patrimonioVida": "10",
+    "patrimonioGrupo": "bensEquip",
+    "patrimonioValor": "15000",
+    "patrimonioSucata": "2000",
+    "patrimonioObs": ""
   }
 ]

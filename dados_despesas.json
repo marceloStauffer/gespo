@@ -14,5 +14,29 @@
     "despesasQuant": "1",
     "despesasValor": "2867",
     "despesasObs": ""
+  },
+  {
+    "despesasData": "2026-05-23",
+    "despesasDescricao": "Compra de embalagens para transporte de peixes",
+    "despesasGrupo": "despGrupoComercializacao",
+    "despesasQuant": "100",
+    "despesasValor": "60",
+    "despesasObs": ""
+  },
+  {
+    "despesasData": "2026-04-15",
+    "despesasDescricao": "Folha de pagamento mês 04/2026",
+    "despesasGrupo": "despGrupoAdm",
+    "despesasQuant": "3",
+    "despesasValor": "8500",
+    "despesasObs": ""
+  },
+  {
+    "despesasData": "2026-05-15",
+    "despesasDescricao": "Compra de insumos",
+    "despesasGrupo": "despGrupoInsumos",
+    "despesasQuant": "60",
+    "despesasValor": "1560",
+    "despesasObs": ""
   }
 ]

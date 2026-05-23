@@ -31,6 +31,23 @@
         <h3>Dados da produção</h3>
         <div style="width: 40px"></div>
         <!-- Espaçador para manter o título centralizado -->
+                 <div
+          class="user-profile"
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: inherit;
+          "
+        >
+          <i class="fas fa-user-circle" style="font-size: 2rem"></i>
+          <span
+            id="nome-usuario"
+            style="margin-top: 5px; font-size: 0.9rem; font-weight: bold"
+            >Usuário</span
+          >
+        </div>
+
       </header>
       <section style="display: flex; justify-content: space-between">
         <div>
@@ -580,4 +597,26 @@
         });
     </script>
   </body>
+    <script>
+        // Função para buscar e exibir o nome do usuário
+        async function carregarUsuario() {
+            try {
+                const baseUrl = window.location.port === "3000" ? "" : "http://localhost:3000";
+                const response = await fetch(`${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`);
+                if (response.ok) {
+                    const dados = await response.json();
+                    if (dados.produtorPrimNome) {
+                        document.getElementById('nome-usuario').textContent = dados.produtorPrimNome;
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao carregar o usuário:", error);
+            }
+        }
+        // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarUsuario();
+        });
+  </script>
+
 </html>
