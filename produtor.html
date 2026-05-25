@@ -170,6 +170,9 @@
         try {
           const baseUrl =
             window.location.port === "3000" ? "" : "http://localhost:3000";
+          // const baseUrl =
+          //   window.location.port === "3000" ? "" : "http://localhost:3000";
+          const baseUrl = "https://gespo.onrender.com";
           const response = await fetch(
             `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
           );
@@ -227,6 +230,9 @@
           try {
             const baseUrl =
               window.location.port === "3000" ? "" : "http://localhost:3000";
+            // const baseUrl =
+            //   window.location.port === "3000" ? "" : "http://localhost:3000";
+            const baseUrl = "https://gespo.onrender.com";
             const response = await fetch(
               `${baseUrl}/api/salvar-json-produtor`,
               {
@@ -257,6 +263,8 @@
         async function carregarUsuario() {
             try {
                 const baseUrl = window.location.port === "3000" ? "" : "http://localhost:3000";
+                // const baseUrl = window.location.port === "3000" ? "" : "http://localhost:3000";
+                const baseUrl = "https://gespo.onrender.com";
                 const response = await fetch(`${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`);
                 if (response.ok) {
                     const dados = await response.json();
