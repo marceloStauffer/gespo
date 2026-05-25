@@ -30,7 +30,7 @@
         <h3>Receitas</h3>
         <div style="width: 40px"></div>
         <!-- Espaçador para manter o título centralizado -->
-                 <div
+        <div
           class="user-profile"
           style="
             display: flex;
@@ -46,7 +46,6 @@
             >Usuário</span
           >
         </div>
-
       </header>
       <section
         id="navegacao-secoes"
@@ -126,7 +125,12 @@
             <br />
 
             <label for="recValor">Valor total:</label>
-            <input id="recValor" type="number" name="receitasValor" />
+            <input
+              id="recValor"
+              type="number"
+              step="0.01"
+              name="receitasValor"
+            />
             <br />
 
             <label for="recObs">Obs.:</label>
@@ -381,26 +385,29 @@
         });
     </script>
   </body>
-      <script>
-        // Função para buscar e exibir o nome do usuário
-        async function carregarUsuario() {
-            try {
-                const baseUrl = window.location.port === "3000" ? "" : "http://localhost:3000";
-                const response = await fetch(`${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`);
-                if (response.ok) {
-                    const dados = await response.json();
-                    if (dados.produtorPrimNome) {
-                        document.getElementById('nome-usuario').textContent = dados.produtorPrimNome;
-                    }
-                }
-            } catch (error) {
-                console.error("Erro ao carregar o usuário:", error);
-            }
+  <script>
+    // Função para buscar e exibir o nome do usuário
+    async function carregarUsuario() {
+      try {
+        const baseUrl =
+          window.location.port === "3000" ? "" : "http://localhost:3000";
+        const response = await fetch(
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+        );
+        if (response.ok) {
+          const dados = await response.json();
+          if (dados.produtorPrimNome) {
+            document.getElementById("nome-usuario").textContent =
+              dados.produtorPrimNome;
+          }
         }
-        // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
-        document.addEventListener('DOMContentLoaded', () => {
-            carregarUsuario();
-        });
+      } catch (error) {
+        console.error("Erro ao carregar o usuário:", error);
+      }
+    }
+    // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarUsuario();
+    });
   </script>
-
 </html>

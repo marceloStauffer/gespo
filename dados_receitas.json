@@ -63,5 +63,14 @@
     "receitasQuant": "20",
     "receitasValor": "5000",
     "receitasObs": "matrizes campeãs"
+  },
+  {
+    "receitasData": "2026-05-24",
+    "receitasDescricao": "Recebimento por consultoria",
+    "receitasGrupo": "recGrupoServicos",
+    "receitasSubgrupo": "recSubgrupoConsultoria",
+    "receitasQuant": "1",
+    "receitasValor": "2500.51",
+    "receitasObs": "valor com 2 casas decimais"
   }
 ]

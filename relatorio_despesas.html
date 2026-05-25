@@ -528,6 +528,10 @@
             body: linhas,
             theme: 'grid',
             headStyles: { fillColor: [145, 116, 96] }, // Cor var(--primary-color) correspondente ao marrom do site
+            columnStyles: {
+                3: { halign: "right" },
+                4: { halign: "right" }
+            },
             didParseCell: function(data) {
                 // Deixa a última linha (Total) em negrito
                 if (data.row.index === linhas.length - 1) {

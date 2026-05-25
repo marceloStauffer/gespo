@@ -38,5 +38,15 @@
     "patrimonioValor": "15000",
     "patrimonioSucata": "2000",
     "patrimonioObs": ""
+  },
+  {
+    "patrimonioCadData": "2026-05-24",
+    "patrimonioNome": "Mesa de trabalho",
+    "patrimonioQuant": "2",
+    "patrimonioVida": "15",
+    "patrimonioGrupo": "bensInstal",
+    "patrimonioValor": "350.51",
+    "patrimonioSucata": "50.23",
+    "patrimonioObs": "valor atual com 2 casas decimais"
   }
 ]

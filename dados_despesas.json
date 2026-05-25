@@ -38,5 +38,13 @@
     "despesasQuant": "60",
     "despesasValor": "1560",
     "despesasObs": ""
+  },
+  {
+    "despesasData": "2026-05-24",
+    "despesasDescricao": "Conserto de aquário",
+    "despesasGrupo": "despGrupoOutras",
+    "despesasQuant": "1",
+    "despesasValor": "250.51",
+    "despesasObs": "valor com 2 casas decimais"
   }
 ]
