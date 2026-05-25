@@ -4,7 +4,8 @@ const path = require('path');
 const multer = require('multer'); // Requer instalação: npm install multer
 
 const app = express();
-const port = 3000;
+//const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware de CORS para permitir acesso de outras portas (ex: Live Server ou aberturas via file://)
 app.use((req, res, next) => {
@@ -305,6 +306,11 @@ app.get('/api/ler-json-documentos', (req, res) => {
 });
 
 // Inicia o servidor
-app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}/produtor.html`);
+
+// app.listen(port, () => {
+//     console.log(`Servidor rodando em http://localhost:${port}/produtor.html`);
+// });
+
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
