@@ -70,7 +70,7 @@
       .btn-entrar {
         width: 75%;
         height: 40px;
-        background-color: var(--primary-color, #917460);
+        background-color: #2d9c96;
         color: white;
         border: none;
         font-size: 1.1rem;
@@ -79,16 +79,18 @@
       }
 
       .btn-entrar:hover {
-        background-color: var(--secondary-color, #3e2723);
+        background-color: #237c78;
         color: white;
       }
 
       .links-container {
-        margin-top: 15px;
+        background-color: #ffffff;
+        width: 100%;
+        margin: 20px 0 -30px 0; /* O -30px anula o padding inferior do fundo, colando-o na base */
+        padding: 15px;
+        border-radius: 0;
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* Sombra leve para cima */
         font-size: 0.8rem;
-        text-shadow:
-          1px 1px 3px rgba(255, 255, 255, 0.9),
-          -1px -1px 3px rgba(255, 255, 255, 0.9); /* Aumenta a legibilidade sobre o fundo */
       }
 
       .links-container p {

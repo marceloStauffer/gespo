@@ -72,5 +72,33 @@
     "receitasQuant": "1",
     "receitasValor": "2500.51",
     "receitasObs": "valor com 2 casas decimais"
+  },
+  {
+    "receitasData": "2026-05-20",
+    "receitasDescricao": "Venda de alevinos",
+    "receitasGrupo": "recGrupoPeixes",
+    "receitasSubgrupo": "recSubgrupoAlevinos",
+    "receitasEspecie": "Betta",
+    "receitasQuant": "500",
+    "receitasValor": "2400",
+    "receitasObs": ""
+  },
+  {
+    "receitasData": "2026-05-08",
+    "receitasDescricao": "Venda de antibiótico para platy",
+    "receitasGrupo": "recGrupoInsumos",
+    "receitasSubgrupo": "recSubgrupoCondicionadores",
+    "receitasQuant": "5",
+    "receitasValor": "350",
+    "receitasObs": ""
+  },
+  {
+    "receitasData": "2026-05-21",
+    "receitasDescricao": "Venda de aquário pequeno",
+    "receitasGrupo": "recGrupoInsumos",
+    "receitasSubgrupo": "recSubgrupoAquarios",
+    "receitasQuant": "1",
+    "receitasValor": "670",
+    "receitasObs": ""
   }
 ]

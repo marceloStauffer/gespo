@@ -46,5 +46,21 @@
     "despesasQuant": "1",
     "despesasValor": "250.51",
     "despesasObs": "valor com 2 casas decimais"
+  },
+  {
+    "despesasData": "2026-05-21",
+    "despesasDescricao": "Pagamento de aluguel mensal de área climatizada",
+    "despesasGrupo": "despGrupoAluguel",
+    "despesasQuant": "1",
+    "despesasValor": "1800",
+    "despesasObs": ""
+  },
+  {
+    "despesasData": "2026-05-23",
+    "despesasDescricao": "Compra de plantas para alimentação dos peixes",
+    "despesasGrupo": "despGrupoInsumos",
+    "despesasQuant": "10",
+    "despesasValor": "79.26",
+    "despesasObs": ""
   }
 ]
