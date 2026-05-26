@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styleform.css" />
+    <link rel="icon" href="favicon_peixe.png" />
+    <title>Gespo'App / Login</title>
+    <style>
+      /* Estilos específicos para centralizar e formatar a tela de login */
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--bg-color, #f9f8f4);
+      }
+
+      .login-container {
+        text-align: center;
+        background: var(--branco-color, #ffffff);
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        z-index: 2; /* Garante que fique acima da imagem de rodapé */
+        overflow: hidden; /* Garante que a imagem do rodapé não ultrapasse as bordas arredondadas */
+      }
+
+      .logo {
+        max-width: 350px;
+        margin-bottom: 10px;
+      }
+
+      .title-small {
+        font-size: 0.7rem;
+        color: var(--tertiary-color, #795548);
+        margin: 0;
+        font-weight: normal;
+      }
+
+      .title-large {
+        font-size: 1.8rem;
+        margin: 0;
+        font-weight: bold;
+        color: #2d9c96; /* Verde-azulado (Teal) baseado na logo Gespo */
+        line-height: 1.1;
+      }
+
+      .login-form {
+        margin-top: 0;
+        margin-bottom: 0; /* Sobrescreve o margin-bottom do styleform.css */
+        padding: 0;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centraliza os campos */
+        gap: 15px;
+      }
+
+      .login-form input {
+        margin-bottom: 0;
+        width: 75%; /* Diminui a largura para permitir maior visualização do fundo */
+        padding: 10px;
+      }
+
+      .btn-entrar {
+        width: 75%;
+        height: 40px;
+        background-color: var(--primary-color, #917460);
+        color: white;
+        border: none;
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      .btn-entrar:hover {
+        background-color: var(--secondary-color, #3e2723);
+        color: white;
+      }
+
+      .links-container {
+        margin-top: 15px;
+        font-size: 0.8rem;
+        text-shadow:
+          1px 1px 3px rgba(255, 255, 255, 0.9),
+          -1px -1px 3px rgba(255, 255, 255, 0.9); /* Aumenta a legibilidade sobre o fundo */
+      }
+
+      .links-container p {
+        margin: 5px 0;
+        font-weight: bold;
+      }
+
+      .link-esqueceu {
+        color: #f44336; /* Vermelho */
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      .form-section-bg {
+        margin-top: 20px;
+        margin-left: -25px; /* Compensa o padding esquerdo do login-container */
+        margin-right: -25px; /* Compensa o padding direito do login-container */
+        margin-bottom: -25px; /* Compensa o padding inferior do login-container */
+        padding: 30px 0;
+        background-image: url("img/fundoAquarioPeixes.webp");
+        background-size: cover;
+        background-position: center bottom;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <img src="img/logoGespo.webp" alt="Logo Gespo" class="logo" />
+
+      <div class="form-section-bg">
+        <form class="login-form" id="form-login">
+          <input
+            type="text"
+            id="username"
+            placeholder="Nome do usuário"
+            required
+          />
+          <input type="password" id="password" placeholder="Senha" required />
+
+          <button type="submit" class="btn-entrar">ENTRAR</button>
+        </form>
+
+        <div class="links-container">
+          <p>NOVO USUÁRIO? <a href="#">CLIQUE AQUI</a></p>
+          <p><a href="#" class="link-esqueceu">ESQUECI MINHA SENHA</a></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Função para carregar os dados pré-cadastrados ao abrir a tela
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const baseUrl =
+            window.location.port === "3000" ? "" : "http://localhost:3000";
+          const response = await fetch(
+            `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          );
+
+          if (response.ok) {
+            const dados = await response.json();
+            if (dados.produtorPrimNome) {
+              document.getElementById("username").value =
+                dados.produtorPrimNome;
+            }
+            if (dados.produtorPassUser) {
+              document.getElementById("password").value =
+                dados.produtorPassUser;
+            }
+          }
+        } catch (error) {
+          console.error("Erro ao carregar dados do usuário:", error);
+        }
+      });
+
+      // Evento de clique do botão ENTRAR
+      document.getElementById("form-login").addEventListener("submit", (e) => {
+        e.preventDefault(); // Evita recarregar a página com o evento submit padrão
+
+        // Redireciona para o index.html
+        window.location.href = "index.html";
+      });
+    </script>
+  </body>
+</html>
