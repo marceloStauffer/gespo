@@ -350,37 +350,37 @@
         html +=
           '<div style="background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">';
         html +=
-          '<h3 style="color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; margin-top: 0;">RECEITAS</h3>';
+          '<h3 style="color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; margin-top: 0; text-align: left;">RECEITAS</h3>';
         for (let g in recAgrupadas) {
           let nomeG = gruposRecMap[g] || g;
-          html += `<div style="margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: var(--secondary-color);">❖ ${nomeG}: R$ ${recAgrupadas[g].total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+          html += `<div style="display: flex; justify-content: space-between; margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: var(--secondary-color);"><span>❖ ${nomeG}:</span><span>R$ ${recAgrupadas[g].total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>`;
           for (let sg in recAgrupadas[g].subgrupos) {
             let nomeSG = subgruposRecMap[sg] || sg;
             let valSG = recAgrupadas[g].subgrupos[sg];
-            html += `<div style="margin-left: 25px; margin-top: 5px; color: #555;">↳ ${nomeSG}: R$ ${valSG.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+            html += `<div style="display: flex; justify-content: space-between; margin-left: 25px; margin-top: 5px; color: #555;"><span>↳ ${nomeSG}:</span><span>R$ ${valSG.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>`;
           }
         }
         if (Object.keys(recAgrupadas).length === 0) {
           html +=
-            '<p style="margin-top: 10px; color: #777;">Nenhuma receita neste período.</p>';
+            '<p style="margin-top: 10px; color: #777; text-align: left;">Nenhuma receita neste período.</p>';
         }
-        html += `<div style="margin-top: 20px; font-size: 1.2rem; font-weight: bold; color: var(--secondary-color); text-align: right;">TOTAL RECEITAS: R$ ${totalReceitasGlobais.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+        html += `<div style="display: flex; justify-content: space-between; margin-top: 20px; padding-top: 10px; border-top: 1px solid #ccc; font-size: 1.2rem; font-weight: bold; color: var(--secondary-color);"><span>TOTAL RECEITAS:</span><span>R$ ${totalReceitasGlobais.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>`;
         html += "</div>";
 
         // Bloco Despesas
         html +=
           '<div style="background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">';
         html +=
-          '<h3 style="color: #f44336; border-bottom: 2px solid #f44336; padding-bottom: 5px; margin-top: 0;">DESPESAS</h3>';
+          '<h3 style="color: #f44336; border-bottom: 2px solid #f44336; padding-bottom: 5px; margin-top: 0; text-align: left;">DESPESAS</h3>';
         for (let g in despAgrupadas) {
           let nomeG = gruposDespMap[g] || g;
-          html += `<div style="margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: #555;">❖ ${nomeG}: R$ ${despAgrupadas[g].toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+          html += `<div style="display: flex; justify-content: space-between; margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: #555;"><span>❖ ${nomeG}:</span><span>R$ ${despAgrupadas[g].toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>`;
         }
         if (Object.keys(despAgrupadas).length === 0) {
           html +=
-            '<p style="margin-top: 10px; color: #777;">Nenhuma despesa neste período.</p>';
+            '<p style="margin-top: 10px; color: #777; text-align: left;">Nenhuma despesa neste período.</p>';
         }
-        html += `<div style="margin-top: 20px; font-size: 1.2rem; font-weight: bold; color: #f44336; text-align: right;">TOTAL DESPESAS: R$ ${totalDespesasGlobais.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+        html += `<div style="display: flex; justify-content: space-between; margin-top: 20px; padding-top: 10px; border-top: 1px solid #ccc; font-size: 1.2rem; font-weight: bold; color: #f44336;"><span>TOTAL DESPESAS:</span><span>R$ ${totalDespesasGlobais.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>`;
         html += "</div>";
 
         // Bloco Resultado Operacional
@@ -388,9 +388,9 @@
         let corResultado = resultadoOperacional >= 0 ? "#4caf50" : "#f44336";
         let textoResultado = resultadoOperacional >= 0 ? "LUCRO" : "PREJUÍZO";
 
-        html += `<div style="background: ${corResultado}15; border: 2px solid ${corResultado}; border-radius: 8px; padding: 20px; text-align: center;">`;
-        html += `<h2 style="margin: 0; color: ${corResultado};">RESULTADO OPERACIONAL (${textoResultado})</h2>`;
-        html += `<div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: ${corResultado};">R$ ${resultadoOperacional.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
+        html += `<div style="background: ${corResultado}15; border: 2px solid ${corResultado}; border-radius: 8px; padding: 20px; display: flex; justify-content: space-between; align-items: center;">`;
+        html += `<div style="font-weight: bold; font-size: 1.2rem; color: ${corResultado}; text-transform: uppercase;">RESULTADO (${textoResultado}):</div>`;
+        html += `<div style="font-size: 1.5rem; font-weight: bold; color: ${corResultado};">R$ ${resultadoOperacional.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>`;
         html += "</div>";
 
         container.innerHTML = html;
