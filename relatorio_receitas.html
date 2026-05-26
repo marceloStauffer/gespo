@@ -445,8 +445,11 @@
           );
           if (!isNaN(valorNum)) somaTotal += valorNum;
 
-          // Estilo para diminuir o espaçamento entre linhas
-          const pStyle = "margin: 2px 0; line-height: 1.3;";
+          // Estilos para formatar como tabela de 2 colunas
+          const rowStyle = "display: flex; margin-bottom: 8px; text-align: left; align-items: baseline; gap: 10px;";
+          const labelStyle = "font-weight: bold; font-size: 0.85rem; color: #795548; text-transform: uppercase; width: 135px; flex-shrink: 0;";
+          const valueStyle = "font-size: 1rem; color: #3e2723; word-break: break-word;";
+
           const nomeGrupo =
             gruposMap[item.receitasGrupo] ||
             item.receitasGrupo ||
@@ -457,15 +460,15 @@
             "Não informado";
 
           card.innerHTML = `
-            <p style="${pStyle}"><strong>Data:</strong> ${dataFormatada || "N/A"}</p>
-            <p style="${pStyle}"><strong>Descrição:</strong> ${item.receitasDescricao || "Sem descrição"}</p>
-            <p style="${pStyle}"><strong>Grupo:</strong> ${nomeGrupo}</p>
-            <p style="${pStyle}"><strong>Subgrupo:</strong> ${nomeSubgrupo}</p>
-            ${item.receitasEspecie ? `<p style="${pStyle}"><strong>Espécie:</strong> ${item.receitasEspecie}</p>` : ""}
-            <p style="${pStyle}"><strong>Quantidade:</strong> ${item.receitasQuant || "N/A"}</p>
-            <p style="${pStyle}"><strong>Valor:</strong> R$ ${item.receitasValor || "0,00"}</p>
-            <p style="${pStyle}"><strong>Obs:</strong> ${item.receitasObs || "-"}</p>
-            <div style="margin-top: 12px; display: flex; gap: 10px;">
+            <div style="${rowStyle}"><div style="${labelStyle}">Data:</div><div style="${valueStyle}">${dataFormatada || "N/A"}</div></div>
+            <div style="${rowStyle}"><div style="${labelStyle}">Descrição:</div><div style="${valueStyle}">${item.receitasDescricao || "Sem descrição"}</div></div>
+            <div style="${rowStyle}"><div style="${labelStyle}">Grupo:</div><div style="${valueStyle}">${nomeGrupo}</div></div>
+            <div style="${rowStyle}"><div style="${labelStyle}">Subgrupo:</div><div style="${valueStyle}">${nomeSubgrupo}</div></div>
+            ${item.receitasEspecie ? `<div style="${rowStyle}"><div style="${labelStyle}">Espécie:</div><div style="${valueStyle}">${item.receitasEspecie}</div></div>` : ""}
+            <div style="${rowStyle}"><div style="${labelStyle}">Quantidade:</div><div style="${valueStyle}">${item.receitasQuant || "N/A"}</div></div>
+            <div style="${rowStyle}"><div style="${labelStyle}">Valor:</div><div style="${valueStyle}">R$ ${item.receitasValor || "0,00"}</div></div>
+            <div style="${rowStyle}"><div style="${labelStyle}">Obs:</div><div style="${valueStyle}">${item.receitasObs || "-"}</div></div>
+            <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid #eee; padding-top: 10px;">
               <button onclick="abrirModalEditar(${originalIndex})" style="padding: 5px 15px;">Editar</button>
               <button onclick="abrirModalExcluir(${originalIndex})" style="padding: 5px 15px; background-color: #f44336;">Excluir</button>
             </div>
