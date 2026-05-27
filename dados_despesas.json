@@ -62,5 +62,13 @@
     "despesasQuant": "10",
     "despesasValor": "79.26",
     "despesasObs": ""
+  },
+  {
+    "despesasData": "2026-05-20",
+    "despesasDescricao": "Pagamento de impostos",
+    "despesasGrupo": "despGrupoAdm",
+    "despesasQuant": "1",
+    "despesasValor": "856",
+    "despesasObs": ""
   }
 ]
