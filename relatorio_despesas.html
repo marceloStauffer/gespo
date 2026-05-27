@@ -49,17 +49,45 @@
             style="margin-top: 5px; font-size: 0.9rem; font-weight: bold"
             >Usuário</span
           >
-          <a href="login.html" style="font-size: 0.75rem; color: inherit; margin-top: 2px; text-decoration: underline;">Logout</a>
+          <a
+            href="login.html"
+            style="
+              font-size: 0.75rem;
+              color: inherit;
+              margin-top: 2px;
+              text-decoration: underline;
+            "
+            >Logout</a
+          >
         </div>
       </header>
-      <section style="display: flex; justify-content: space-between; align-items: center;">
+      <section
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
         <div>
           <a href="relatorios.html" target="_self"
             ><button id="botao-form">← VOLTAR</button></a
           >
         </div>
         <div>
-          <button id="btn-abrir-modal-pdf" style="width: auto; padding: 5px 15px; font-size: 1.2rem; background-color: #e0ea1e; color: #3e2723; border: none; border-radius: 5px; cursor: pointer;" title="Visualizar PDF">
+          <button
+            id="btn-abrir-modal-pdf"
+            style="
+              width: auto;
+              padding: 5px 15px;
+              font-size: 1.2rem;
+              background-color: #e0ea1e;
+              color: #3e2723;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+            "
+            title="Visualizar PDF"
+          >
             <i class="fas fa-file-pdf"></i> PDF
           </button>
         </div>
@@ -250,10 +278,31 @@
               gap: 15px;
             "
           >
-            <button id="btn-sim-pdf" style="width: 80px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; padding: 8px;">Sim</button>
+            <button
+              id="btn-sim-pdf"
+              style="
+                width: 80px;
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                padding: 8px;
+              "
+            >
+              Sim
+            </button>
             <button
               onclick="fecharModal('modal-pdf')"
-              style="width: 80px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; padding: 8px;"
+              style="
+                width: 80px;
+                background-color: #f44336;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                padding: 8px;
+              "
             >
               Não
             </button>
@@ -289,7 +338,7 @@
 
         try {
           const respProd = await fetch(
-            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
+            `/dados_producao.json?t=${new Date().getTime()}`,
           );
           if (respProd.ok) {
             const prod = await respProd.json();
@@ -308,7 +357,7 @@
       async function carregarDespesas() {
         try {
           const resp = await fetch(
-            `${baseUrl}/dados_despesas.json?t=${new Date().getTime()}`,
+            `/dados_despesas.json?t=${new Date().getTime()}`,
           );
           if (resp.ok) {
             let dados = await resp.json();
@@ -367,9 +416,12 @@
           if (!isNaN(valorNum)) somaTotal += valorNum;
 
           // Estilos para formatar como tabela de 2 colunas
-          const rowStyle = "display: flex; margin-bottom: 8px; text-align: left; align-items: baseline; gap: 10px;";
-          const labelStyle = "font-weight: bold; font-size: 0.85rem; color: #795548; text-transform: uppercase; width: 135px; flex-shrink: 0;";
-          const valueStyle = "font-size: 1rem; color: #3e2723; word-break: break-word;";
+          const rowStyle =
+            "display: flex; margin-bottom: 8px; text-align: left; align-items: baseline; gap: 10px;";
+          const labelStyle =
+            "font-weight: bold; font-size: 0.85rem; color: #795548; text-transform: uppercase; width: 135px; flex-shrink: 0;";
+          const valueStyle =
+            "font-size: 1rem; color: #3e2723; word-break: break-word;";
 
           const nomeGrupo =
             gruposMap[item.despesasGrupo] ||
@@ -447,10 +499,9 @@
         .addEventListener("click", async () => {
           if (indiceSelecionado !== null) {
             try {
-              const resp = await fetch(
-                `${baseUrl}/api/despesas/${indiceSelecionado}`,
-                { method: "DELETE" },
-              );
+              const resp = await fetch(`/api/despesas/${indiceSelecionado}`, {
+                method: "DELETE",
+              });
               if (resp.ok) {
                 fecharModal("modal-excluir");
                 carregarDespesas();
@@ -464,9 +515,11 @@
         });
 
       // Abertura do Modal de PDF
-      document.getElementById("btn-abrir-modal-pdf").addEventListener("click", () => {
-        document.getElementById("modal-pdf").style.display = "flex";
-      });
+      document
+        .getElementById("btn-abrir-modal-pdf")
+        .addEventListener("click", () => {
+          document.getElementById("modal-pdf").style.display = "flex";
+        });
 
       // Geração do PDF
       document.getElementById("btn-sim-pdf").addEventListener("click", () => {
@@ -478,15 +531,17 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        const propriedade = document.getElementById("nome-propriedade").textContent || "Propriedade Não Informada";
+        const propriedade =
+          document.getElementById("nome-propriedade").textContent ||
+          "Propriedade Não Informada";
         const dInicio = document.getElementById("data-inicio").value;
         const dFim = document.getElementById("data-fim").value;
         let periodoStr = "Período: Todos os registros";
 
         if (dInicio && dFim) {
-            const dataI = dInicio.split('-').reverse().join('/');
-            const dataF = dFim.split('-').reverse().join('/');
-            periodoStr = `Período: ${dataI} a ${dataF}`;
+          const dataI = dInicio.split("-").reverse().join("/");
+          const dataF = dFim.split("-").reverse().join("/");
+          periodoStr = `Período: ${dataI} a ${dataF}`;
         }
 
         // Título
@@ -502,52 +557,58 @@
         const linhas = [];
         let somaTotal = 0;
 
-        despesasFiltradas.forEach(item => {
-            let dataFormatada = item.despesasData;
-            if (dataFormatada && dataFormatada.includes("-")) {
-              const p = dataFormatada.split("-");
-              dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
-            }
-            const nomeGrupo = gruposMap[item.despesasGrupo] || item.despesasGrupo || "N/I";
-            const valorNum = parseFloat(String(item.despesasValor || "0").replace(",", "."));
-            somaTotal += isNaN(valorNum) ? 0 : valorNum;
+        despesasFiltradas.forEach((item) => {
+          let dataFormatada = item.despesasData;
+          if (dataFormatada && dataFormatada.includes("-")) {
+            const p = dataFormatada.split("-");
+            dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
+          }
+          const nomeGrupo =
+            gruposMap[item.despesasGrupo] || item.despesasGrupo || "N/I";
+          const valorNum = parseFloat(
+            String(item.despesasValor || "0").replace(",", "."),
+          );
+          somaTotal += isNaN(valorNum) ? 0 : valorNum;
 
-            linhas.push([
-                dataFormatada || "N/A",
-                item.despesasDescricao || "N/A",
-                nomeGrupo,
-                item.despesasQuant || "N/A",
-                valorNum.toLocaleString("pt-BR", { minimumFractionDigits: 2 })
-            ]);
+          linhas.push([
+            dataFormatada || "N/A",
+            item.despesasDescricao || "N/A",
+            nomeGrupo,
+            item.despesasQuant || "N/A",
+            valorNum.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+          ]);
         });
 
         // Linha do Total
         linhas.push([
-            "", "", "", "TOTAL:",
-            somaTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 })
+          "",
+          "",
+          "",
+          "TOTAL:",
+          somaTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
         ]);
 
         doc.autoTable({
-            startY: 35,
-            head: [colunas],
-            body: linhas,
-            theme: 'grid',
-            headStyles: { fillColor: [145, 116, 96] }, // Cor var(--primary-color) correspondente ao marrom do site
-            columnStyles: {
-                3: { halign: "right" },
-                4: { halign: "right" }
-            },
-            didParseCell: function(data) {
-                // Deixa a última linha (Total) em negrito
-                if (data.row.index === linhas.length - 1) {
-                    data.cell.styles.fontStyle = 'bold';
-                }
+          startY: 35,
+          head: [colunas],
+          body: linhas,
+          theme: "grid",
+          headStyles: { fillColor: [145, 116, 96] }, // Cor var(--primary-color) correspondente ao marrom do site
+          columnStyles: {
+            3: { halign: "right" },
+            4: { halign: "right" },
+          },
+          didParseCell: function (data) {
+            // Deixa a última linha (Total) em negrito
+            if (data.row.index === linhas.length - 1) {
+              data.cell.styles.fontStyle = "bold";
             }
+          },
         });
 
         // Abre o PDF em uma nova guia do navegador (visualização)
-        const pdfUrl = doc.output('bloburl');
-        window.open(pdfUrl, '_blank');
+        const pdfUrl = doc.output("bloburl");
+        window.open(pdfUrl, "_blank");
       }
     </script>
   </body>
@@ -557,7 +618,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

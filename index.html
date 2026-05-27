@@ -124,8 +124,7 @@
         // Função para buscar e exibir o nome do usuário
         async function carregarUsuario() {
             try {
-                const baseUrl = window.location.port === "3000" ? "" : "http://localhost:3000";
-                const response = await fetch(`${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`);
+                const response = await fetch(`/dados_produtor.json?t=${new Date().getTime()}`);
                 if (response.ok) {
                     const dados = await response.json();
                     if (dados.produtorPrimNome) {

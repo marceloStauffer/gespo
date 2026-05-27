@@ -45,7 +45,16 @@
             style="margin-top: 5px; font-size: 0.9rem; font-weight: bold"
             >Usuário</span
           >
-          <a href="login.html" style="font-size: 0.75rem; color: inherit; margin-top: 2px; text-decoration: underline;">Logout</a>
+          <a
+            href="login.html"
+            style="
+              font-size: 0.75rem;
+              color: inherit;
+              margin-top: 2px;
+              text-decoration: underline;
+            "
+            >Logout</a
+          >
         </div>
       </header>
       <section
@@ -289,7 +298,7 @@
             const baseUrl =
               window.location.port === "3000" ? "" : "http://localhost:3000";
             const response = await fetch(
-              `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
+              `/dados_receitas.json?t=${new Date().getTime()}`,
             );
             if (response.ok) {
               const dados = await response.json();
@@ -346,8 +355,8 @@
 
             const url =
               editIndex !== null
-                ? `${baseUrl}/api/receitas/${editIndex}`
-                : `${baseUrl}/api/salvar-json-receitas`;
+                ? `/api/receitas/${editIndex}`
+                : `/api/salvar-json-receitas`;
             const methodForm = editIndex !== null ? "PUT" : "POST";
 
             const response = await fetch(url, {
@@ -393,7 +402,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

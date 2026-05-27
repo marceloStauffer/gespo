@@ -106,10 +106,8 @@
     // Função para buscar e exibir o nome do usuário
     async function carregarUsuario() {
       try {
-        const baseUrl =
-          window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();
@@ -126,10 +124,8 @@
     // Carrega a lista de documentos do JSON e preenche a tabela
     async function carregarDocumentos() {
       try {
-        const baseUrl =
-          window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_documentos.json?t=${new Date().getTime()}`,
+          `/dados_documentos.json?t=${new Date().getTime()}`,
         );
         const lista = document.getElementById("lista-documentos");
         lista.innerHTML = ""; // Limpa a tabela
@@ -181,11 +177,9 @@
           }
         });
 
-        const baseUrl =
-          window.location.port === "3000" ? "" : "http://localhost:3000";
 
         try {
-          const response = await fetch(`${baseUrl}/api/documentos`, {
+          const response = await fetch(`/api/documentos`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(dados),

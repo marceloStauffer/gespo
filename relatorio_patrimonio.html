@@ -49,7 +49,16 @@
             style="margin-top: 5px; font-size: 0.9rem; font-weight: bold"
             >Usuário</span
           >
-          <a href="login.html" style="font-size: 0.75rem; color: inherit; margin-top: 2px; text-decoration: underline;">Logout</a>
+          <a
+            href="login.html"
+            style="
+              font-size: 0.75rem;
+              color: inherit;
+              margin-top: 2px;
+              text-decoration: underline;
+            "
+            >Logout</a
+          >
         </div>
       </header>
       <section
@@ -328,7 +337,7 @@
 
         try {
           const respProd = await fetch(
-            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
+            `/dados_producao.json?t=${new Date().getTime()}`,
           );
           if (respProd.ok) {
             const prod = await respProd.json();
@@ -347,7 +356,7 @@
       async function carregarPatrimonios() {
         try {
           const resp = await fetch(
-            `${baseUrl}/dados_patrimonio.json?t=${new Date().getTime()}`,
+            `/dados_patrimonio.json?t=${new Date().getTime()}`,
           );
           if (resp.ok) {
             let dados = await resp.json();
@@ -409,9 +418,12 @@
           if (!isNaN(valorNum)) somaTotal += valorNum;
 
           // Estilos para formatar como tabela de 2 colunas
-          const rowStyle = "display: flex; margin-bottom: 8px; text-align: left; align-items: baseline; gap: 10px;";
-          const labelStyle = "font-weight: bold; font-size: 0.85rem; color: #795548; text-transform: uppercase; width: 135px; flex-shrink: 0;";
-          const valueStyle = "font-size: 1rem; color: #3e2723; word-break: break-word;";
+          const rowStyle =
+            "display: flex; margin-bottom: 8px; text-align: left; align-items: baseline; gap: 10px;";
+          const labelStyle =
+            "font-weight: bold; font-size: 0.85rem; color: #795548; text-transform: uppercase; width: 135px; flex-shrink: 0;";
+          const valueStyle =
+            "font-size: 1rem; color: #3e2723; word-break: break-word;";
 
           const nomeGrupo =
             gruposMap[item.patrimonioGrupo] ||
@@ -492,10 +504,9 @@
         .addEventListener("click", async () => {
           if (indiceSelecionado !== null) {
             try {
-              const resp = await fetch(
-                `${baseUrl}/api/patrimonio/${indiceSelecionado}`,
-                { method: "DELETE" },
-              );
+              const resp = await fetch(`/api/patrimonio/${indiceSelecionado}`, {
+                method: "DELETE",
+              });
               if (resp.ok) {
                 fecharModal("modal-excluir");
                 carregarPatrimonios();
@@ -628,7 +639,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

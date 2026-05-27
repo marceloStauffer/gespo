@@ -198,10 +198,8 @@
           });
 
           try {
-            const baseUrl =
-              window.location.port === "3000" ? "" : "http://localhost:3000";
             const response = await fetch(
-              `${baseUrl}/dados_despesas.json?t=${new Date().getTime()}`,
+              `/dados_despesas.json?t=${new Date().getTime()}`,
             );
             if (response.ok) {
               const dados = await response.json();
@@ -248,13 +246,11 @@
           });
 
           try {
-            const baseUrl =
-              window.location.port === "3000" ? "" : "http://localhost:3000";
 
             const url =
               editIndex !== null
-                ? `${baseUrl}/api/despesas/${editIndex}`
-                : `${baseUrl}/api/salvar-json-despesas`;
+                ? `/api/despesas/${editIndex}`
+                : `/api/salvar-json-despesas`;
             const methodForm = editIndex !== null ? "PUT" : "POST";
 
             const response = await fetch(url, {
@@ -294,10 +290,8 @@
     // Função para buscar e exibir o nome do usuário
     async function carregarUsuario() {
       try {
-        const baseUrl =
-          window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

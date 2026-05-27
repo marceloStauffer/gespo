@@ -360,7 +360,7 @@
         // Busca o nome da propriedade em dados_producao.json
         try {
           const respProd = await fetch(
-            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
+            `/dados_producao.json?t=${new Date().getTime()}`,
           );
           if (respProd.ok) {
             const prod = await respProd.json();
@@ -380,7 +380,7 @@
       async function carregarReceitas() {
         try {
           const resp = await fetch(
-            `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
+            `/dados_receitas.json?t=${new Date().getTime()}`,
           );
           if (resp.ok) {
             let dados = await resp.json();
@@ -446,9 +446,12 @@
           if (!isNaN(valorNum)) somaTotal += valorNum;
 
           // Estilos para formatar como tabela de 2 colunas
-          const rowStyle = "display: flex; margin-bottom: 8px; text-align: left; align-items: baseline; gap: 10px;";
-          const labelStyle = "font-weight: bold; font-size: 0.85rem; color: #795548; text-transform: uppercase; width: 135px; flex-shrink: 0;";
-          const valueStyle = "font-size: 1rem; color: #3e2723; word-break: break-word;";
+          const rowStyle =
+            "display: flex; margin-bottom: 8px; text-align: left; align-items: baseline; gap: 10px;";
+          const labelStyle =
+            "font-weight: bold; font-size: 0.85rem; color: #795548; text-transform: uppercase; width: 135px; flex-shrink: 0;";
+          const valueStyle =
+            "font-size: 1rem; color: #3e2723; word-break: break-word;";
 
           const nomeGrupo =
             gruposMap[item.receitasGrupo] ||
@@ -536,10 +539,9 @@
         .addEventListener("click", async () => {
           if (indiceSelecionado !== null) {
             try {
-              const resp = await fetch(
-                `${baseUrl}/api/receitas/${indiceSelecionado}`,
-                { method: "DELETE" },
-              );
+              const resp = await fetch(`/api/receitas/${indiceSelecionado}`, {
+                method: "DELETE",
+              });
               if (resp.ok) {
                 fecharModal("modal-excluir");
                 carregarReceitas();
@@ -673,7 +675,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();
