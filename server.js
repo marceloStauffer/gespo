@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 
 // Middleware para processar JSON e servir arquivos estáticos
 app.use(express.json());
-//app.use(express.static(__dirname, { index: 'index.html' }));
+app.use(express.static(__dirname, { index: 'index.html' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir arquivos enviados
 
 // Configuração do Multer para upload de arquivos

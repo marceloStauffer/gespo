@@ -1,11 +1,12 @@
 {
-  "produtorNome": "João Guimarães Rosa",
-  "produtorPrimNome": "joao.rosa",
+  "produtorNome": "Vanildo José da Silva Filho",
+  "produtorPrimNome": "vanildo",
+  "produtorPassUser": "vanildo",
   "produtorGenero": "Masculino",
   "produtorCpf": "123.456.789-00",
-  "produtorNascData": "1908-06-27",
+  "produtorNascData": "1980-06-27",
   "produtorCelular": "31900001122",
-  "produtorEmail": "guimaraesrosa@gmail.com",
+  "produtorEmail": "vanildo@gmail.com",
   "produtorTipo": "profissional",
   "produtorFoto": {}
 }

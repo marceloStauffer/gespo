@@ -30,7 +30,7 @@
         <h3>Dados da produção</h3>
         <div style="width: 40px"></div>
         <!-- Espaçador para manter o título centralizado -->
-                 <div
+        <div
           class="user-profile"
           style="
             display: flex;
@@ -45,9 +45,17 @@
             style="margin-top: 5px; font-size: 0.9rem; font-weight: bold"
             >Usuário</span
           >
-          <a href="login.html" style="font-size: 0.75rem; color: inherit; margin-top: 2px; text-decoration: underline;">Logout</a>
+          <a
+            href="login.html"
+            style="
+              font-size: 0.75rem;
+              color: inherit;
+              margin-top: 2px;
+              text-decoration: underline;
+            "
+            >Logout</a
+          >
         </div>
-
       </header>
       <section style="display: flex; justify-content: space-between">
         <div>
@@ -79,6 +87,13 @@
             <input id="propriedadeUf" type="text" name="propriedadeUf" />
             <br />
             <label for="propriedadeLocal">Localização da propriedade</label>
+            <input
+              id="propriedadeLocal"
+              type="text"
+              name="propriedadeLocal"
+              placeholder="informe as coordenadas do local da implantação"
+            />
+
           </fieldset>
 
           <fieldset>
@@ -490,10 +505,31 @@
           </fieldset>
 
           <br />
-          <button type="submit">Enviar</button>
+          <button type="submit">Salvar</button>
           <button type="reset">Limpar</button>
         </form>
       </section>
+
+      <!-- Pop-up de sucesso -->
+      <div
+        id="popup-sucesso"
+        style="
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #4caf50;
+          color: white;
+          padding: 20px 40px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          z-index: 1000;
+          text-align: center;
+        "
+      >
+        <h2>Registro salvo com sucesso</h2>
+      </div>
     </main>
     <script>
       // Lógica para habilitar/desabilitar o campo de outras espécies
@@ -539,7 +575,7 @@
                 }
               }
             }
-            
+
             // Garante que o campo será liberado caso o JSON já venha com "Outros" marcado
             if (checkboxOutros.checked) {
               inputOutrosInf.disabled = false;
@@ -582,7 +618,12 @@
             );
 
             if (response.ok) {
-              window.location.href = "sucesso.html";
+              const popup = document.getElementById("popup-sucesso");
+              popup.style.display = "block";
+
+              setTimeout(() => {
+                popup.style.display = "none";
+              }, 3000);
             } else {
               const errorText = await response.text();
               alert(
@@ -597,26 +638,29 @@
         });
     </script>
   </body>
-    <script>
-        // Função para buscar e exibir o nome do usuário
-        async function carregarUsuario() {
-            try {
-                const baseUrl = window.location.port === "3000" ? "" : "http://localhost:3000";
-                const response = await fetch(`${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`);
-                if (response.ok) {
-                    const dados = await response.json();
-                    if (dados.produtorPrimNome) {
-                        document.getElementById('nome-usuario').textContent = dados.produtorPrimNome;
-                    }
-                }
-            } catch (error) {
-                console.error("Erro ao carregar o usuário:", error);
-            }
+  <script>
+    // Função para buscar e exibir o nome do usuário
+    async function carregarUsuario() {
+      try {
+        const baseUrl =
+          window.location.port === "3000" ? "" : "http://localhost:3000";
+        const response = await fetch(
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+        );
+        if (response.ok) {
+          const dados = await response.json();
+          if (dados.produtorPrimNome) {
+            document.getElementById("nome-usuario").textContent =
+              dados.produtorPrimNome;
+          }
         }
-        // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
-        document.addEventListener('DOMContentLoaded', () => {
-            carregarUsuario();
-        });
+      } catch (error) {
+        console.error("Erro ao carregar o usuário:", error);
+      }
+    }
+    // Inicia a página carregando todos os peixes (busca vazia) e os dados do usuário
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarUsuario();
+    });
   </script>
-
 </html>
