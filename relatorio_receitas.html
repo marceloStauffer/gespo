@@ -13,6 +13,8 @@
     <!-- Bibliotecas para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <!-- Biblioteca para geração de Excel com estilos -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
   </head>
   <body>
     <main>
@@ -73,7 +75,23 @@
             ><button id="botao-form">← VOLTAR</button></a
           >
         </div>
-        <div>
+        <div style="display: flex; gap: 10px;">
+          <button
+            id="btn-abrir-modal-excel"
+            style="
+              width: auto;
+              padding: 5px 15px;
+              font-size: 1.2rem;
+              background-color: #217346;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+            "
+            title="Gerar Excel"
+          >
+            <i class="fas fa-file-excel"></i> Excel
+          </button>
           <button
             id="btn-abrir-modal-pdf"
             style="
@@ -309,6 +327,47 @@
           </div>
         </div>
       </div>
+
+      <!-- POP-UP DE GERAR EXCEL -->
+      <div
+        id="modal-excel"
+        style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div
+          style="
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          "
+        >
+          <h2 style="margin-top: 0">Gerar Excel</h2>
+          <p>Deseja gerar arquivo .xlsx?</p>
+          <div
+            style="
+              margin-top: 20px;
+              display: flex;
+              justify-content: center;
+              gap: 15px;
+            "
+          >
+            <button id="btn-sim-excel" style="width: 80px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; padding: 8px;">Sim</button>
+            <button onclick="fecharModal('modal-excel')" style="width: 80px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; padding: 8px;">Não</button>
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- Lógica de Negócio do Relatório -->
@@ -360,7 +419,7 @@
         // Busca o nome da propriedade em dados_producao.json
         try {
           const respProd = await fetch(
-            `/dados_producao.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
           );
           if (respProd.ok) {
             const prod = await respProd.json();
@@ -380,7 +439,7 @@
       async function carregarReceitas() {
         try {
           const resp = await fetch(
-            `/dados_receitas.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
           );
           if (resp.ok) {
             let dados = await resp.json();
@@ -472,8 +531,8 @@
             <div style="${rowStyle}"><div style="${labelStyle}">Valor:</div><div style="${valueStyle}">R$ ${item.receitasValor || "0,00"}</div></div>
             <div style="${rowStyle}"><div style="${labelStyle}">Obs:</div><div style="${valueStyle}">${item.receitasObs || "-"}</div></div>
             <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid #eee; padding-top: 10px;">
-              <button onclick="abrirModalEditar(${originalIndex})" style="padding: 5px 15px;">Editar</button>
-              <button onclick="abrirModalExcluir(${originalIndex})" style="padding: 5px 15px; background-color: #f44336;">Excluir</button>
+              <button onclick="abrirModalEditar(${originalIndex})" style="padding: 5px 15px; background-color: green; color: white;">Editar</button>
+              <button onclick="abrirModalExcluir(${originalIndex})" style="padding: 5px 15px; background-color: red; color: white;">Excluir</button>
             </div>
           `;
           container.appendChild(card);
@@ -539,9 +598,12 @@
         .addEventListener("click", async () => {
           if (indiceSelecionado !== null) {
             try {
-              const resp = await fetch(`/api/receitas/${indiceSelecionado}`, {
-                method: "DELETE",
-              });
+              const resp = await fetch(
+                `${baseUrl}/api/receitas/${indiceSelecionado}`,
+                {
+                  method: "DELETE",
+                },
+              );
               if (resp.ok) {
                 fecharModal("modal-excluir");
                 carregarReceitas();
@@ -649,7 +711,7 @@
           head: [colunas],
           body: linhas,
           theme: "grid",
-          headStyles: { fillColor: [145, 116, 96] }, // Cor var(--primary-color) correspondente ao marrom do site
+          headStyles: { fillColor: [33, 115, 70] }, // Verde escuro
           columnStyles: {
             5: { halign: "right" },
             6: { halign: "right" },
@@ -666,6 +728,111 @@
         const pdfUrl = doc.output("bloburl");
         window.open(pdfUrl, "_blank");
       }
+
+      // Abertura do Modal de Excel
+      document
+        .getElementById("btn-abrir-modal-excel")
+        .addEventListener("click", () => {
+          document.getElementById("modal-excel").style.display = "flex";
+        });
+
+      // Geração do Excel
+      document.getElementById("btn-sim-excel").addEventListener("click", () => {
+        fecharModal("modal-excel");
+        gerarExcel();
+      });
+
+      function gerarExcel() {
+        const propriedade = document.getElementById("nome-propriedade").textContent || "Propriedade Não Informada";
+        const dInicio = document.getElementById("data-inicio").value;
+        const dFim = document.getElementById("data-fim").value;
+        let periodoStr = "Todos os registros";
+
+        if (dInicio && dFim) {
+          const dataI = dInicio.split("-").reverse().join("/");
+          const dataF = dFim.split("-").reverse().join("/");
+          periodoStr = `${dataI} a ${dataF}`;
+        }
+
+        const dadosExcel = [];
+        dadosExcel.push([{ v: "Propriedade", t: "s", s: { font: { bold: true } } }, propriedade]);
+        dadosExcel.push([{ v: "Relatório", t: "s", s: { font: { bold: true } } }, "Receitas"]);
+        dadosExcel.push([{ v: "Período", t: "s", s: { font: { bold: true } } }, periodoStr]);
+        dadosExcel.push([]);
+
+        const styleHead = { font: { bold: true, color: { rgb: "FFFFFF" } }, fill: { fgColor: { rgb: "217346" } } }; // Verde Escuro
+        dadosExcel.push([
+          { v: "Data", t: "s", s: styleHead },
+          { v: "Descrição", t: "s", s: styleHead },
+          { v: "Grupo", t: "s", s: styleHead },
+          { v: "Subgrupo", t: "s", s: styleHead },
+          { v: "Espécie", t: "s", s: styleHead },
+          { v: "Qtd", t: "s", s: styleHead },
+          { v: "Valor (R$)", t: "s", s: styleHead },
+        ]);
+
+        let somaTotal = 0;
+
+        receitasFiltradas.forEach((item) => {
+          let dataFormatada = item.receitasData;
+          if (dataFormatada && dataFormatada.includes("-")) {
+            const p = dataFormatada.split("-");
+            dataFormatada = `${p[2]}/${p[1]}/${p[0]}`;
+          }
+          const nomeGrupo = gruposMap[item.receitasGrupo] || item.receitasGrupo || "N/I";
+          const nomeSubgrupo = subgruposMap[item.receitasSubgrupo] || item.receitasSubgrupo || "N/I";
+          const valorNum = parseFloat(String(item.receitasValor || "0").replace(",", "."));
+          somaTotal += isNaN(valorNum) ? 0 : valorNum;
+
+          dadosExcel.push([
+            dataFormatada || "N/A",
+            item.receitasDescricao || "N/A",
+            nomeGrupo,
+            nomeSubgrupo,
+            item.receitasEspecie || "-",
+            item.receitasQuant || "N/A",
+            valorNum,
+          ]);
+        });
+        dadosExcel.push([
+          "",
+          "",
+          "",
+          "",
+          "",
+          { v: "TOTAL:", t: "s", s: { font: { bold: true } } },
+          { v: somaTotal, t: "n", s: { font: { bold: true } } },
+        ]);
+
+        const ws = XLSX.utils.aoa_to_sheet(dadosExcel);
+        
+        // Formatação profissional do Excel
+        ws['!cols'] = [
+          { wch: 15 }, // Data
+          { wch: 35 }, // Descrição
+          { wch: 25 }, // Grupo
+          { wch: 30 }, // Subgrupo
+          { wch: 20 }, // Espécie
+          { wch: 12 }, // Qtd
+          { wch: 20 }  // Valor (R$)
+        ];
+
+        for (let cell in ws) {
+          if (cell.startsWith('!')) continue;
+          if (ws[cell].t === 'n') {
+            const col = cell.replace(/[0-9]/g, '');
+            if (col === 'G') {
+              ws[cell].z = '"R$" #,##0.00';
+              if (!ws[cell].s) ws[cell].s = {};
+              ws[cell].s.numFmt = '"R$" #,##0.00';
+            }
+          }
+        }
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Receitas");
+        XLSX.writeFile(wb, "Relatorio_Receitas.xlsx");
+      }
     </script>
   </body>
   <script>
@@ -675,7 +842,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `/dados_produtor.json?t=${new Date().getTime()}`,
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

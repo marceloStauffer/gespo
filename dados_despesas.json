@@ -21,7 +21,7 @@
     "despesasGrupo": "despGrupoComercializacao",
     "despesasQuant": "100",
     "despesasValor": "60",
-    "despesasObs": ""
+    "despesasObs": "teste 3000"
   },
   {
     "despesasData": "2026-04-15",
@@ -70,5 +70,21 @@
     "despesasQuant": "1",
     "despesasValor": "856",
     "despesasObs": ""
+  },
+  {
+    "despesasData": "2026-05-28",
+    "despesasDescricao": "Conserto de máquina danificada",
+    "despesasGrupo": "despGrupoOutras",
+    "despesasQuant": "1",
+    "despesasValor": "250",
+    "despesasObs": "teste 3000"
+  },
+  {
+    "despesasData": "2026-05-28",
+    "despesasDescricao": "Compra de lona 5m",
+    "despesasGrupo": "despGrupoInsumos",
+    "despesasQuant": "5",
+    "despesasValor": "50",
+    "despesasObs": "despesa inserida teste"
   }
 ]

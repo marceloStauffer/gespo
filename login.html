@@ -133,9 +133,11 @@
           <button type="submit" class="btn-entrar">ENTRAR</button>
         </form>
 
-        <div class="links-container">
+        <div class="links-container">  
           <p>NOVO USUÁRIO? <a href="#">CLIQUE AQUI</a></p>
-          <p><a href="#" class="link-esqueceu">ESQUECI MINHA SENHA</a></p>
+        </div>
+        <div class="links-container">  
+        <p><a href="#" class="link-esqueceu">ESQUECI MINHA SENHA</a></p>
         </div>
       </div>
     </div>
@@ -147,7 +149,7 @@
           const baseUrl =
             window.location.port === "3000" ? "" : "http://localhost:3000";
           const response = await fetch(
-            `/dados_produtor.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
           );
 
           if (response.ok) {

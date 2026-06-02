@@ -545,7 +545,7 @@
           const baseUrl =
             window.location.port === "3000" ? "" : "http://localhost:3000";
           const response = await fetch(
-            `/dados_producao.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
           );
 
           if (response.ok) {
@@ -607,11 +607,14 @@
           try {
             const baseUrl =
               window.location.port === "3000" ? "" : "http://localhost:3000";
-            const response = await fetch(`/api/salvar-json-producao`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(dados),
-            });
+            const response = await fetch(
+              `${baseUrl}/api/salvar-json-producao`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados),
+              },
+            );
 
             if (response.ok) {
               const popup = document.getElementById("popup-sucesso");
@@ -641,7 +644,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `/dados_produtor.json?t=${new Date().getTime()}`,
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

@@ -100,5 +100,15 @@
     "receitasQuant": "1",
     "receitasValor": "670",
     "receitasObs": ""
+  },
+  {
+    "receitasData": "2026-05-28",
+    "receitasDescricao": "Venda de Betta para fulano de tal",
+    "receitasGrupo": "recGrupoPeixes",
+    "receitasSubgrupo": "recSubgrupoAdultos",
+    "receitasEspecie": "Betta",
+    "receitasQuant": "50",
+    "receitasValor": "100.50",
+    "receitasObs": "Teste com Vanildo - alterado em 28/05"
   }
 ]

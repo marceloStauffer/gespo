@@ -220,7 +220,7 @@
             const baseUrl =
               window.location.port === "3000" ? "" : "http://localhost:3000";
             const response = await fetch(
-              `/dados_patrimonio.json?t=${new Date().getTime()}`,
+              `${baseUrl}/dados_patrimonio.json?t=${new Date().getTime()}`,
             );
             if (response.ok) {
               const dados = await response.json();
@@ -276,8 +276,8 @@
 
             const url =
               editIndex !== null
-                ? `/api/patrimonio/${editIndex}`
-                : `/api/salvar-json-patrimonio`;
+                ? `${baseUrl}/api/patrimonio/${editIndex}`
+                : `${baseUrl}/api/salvar-json-patrimonio`;
             const methodForm = editIndex !== null ? "PUT" : "POST";
 
             const response = await fetch(url, {
@@ -320,7 +320,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `/dados_produtor.json?t=${new Date().getTime()}`,
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

@@ -13,6 +13,8 @@
     <!-- Bibliotecas para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <!-- Biblioteca para geração de Excel com estilos -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
   </head>
   <body>
     <main>
@@ -75,7 +77,23 @@
             ><button id="botao-form">← VOLTAR</button></a
           >
         </div>
-        <div>
+        <div style="display: flex; gap: 10px">
+          <button
+            id="btn-abrir-modal-excel"
+            style="
+              width: auto;
+              padding: 5px 15px;
+              font-size: 1.2rem;
+              background-color: #217346;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+            "
+            title="Gerar Excel"
+          >
+            <i class="fas fa-file-excel"></i> Excel
+          </button>
           <button
             id="btn-abrir-modal-pdf"
             style="
@@ -198,6 +216,73 @@
           </div>
         </div>
       </div>
+
+      <!-- POP-UP DE GERAR EXCEL -->
+      <div
+        id="modal-excel"
+        style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div
+          style="
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          "
+        >
+          <h2 style="margin-top: 0">Gerar Excel</h2>
+          <p>Deseja gerar arquivo .xlsx do Resultado Operacional?</p>
+          <div
+            style="
+              margin-top: 20px;
+              display: flex;
+              justify-content: center;
+              gap: 15px;
+            "
+          >
+            <button
+              id="btn-sim-excel"
+              style="
+                width: 80px;
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                padding: 8px;
+              "
+            >
+              Sim
+            </button>
+            <button
+              onclick="fecharModal('modal-excel')"
+              style="
+                width: 80px;
+                background-color: #f44336;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                padding: 8px;
+              "
+            >
+              Não
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- Lógica de Negócio do Relatório -->
@@ -253,7 +338,7 @@
         // Busca o nome da propriedade
         try {
           const respProd = await fetch(
-            `/dados_producao.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
           );
           if (respProd.ok) {
             const prod = await respProd.json();
@@ -271,10 +356,10 @@
       async function carregarDados() {
         try {
           const reqReceitas = fetch(
-            `/dados_receitas.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
           );
           const reqDespesas = fetch(
-            `/dados_despesas.json?t=${new Date().getTime()}`,
+            `${baseUrl}/dados_despesas.json?t=${new Date().getTime()}`,
           );
 
           const [respRec, respDesp] = await Promise.all([
@@ -463,11 +548,16 @@
 
         // Tabela Receitas
         doc.setFontSize(12);
-        doc.setTextColor(145, 116, 96); // Marrom do site
+        doc.setTextColor(33, 115, 70); // Verde escuro
         doc.text("RECEITAS", 14, finalY);
         finalY += 5;
 
-        const colunasRec = ["Grupo", "Subgrupo", "Total (R$)"];
+        const colunasRec = [
+          "Grupo",
+          "Subgrupo",
+          "Total Subgrupo (R$)",
+          "Total Grupo (R$)",
+        ];
         const linhasRec = [];
 
         for (let g in window.recAgrupadasParaPDF) {
@@ -475,6 +565,7 @@
           let subgrupos = window.recAgrupadasParaPDF[g].subgrupos;
           linhasRec.push([
             nomeG,
+            "",
             "",
             window.recAgrupadasParaPDF[g].total.toLocaleString("pt-BR", {
               minimumFractionDigits: 2,
@@ -487,12 +578,14 @@
               subgrupos[sg].toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
               }),
+              "",
             ]);
           }
         }
         linhasRec.push([
           "",
           "TOTAL RECEITAS:",
+          "",
           totalReceitasGlobais.toLocaleString("pt-BR", {
             minimumFractionDigits: 2,
           }),
@@ -503,9 +596,10 @@
           head: [colunasRec],
           body: linhasRec,
           theme: "grid",
-          headStyles: { fillColor: [145, 116, 96] },
+          headStyles: { fillColor: [33, 115, 70] }, // Verde escuro
           columnStyles: {
             2: { halign: "right" },
+            3: { halign: "right" },
           },
           didParseCell: function (data) {
             if (data.section === "body") {
@@ -520,7 +614,7 @@
                 };
               } else {
                 if (data.row.raw[0]) {
-                  if (data.column.index === 0 || data.column.index === 2) {
+                  if (data.column.index === 0 || data.column.index === 3) {
                     data.cell.styles.fontStyle = "bold";
                   }
                   data.cell.styles.lineWidth = {
@@ -608,6 +702,171 @@
         const pdfUrl = doc.output("bloburl");
         window.open(pdfUrl, "_blank");
       }
+
+      // Abertura do Modal de Excel
+      document
+        .getElementById("btn-abrir-modal-excel")
+        .addEventListener("click", () => {
+          document.getElementById("modal-excel").style.display = "flex";
+        });
+
+      // Geração do Excel
+      document.getElementById("btn-sim-excel").addEventListener("click", () => {
+        fecharModal("modal-excel");
+        gerarExcel();
+      });
+
+      function gerarExcel() {
+        const propriedade =
+          document.getElementById("nome-propriedade").textContent ||
+          "Propriedade Não Informada";
+        const dInicio = document.getElementById("data-inicio").value;
+        const dFim = document.getElementById("data-fim").value;
+        let periodoStr = "Todos os registros";
+
+        if (dInicio && dFim) {
+          const dataI = dInicio.split("-").reverse().join("/");
+          const dataF = dFim.split("-").reverse().join("/");
+          periodoStr = `${dataI} a ${dataF}`;
+        }
+
+        const dadosExcel = [];
+        dadosExcel.push([
+          { v: "Propriedade", t: "s", s: { font: { bold: true } } },
+          propriedade,
+        ]);
+        dadosExcel.push([
+          { v: "Relatório", t: "s", s: { font: { bold: true } } },
+          "Resultado Operacional",
+        ]);
+        dadosExcel.push([
+          { v: "Período", t: "s", s: { font: { bold: true } } },
+          periodoStr,
+        ]);
+        dadosExcel.push([]);
+
+        // Bloco de Receitas
+        dadosExcel.push([
+          {
+            v: "RECEITAS",
+            t: "s",
+            s: { font: { bold: true, color: { rgb: "217346" } } },
+          },
+        ]);
+        const styleHeadRec = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "217346" } },
+        };
+        dadosExcel.push([
+          { v: "Grupo", t: "s", s: styleHeadRec },
+          { v: "Subgrupo", t: "s", s: styleHeadRec },
+          { v: "Total Subgrupo (R$)", t: "s", s: styleHeadRec },
+          { v: "Total Grupo (R$)", t: "s", s: styleHeadRec },
+        ]);
+        for (let g in window.recAgrupadasParaPDF) {
+          let nomeG = gruposRecMap[g] || g;
+          let subgrupos = window.recAgrupadasParaPDF[g].subgrupos;
+          dadosExcel.push([
+            { v: nomeG, t: "s", s: { font: { bold: true } } },
+            "",
+            "",
+            {
+              v: window.recAgrupadasParaPDF[g].total,
+              t: "n",
+              s: { font: { bold: true } },
+            },
+          ]);
+          for (let sg in subgrupos) {
+            dadosExcel.push(["", subgruposRecMap[sg] || sg, subgrupos[sg], ""]);
+          }
+        }
+        dadosExcel.push([
+          "",
+          { v: "TOTAL RECEITAS:", t: "s", s: { font: { bold: true } } },
+          "",
+          { v: totalReceitasGlobais, t: "n", s: { font: { bold: true } } },
+        ]);
+        dadosExcel.push([]);
+
+        // Bloco de Despesas
+        dadosExcel.push([
+          {
+            v: "DESPESAS",
+            t: "s",
+            s: { font: { bold: true, color: { rgb: "F44336" } } },
+          },
+        ]);
+        const styleHeadDesp = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "F44336" } },
+        };
+        dadosExcel.push([
+          { v: "Grupo", t: "s", s: styleHeadDesp },
+          { v: "", t: "s", s: styleHeadDesp },
+          { v: "", t: "s", s: styleHeadDesp },
+          { v: "Total (R$)", t: "s", s: styleHeadDesp },
+        ]);
+        for (let g in window.despAgrupadasParaPDF) {
+          dadosExcel.push([
+            { v: gruposDespMap[g] || g, t: "s", s: { font: { bold: true } } },
+            "",
+            "",
+            {
+              v: window.despAgrupadasParaPDF[g],
+              t: "n",
+              s: { font: { bold: true } },
+            },
+          ]);
+        }
+        dadosExcel.push([
+          { v: "TOTAL DESPESAS:", t: "s", s: { font: { bold: true } } },
+          "",
+          "",
+          { v: totalDespesasGlobais, t: "n", s: { font: { bold: true } } },
+        ]);
+        dadosExcel.push([]);
+
+        let resultado = totalReceitasGlobais - totalDespesasGlobais;
+        let statusText = resultado >= 0 ? "LUCRO" : "PREJUÍZO";
+        let corResultado = resultado >= 0 ? "4CAF50" : "F44336"; // Verde / Vermelho
+        let styleResult = {
+          font: { bold: true, color: { rgb: corResultado } },
+        };
+
+        dadosExcel.push([
+          {
+            v: `RESULTADO OPERACIONAL (${statusText}):`,
+            t: "s",
+            s: styleResult,
+          },
+          "",
+          "",
+          { v: resultado, t: "n", s: styleResult },
+        ]);
+
+        const ws = XLSX.utils.aoa_to_sheet(dadosExcel);
+
+        // Formatação profissional do Excel
+        ws["!cols"] = [
+          { wch: 35 }, // Grupo / Descrição
+          { wch: 40 }, // Subgrupo / Secundário
+          { wch: 25 }, // Total Subgrupo (R$)
+          { wch: 25 }, // Total Grupo (R$)
+        ];
+
+        for (let cell in ws) {
+          if (cell.startsWith("!")) continue;
+          if (ws[cell].t === "n") {
+            ws[cell].z = '"R$" #,##0.00'; // Todos os números nesta tela são moeda
+            if (!ws[cell].s) ws[cell].s = {};
+            ws[cell].s.numFmt = '"R$" #,##0.00'; // Suporte ao formato para estilos
+          }
+        }
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Resultado Operacional");
+        XLSX.writeFile(wb, "Resultado_Operacional.xlsx");
+      }
     </script>
   </body>
   <script>
@@ -616,7 +875,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `/dados_produtor.json?t=${new Date().getTime()}`,
+          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();
