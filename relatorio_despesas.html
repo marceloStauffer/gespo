@@ -423,7 +423,7 @@
 
         try {
           const respProd = await fetch(
-            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
+            `${""}/dados_producao.json?t=${new Date().getTime()}`,
           );
           if (respProd.ok) {
             const prod = await respProd.json();
@@ -442,7 +442,7 @@
       async function carregarDespesas() {
         try {
           const resp = await fetch(
-            `${baseUrl}/dados_despesas.json?t=${new Date().getTime()}`,
+            `${""}/dados_despesas.json?t=${new Date().getTime()}`,
           );
           if (resp.ok) {
             let dados = await resp.json();
@@ -585,7 +585,7 @@
           if (indiceSelecionado !== null) {
             try {
               const resp = await fetch(
-                `${baseUrl}/api/despesas/${indiceSelecionado}`,
+                `${""}/api/despesas/${indiceSelecionado}`,
                 {
                   method: "DELETE",
                 },
@@ -727,12 +727,24 @@
         }
 
         const dadosExcel = [];
-        dadosExcel.push([{ v: "Propriedade", t: "s", s: { font: { bold: true } } }, propriedade]);
-        dadosExcel.push([{ v: "Relatório", t: "s", s: { font: { bold: true } } }, "Despesas"]);
-        dadosExcel.push([{ v: "Período", t: "s", s: { font: { bold: true } } }, periodoStr]);
+        dadosExcel.push([
+          { v: "Propriedade", t: "s", s: { font: { bold: true } } },
+          propriedade,
+        ]);
+        dadosExcel.push([
+          { v: "Relatório", t: "s", s: { font: { bold: true } } },
+          "Despesas",
+        ]);
+        dadosExcel.push([
+          { v: "Período", t: "s", s: { font: { bold: true } } },
+          periodoStr,
+        ]);
         dadosExcel.push([]);
 
-        const styleHead = { font: { bold: true, color: { rgb: "FFFFFF" } }, fill: { fgColor: { rgb: "F44336" } } }; // Vermelho
+        const styleHead = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "F44336" } },
+        }; // Vermelho
         dadosExcel.push([
           { v: "Data", t: "s", s: styleHead },
           { v: "Descrição", t: "s", s: styleHead },
@@ -807,7 +819,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `${""}/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

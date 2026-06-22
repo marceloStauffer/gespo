@@ -338,7 +338,7 @@
         // Busca o nome da propriedade
         try {
           const respProd = await fetch(
-            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
+            `${""}/dados_producao.json?t=${new Date().getTime()}`,
           );
           if (respProd.ok) {
             const prod = await respProd.json();
@@ -356,10 +356,10 @@
       async function carregarDados() {
         try {
           const reqReceitas = fetch(
-            `${baseUrl}/dados_receitas.json?t=${new Date().getTime()}`,
+            `${""}/dados_receitas.json?t=${new Date().getTime()}`,
           );
           const reqDespesas = fetch(
-            `${baseUrl}/dados_despesas.json?t=${new Date().getTime()}`,
+            `${""}/dados_despesas.json?t=${new Date().getTime()}`,
           );
 
           const [respRec, respDesp] = await Promise.all([
@@ -875,7 +875,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `${""}/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();

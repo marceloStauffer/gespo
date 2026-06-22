@@ -422,7 +422,7 @@
 
         try {
           const respProd = await fetch(
-            `${baseUrl}/dados_producao.json?t=${new Date().getTime()}`,
+            `${""}/dados_producao.json?t=${new Date().getTime()}`,
           );
           if (respProd.ok) {
             const prod = await respProd.json();
@@ -441,7 +441,7 @@
       async function carregarPatrimonios() {
         try {
           const resp = await fetch(
-            `${baseUrl}/dados_patrimonio.json?t=${new Date().getTime()}`,
+            `${""}/dados_patrimonio.json?t=${new Date().getTime()}`,
           );
           if (resp.ok) {
             let dados = await resp.json();
@@ -590,7 +590,7 @@
           if (indiceSelecionado !== null) {
             try {
               const resp = await fetch(
-                `${baseUrl}/api/patrimonio/${indiceSelecionado}`,
+                `${""}/api/patrimonio/${indiceSelecionado}`,
                 {
                   method: "DELETE",
                 },
@@ -850,7 +850,7 @@
         const baseUrl =
           window.location.port === "3000" ? "" : "http://localhost:3000";
         const response = await fetch(
-          `${baseUrl}/dados_produtor.json?t=${new Date().getTime()}`,
+          `${""}/dados_produtor.json?t=${new Date().getTime()}`,
         );
         if (response.ok) {
           const dados = await response.json();
