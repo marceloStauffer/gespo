@@ -110,5 +110,15 @@
     "receitasQuant": "50",
     "receitasValor": "100.50",
     "receitasObs": "Teste com Vanildo - alterado em 28/05"
+  },
+  {
+    "receitasData": "2026-05-29",
+    "receitasDescricao": "Venda de matrizes para criador",
+    "receitasGrupo": "recGrupoPeixes",
+    "receitasSubgrupo": "recSubgrupoMatrizes",
+    "receitasEspecie": "Platy",
+    "receitasQuant": "50",
+    "receitasValor": "950",
+    "receitasObs": ""
   }
 ]

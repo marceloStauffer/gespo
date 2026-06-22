@@ -86,5 +86,13 @@
     "despesasQuant": "5",
     "despesasValor": "50",
     "despesasObs": "despesa inserida teste"
+  },
+  {
+    "despesasData": "2026-05-29",
+    "despesasDescricao": "Pagamento de ITR",
+    "despesasGrupo": "despGrupoAdm",
+    "despesasQuant": "1",
+    "despesasValor": "243",
+    "despesasObs": "pagamento de impostos"
   }
 ]
